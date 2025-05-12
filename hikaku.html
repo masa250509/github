@@ -42,7 +42,7 @@
     .triangle {
       color: rgb(0, 153, 0);
       font-size: 1.2em;
-      margin-right: 0.5em; /* ここで▶と結果の間の空き具合を調整 */
+      margin-right: 0.5em;
     }
     .result {
       min-width: 6em;
@@ -95,6 +95,7 @@
     .line-container label {
       margin-right: 10px;
     }
+
     @media (max-width: 600px) {
       .item {
         flex-direction: column;
@@ -107,8 +108,15 @@
       }
       .triangle-row {
         display: flex;
-        justify-content: space-between;
+        align-items: center;
         width: 100%;
+        justify-content: flex-start; /* 左揃え */
+      }
+      .triangle {
+        margin-right: 0.25em;
+      }
+      .result::before {
+        content: " ";
       }
       input {
         width: 45%;
@@ -117,20 +125,12 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .triangle {
-        margin-right: 0.2em; /* スマホ版で▶と結果の間を少し縮小 */
-      }
-      .result {
-        font-size: 1em; /* スマホ版で結果の文字サイズを少し小さく */
-      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>価格比較</h1>
-
-    <!-- 価格比較と商品Aの間の罫線 -->
     <div class="divider"></div>
 
     <div class="section">
@@ -142,8 +142,7 @@
             <input id="priceA" type="number" placeholder="価格" /> 円
           </div>
           <div class="triangle-row">
-            <span class="triangle">▶</span>
-            <span id="resultA" class="result">-- 円/g</span>
+            <span class="triangle">▶</span><span id="resultA" class="result">-- 円/g</span>
           </div>
         </div>
       </div>
@@ -159,8 +158,7 @@
             <input id="priceB" type="number" placeholder="価格" /> 円
           </div>
           <div class="triangle-row">
-            <span class="triangle">▶</span>
-            <span id="resultB" class="result">-- 円/g</span>
+            <span class="triangle">▶</span><span id="resultB" class="result">-- 円/g</span>
           </div>
         </div>
       </div>
