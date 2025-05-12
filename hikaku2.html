@@ -42,7 +42,7 @@
     .triangle {
       color: rgb(0, 153, 0);
       font-size: 1.2em;
-      margin: 0 0.5em;
+      margin-right: 0.5em; /* ここで▶と結果の間の空き具合を調整 */
     }
     .result {
       min-width: 6em;
@@ -116,6 +116,12 @@
       .line-container {
         flex-direction: column;
         align-items: flex-start;
+      }
+      .triangle {
+        margin-right: 0.2em; /* スマホ版で▶と結果の間を少し縮小 */
+      }
+      .result {
+        font-size: 1em; /* スマホ版で結果の文字サイズを少し小さく */
       }
     }
   </style>
