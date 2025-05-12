@@ -8,203 +8,232 @@
     body {
       font-family: sans-serif;
       background-color: #ffffff;
+      padding: 0;
       margin: 0;
-      padding: 1rem;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      display: flex;
+      justify-content: center;
     }
-
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
     h1 {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
       text-align: left;
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
     }
-
     .divider {
+      border-top: 1px solid black;
+      margin: 0.5em 0;
+    }
+    .section {
+      padding: 0.5em 0;
+    }
+    .item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 0.5em;
+      padding: 0.5em;
+    }
+    .highlight {
+      background-color: rgb(255, 230, 0);
+    }
+    .triangle {
+      color: rgb(0, 153, 0);
+      font-size: 1.2em;
+      margin-right: 0.5em; /* ここで▶と結果の間の空き具合を調整 */
+    }
+    .result {
+      min-width: 6em;
+    }
+    .recommendation {
+      background-color: rgb(255, 230, 0);
+      color: #000;
+      padding: 0.8em;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 0.5em;
+      margin-top: 1em;
+    }
+    .controls {
+      margin-top: 0.8em;
+      text-align: left;
+    }
+    button {
+      background-color: rgb(0, 153, 0);
+      color: white;
       border: none;
-      border-top: 1px solid #000;
-      margin: 8px 0;
+      padding: 0.5em 1em;
+      margin-top: 1em;
+      border-radius: 0.5em;
+      font-size: 1em;
     }
-
-    .product {
-      padding: 0.5rem 0;
+    input {
+      width: 35%;
+      padding: 0.3em;
+      font-size: 1em;
+      text-align: right;
+      margin-right: 0.5em;
     }
-
     .input-row {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      gap: 0.5em;
     }
-
-    .input-row input {
-      width: 80px;
-      padding: 4px;
-      font-size: 1rem;
-    }
-
-    .result {
+    .triangle-row {
       display: flex;
       align-items: center;
-      margin-top: 0.25rem;
-      font-weight: bold;
-      color: #000;
+      margin-top: 0.5em;
     }
-
-    .triangle {
-      color: rgb(0, 200, 0); /* ▶の色：緑 */
-      margin-right: 0.25rem;
-    }
-
-    .highlight {
-      background-color: rgb(255, 230, 0);
-      padding: 0.5rem;
-      font-weight: bold;
-    }
-
-    .recommend {
-      background-color: rgb(0, 100, 0); /* 深緑 */
-      color: white;
-      padding: 0.5rem;
-      font-weight: bold;
-      margin-top: 0.5rem;
-    }
-
-    .buttons {
+    .line-container {
       display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.5em 0;
     }
-
-    .button {
-      background-color: rgb(0, 200, 0); /* 緑色 */
-      color: white;
-      padding: 0.4rem 1rem;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
+    .line-container label {
+      margin-right: 10px;
     }
-
-    .left-align {
-      text-align: left;
-    }
-
     @media (max-width: 600px) {
-      .divider {
-        display: none;
-      }
-
-      .result {
-        justify-content: flex-start;
-      }
-
-      .input-row {
-        flex-direction: row;
-      }
-
-      .input-row input {
-        width: 60px;
-      }
-
-      .buttons {
+      .item {
         flex-direction: column;
         align-items: flex-start;
+      }
+      .input-row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .triangle-row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+      input {
+        width: 45%;
+      }
+      .line-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .triangle {
+        margin-right: 0.2em; /* スマホ版で▶と結果の間を少し縮小 */
+      }
+      .result {
+        font-size: 1em; /* スマホ版で結果の文字サイズを少し小さく */
       }
     }
   </style>
 </head>
 <body>
-  <h1>価格比較</h1>
-  <hr class="divider" />
-  
-  <div class="product" id="productA">
-    <div class="left-align">商品A：</div>
-    <hr class="divider" />
-    <div class="input-row">
-      <input type="number" id="weightA" placeholder="重さ" /> g
-      <input type="number" id="priceA" placeholder="価格" /> 円
+  <div class="container">
+    <h1>価格比較</h1>
+
+    <!-- 価格比較と商品Aの間の罫線 -->
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="line-container">
+        <div id="itemA" class="item">
+          <label>商品A：</label>
+          <div class="input-row">
+            <input id="weightA" type="number" placeholder="重さ" /> g
+            <input id="priceA" type="number" placeholder="価格" /> 円
+          </div>
+          <div class="triangle-row">
+            <span class="triangle">▶</span>
+            <span id="resultA" class="result">-- 円/g</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
     </div>
-    <div class="result"><span class="triangle">▶</span><span id="unitPriceA">-- 円/g</span></div>
-  </div>
 
-  <div class="product" id="productB">
-    <div class="left-align">商品B：</div>
-    <hr class="divider" />
-    <div class="input-row">
-      <input type="number" id="weightB" placeholder="重さ" /> g
-      <input type="number" id="priceB" placeholder="価格" /> 円
+    <div class="section">
+      <div class="line-container">
+        <div id="itemB" class="item">
+          <label>商品B：</label>
+          <div class="input-row">
+            <input id="weightB" type="number" placeholder="重さ" /> g
+            <input id="priceB" type="number" placeholder="価格" /> 円
+          </div>
+          <div class="triangle-row">
+            <span class="triangle">▶</span>
+            <span id="resultB" class="result">-- 円/g</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
     </div>
-    <div class="result"><span class="triangle">▶</span><span id="unitPriceB">-- 円/g</span></div>
+
+    <div id="recommendation" class="recommendation" style="display:none;"></div>
+
+    <div class="controls">
+      <button onclick="resetFields()">リセット</button>
+    </div>
   </div>
-
-  <hr class="divider" />
-
-  <div id="resultBanner" class="highlight left-align">どちらがお得か計算中...</div>
-  <button class="button" onclick="resetFields()">リセット</button>
 
   <script>
+    const weightA = document.getElementById("weightA");
+    const priceA = document.getElementById("priceA");
+    const resultA = document.getElementById("resultA");
+    const itemA = document.getElementById("itemA");
+
+    const weightB = document.getElementById("weightB");
+    const priceB = document.getElementById("priceB");
+    const resultB = document.getElementById("resultB");
+    const itemB = document.getElementById("itemB");
+
+    const recommendation = document.getElementById("recommendation");
+
     function calculate() {
-      const wA = parseFloat(document.getElementById("weightA").value);
-      const pA = parseFloat(document.getElementById("priceA").value);
-      const wB = parseFloat(document.getElementById("weightB").value);
-      const pB = parseFloat(document.getElementById("priceB").value);
+      const wA = parseFloat(weightA.value);
+      const pA = parseFloat(priceA.value);
+      const wB = parseFloat(weightB.value);
+      const pB = parseFloat(priceB.value);
 
-      const pricePerGA = wA && pA ? pA / wA : null;
-      const pricePerGB = wB && pB ? pB / wB : null;
+      let unitA = wA && pA ? pA / wA : null;
+      let unitB = wB && pB ? pB / wB : null;
 
-      const unitPriceAEl = document.getElementById("unitPriceA");
-      const unitPriceBEl = document.getElementById("unitPriceB");
-      const resultBanner = document.getElementById("resultBanner");
+      resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
+      resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
 
-      if (pricePerGA !== null) {
-        unitPriceAEl.textContent = pricePerGA.toFixed(2) + " 円/g";
-      } else {
-        unitPriceAEl.textContent = "-- 円/g";
-      }
+      itemA.classList.remove("highlight");
+      itemB.classList.remove("highlight");
+      recommendation.style.display = "none";
 
-      if (pricePerGB !== null) {
-        unitPriceBEl.textContent = pricePerGB.toFixed(2) + " 円/g";
-      } else {
-        unitPriceBEl.textContent = "-- 円/g";
-      }
-
-      // ハイライト除去
-      document.getElementById("productA").classList.remove("highlight");
-      document.getElementById("productB").classList.remove("highlight");
-
-      if (pricePerGA && pricePerGB) {
-        if (pricePerGA < pricePerGB) {
-          resultBanner.textContent = "商品Aのほうがお得！";
-          resultBanner.className = "recommend left-align";
-          document.getElementById("productA").classList.add("highlight");
-        } else if (pricePerGB < pricePerGA) {
-          resultBanner.textContent = "商品Bのほうがお得！";
-          resultBanner.className = "recommend left-align";
-          document.getElementById("productB").classList.add("highlight");
-        } else {
-          resultBanner.textContent = "どちらも同じ価格です！";
-          resultBanner.className = "highlight left-align";
+      if (unitA && unitB) {
+        if (unitA < unitB) {
+          itemA.classList.add("highlight");
+          recommendation.textContent = "商品Aのほうがお得！";
+          recommendation.style.display = "block";
+        } else if (unitB < unitA) {
+          itemB.classList.add("highlight");
+          recommendation.textContent = "商品Bのほうがお得！";
+          recommendation.style.display = "block";
         }
       }
     }
 
     function resetFields() {
-      document.getElementById("weightA").value = "";
-      document.getElementById("priceA").value = "";
-      document.getElementById("weightB").value = "";
-      document.getElementById("priceB").value = "";
-      document.getElementById("unitPriceA").textContent = "-- 円/g";
-      document.getElementById("unitPriceB").textContent = "-- 円/g";
-      document.getElementById("resultBanner").textContent = "どちらがお得か計算中...";
-      document.getElementById("resultBanner").className = "highlight left-align";
-      document.getElementById("productA").classList.remove("highlight");
-      document.getElementById("productB").classList.remove("highlight");
+      weightA.value = "";
+      priceA.value = "";
+      resultA.textContent = "-- 円/g";
+      itemA.classList.remove("highlight");
+
+      weightB.value = "";
+      priceB.value = "";
+      resultB.textContent = "-- 円/g";
+      itemB.classList.remove("highlight");
+
+      recommendation.style.display = "none";
     }
 
-    document.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", calculate);
-    });
+    weightA.addEventListener("input", calculate);
+    priceA.addEventListener("input", calculate);
+    weightB.addEventListener("input", calculate);
+    priceB.addEventListener("input", calculate);
   </script>
 </body>
 </html>
