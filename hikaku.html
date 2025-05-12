@@ -10,11 +10,11 @@
       padding: 20px;
       max-width: 600px;
       margin: auto;
-      background-color: #f2f2f2; /* 全体背景色（K5） */
+      background-color: #ffffff; /* 背景白 */
     }
 
     h1 {
-      text-align: left; /* 左揃え */
+      text-align: left;
       margin-bottom: 20px;
     }
 
@@ -35,7 +35,7 @@
     }
 
     .row.highlight {
-      background-color: #E1E100; /* R225 G225 B0 の濃い黄色 */
+      background-color: #FFE600; /* お得な商品 → 濃い黄色 */
     }
 
     .row label {
@@ -50,7 +50,7 @@
     }
 
     .triangle {
-      color: #00B140; /* ▶の色（C100 M0 Y100 K0） */
+      color: #00B140; /* 三角▶ 緑 */
       font-size: 20px;
       margin: 0 4px;
     }
@@ -62,13 +62,21 @@
     }
 
     .highlight-bar {
-      background-color: #006628; /* お得帯（C100 M0 Y100 K50） */
       color: white;
       font-weight: bold;
       text-align: center;
       padding: 12px;
       border-radius: 6px;
       margin-top: 20px;
+    }
+
+    .highlight-a {
+      background-color: #007F33; /* 商品Aが安い → 深緑 */
+    }
+
+    .highlight-b {
+      background-color: #FFFF00; /* 商品Bが安い → 明るい黄色 */
+      color: black;
     }
 
     .buttons {
@@ -81,7 +89,7 @@
       flex: 1;
       padding: 12px;
       font-size: 16px;
-      background-color: #00B140; /* ボタン色（C100 M0 Y100 K0） */
+      background-color: #00B140; /* ボタン色 緑 */
       color: white;
       border: none;
       border-radius: 4px;
@@ -177,13 +185,13 @@
         pricePerB.textContent = `${unitB.toFixed(2)} 円/g`;
 
         if (unitA < unitB) {
-          highlight.innerHTML = `<div class="highlight-bar">商品Aのほうがお得！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar highlight-a">商品Aのほうがお得！</div>`;
           rowA.classList.add("highlight");
         } else if (unitB < unitA) {
-          highlight.innerHTML = `<div class="highlight-bar">商品Bのほうがお得！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar highlight-b">商品Bのほうがお得！</div>`;
           rowB.classList.add("highlight");
         } else {
-          highlight.innerHTML = `<div class="highlight-bar">どちらも同じ価格です！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar highlight-b" style="background-color: #ccc; color: black;">どちらも同じ価格です！</div>`;
         }
       } else {
         alert("すべての値を正しく入力してください。");
