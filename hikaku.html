@@ -10,7 +10,7 @@
       padding: 20px;
       max-width: 600px;
       margin: auto;
-      background-color: #ffffff; /* 背景白 */
+      background-color: #ffffff;
     }
 
     h1 {
@@ -26,39 +26,45 @@
 
     .row {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-direction: column;
+      gap: 6px;
       padding: 10px;
       border-radius: 8px;
       transition: background-color 0.3s ease;
     }
 
     .row.highlight {
-      background-color: #FFE600; /* 入力行のハイライト → 濃い黄色 */
+      background-color: rgb(255, 230, 0);
     }
 
-    .row label {
-      min-width: 60px;
+    .label-line {
       font-weight: bold;
     }
 
-    .row input[type="number"] {
-      width: 6em;
+    .inputs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inputs input[type="number"] {
+      width: 100px;
       padding: 6px;
       font-size: 16px;
     }
 
-    .triangle {
-      color: #00B140; /* ▶の色 */
-      font-size: 20px;
-      margin: 0 4px;
-    }
-
     .unit-price {
-      font-size: 16px;
       display: flex;
       align-items: center;
+      font-size: 16px;
+      margin-top: 4px;
+    }
+
+    .triangle {
+      color: #00B140;
+      font-size: 20px;
+      margin-right: 6px;
     }
 
     .highlight-bar {
@@ -68,7 +74,7 @@
       padding: 12px;
       border-radius: 6px;
       margin-top: 20px;
-      background-color: #007F33; /* 深緑に統一 */
+      background-color: #007F33;
     }
 
     .buttons {
@@ -81,7 +87,7 @@
       flex: 1;
       padding: 12px;
       font-size: 16px;
-      background-color: #00B140; /* ボタン色 緑 */
+      background-color: #00B140;
       color: white;
       border: none;
       border-radius: 4px;
@@ -93,18 +99,29 @@
       background-color: #009933;
     }
 
-    @media (max-width: 500px) {
+    @media (min-width: 600px) {
       .row {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+
+      .label-line {
+        min-width: 60px;
+        margin-right: 10px;
+      }
+
+      .inputs {
+        flex: 1;
       }
 
       .unit-price {
-        margin-top: 6px;
+        margin-left: auto;
+        margin-top: 0;
       }
 
-      .buttons {
-        flex-direction: column;
+      .row > * {
+        margin-right: 10px;
       }
     }
   </style>
@@ -115,12 +132,14 @@
   <hr>
 
   <div class="row" id="rowA">
-    <label>商品A：</label>
-    <input type="number" id="weightA" placeholder="重さ(g)">
-    <span>g</span>
-    <input type="number" id="priceA" placeholder="価格(円)">
-    <span>円</span>
-    <div class="unit-price" id="unitA">
+    <div class="label-line">商品A：</div>
+    <div class="inputs">
+      <input type="number" id="weightA" placeholder="重さ(g)">
+      <span>g</span>
+      <input type="number" id="priceA" placeholder="価格(円)">
+      <span>円</span>
+    </div>
+    <div class="unit-price">
       <span class="triangle">▶</span>
       <span id="pricePerA">円/g</span>
     </div>
@@ -129,12 +148,14 @@
   <hr>
 
   <div class="row" id="rowB">
-    <label>商品B：</label>
-    <input type="number" id="weightB" placeholder="重さ(g)">
-    <span>g</span>
-    <input type="number" id="priceB" placeholder="価格(円)">
-    <span>円</span>
-    <div class="unit-price" id="unitB">
+    <div class="label-line">商品B：</div>
+    <div class="inputs">
+      <input type="number" id="weightB" placeholder="重さ(g)">
+      <span>g</span>
+      <input type="number" id="priceB" placeholder="価格(円)">
+      <span>円</span>
+    </div>
+    <div class="unit-price">
       <span class="triangle">▶</span>
       <span id="pricePerB">円/g</span>
     </div>
@@ -162,7 +183,6 @@
       const rowB = document.getElementById("rowB");
       const highlight = document.getElementById("highlightArea");
 
-      // 初期化
       pricePerA.textContent = "円/g";
       pricePerB.textContent = "円/g";
       rowA.classList.remove("highlight");
