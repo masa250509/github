@@ -133,35 +133,47 @@
                 border: 1px solid #000; /* スマホ表示でも枠線 */
             }
             h1 {
-                font-size: 1.1em;
-                margin-bottom: 0.6em;
+                font-size: 1em; /* 少し小さく */
+                margin-bottom: 0.4em; /* 下のマージンを小さく */
             }
             .item {
-                padding: 0.6em;
-                margin-bottom: 0.6em;
+                padding: 0.4em; /* パディングを小さく */
+                margin-bottom: 0.4em; /* マージンを小さく */
                 border: 1px solid #000; /* スマホ表示でも枠線 */
             }
             label {
                 font-size: 0.8em;
+                margin-bottom: 0.1em; /* 下のマージンを小さく */
+            }
+            .input-group {
+                flex-direction: column; /* 縦並び */
+                align-items: flex-start;
+                gap: 0.2em; /* 要素間のギャップを小さく */
+                margin-top: 0em; /* 上のマージンをなくす */
             }
             input[type="number"] {
                 font-size: 0.8em;
-                padding: 0.4em;
-                width: 50%;
+                padding: 0.3em; /* パディングを小さく */
+                width: 60%;
+                margin-top: 0.1em; /* 上のマージンを小さく */
             }
             .result-container {
                 font-size: 0.8em;
+                margin-top: 0.3em; /* 上のマージンを小さく */
+                margin-bottom: 0em; /* 下のマージンをなくす */
             }
             .triangle {
                 font-size: 0.9em;
+                margin-right: 0.2em; /* 三角と結果の間隔を少し狭く */
             }
             .recommendation {
                 background-color: #fff; /* 通常時は白背景 */
                 color: #333; /* 通常時は黒に近いグレー */
-                padding: 0.6em;
+                padding: 0.4em; /* パディングを小さく */
+                text-align: center;
                 border-radius: 0.3em;
-                margin-top: 0.6em;
-                margin-bottom: 0.6em;
+                margin-top: 0.4em; /* マージンを小さく */
+                margin-bottom: 0.4em; /* マージンを小さく */
                 font-size: 0.8em;
                 border: 1px solid #000; /* スマホ表示でも枠線 */
                 font-weight: normal; /* ボールドを解除 */
@@ -178,9 +190,9 @@
             }
             button {
                 font-size: 0.8em;
-                padding: 0.5em 1em;
+                padding: 0.4em 0.8em; /* パディングを小さく */
                 border-radius: 0.3em;
-                margin-top: 0.6em;
+                margin-top: 0.4em; /* マージンを小さく */
             }
             .input-group {
                 flex-direction: column;
@@ -188,7 +200,7 @@
             }
             input[type="number"] {
                 width: 60%;
-                margin-top: 0.3em;
+                margin-top: 0.1em;
             }
         }
     </style>
