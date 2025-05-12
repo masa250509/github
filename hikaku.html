@@ -1,237 +1,323 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>価格比較</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #ffffff;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      max-width: 600px;
-      width: 100%;
-    }
-    h1 {
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
-      text-align: left;
-    }
-    .divider {
-      border-top: 1px solid black;
-      margin: 0.5em 0;
-    }
-    .section {
-      padding: 0.5em 0;
-    }
-    .item {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 0.5em;
-      padding: 0.5em;
-    }
-    .highlight {
-      background-color: rgb(255, 230, 0);
-    }
-    .triangle {
-      color: rgb(0, 153, 0);
-      font-size: 1.2em;
-      margin-right: 0.5em;
-    }
-    .result {
-      min-width: 6em;
-    }
-    .recommendation {
-      background-color: rgb(255, 230, 0);
-      color: #000;
-      padding: 0.8em;
-      font-weight: bold;
-      text-align: center;
-      border-radius: 0.5em;
-      margin-top: 1em;
-    }
-    .controls {
-      margin-top: 0.8em;
-      text-align: left;
-    }
-    button {
-      background-color: rgb(0, 153, 0);
-      color: white;
-      border: none;
-      padding: 0.5em 1em;
-      margin-top: 1em;
-      border-radius: 0.5em;
-      font-size: 1em;
-    }
-    input {
-      width: 35%;
-      padding: 0.3em;
-      font-size: 1em;
-      text-align: right;
-      margin-right: 0.5em;
-    }
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-    }
-    .triangle-row {
-      display: flex;
-      align-items: center;
-      margin-top: 0.5em;
-    }
-    .line-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0.5em 0;
-    }
-    .line-container label {
-      margin-right: 10px;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>価格比較</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f0f0; /* 外側の背景は薄いグレーのまま */
+            padding: 1em;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff; /* 囲み部分を白に */
+            border: 1px solid #000; /* 黒色の細い枠線 */
+            border-radius: 0.8em;
+            box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.1);
+            padding: 1em;
+        }
+        h1 {
+            font-size: 1.3em;
+            margin-bottom: 0.8em;
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            padding: 0;
+        }
+        .item {
+            background-color: #fff; /* 通常時も白色 */
+            margin-bottom: 0.8em;
+            padding: 0.8em;
+            border: 1px solid #000; /* 黒色の細い枠線を追加 */
+            border-radius: 0.5em;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            margin-top: 0.3em;
+        }
+        label {
+            font-size: 0.9em;
+            color: #555;
+            display: block;
+            margin-bottom: 0.3em;
+        }
+        input[type="number"] {
+            width: 40%;
+            padding: 0.5em;
+            font-size: 0.9em;
+            text-align: right;
+            border: 1px solid #ccc;
+            border-radius: 0.3em;
+        }
+        .result-container {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5em;
+            font-size: 0.9em;
+            color: #000;
+        }
+        .triangle {
+            color: #28a745;
+            font-size: 1em;
+            margin-right: 0.3em;
+        }
+        .result {
+            font-weight: bold;
+            min-width: 6em;
+            text-align: left;
+            color: #000;
+        }
+        .highlight {
+            background-color: rgb(255, 230, 0); /* 黄色 */
+            color: #333;
+        }
+        .recommendation {
+            background-color: #fff; /* 通常時は白背景 */
+            color: #333; /* 通常時は黒に近いグレー */
+            padding: 0.8em;
+            text-align: center;
+            border-radius: 0.5em;
+            margin-top: 0.8em;
+            margin-bottom: 0.8em;
+            font-size: 0.9em;
+            border: 1px solid #000; /* 黒色の細い枠線を追加 */
+            font-weight: normal; /* ボールドを解除 */
+        }
+        .recommendation.advantage { /* お得な場合 */
+            background-color: #28a745; /* 緑背景 */
+            color: #fff; /* 白文字 */
+            border: 1px solid #28a745; /* 緑色の枠線 */
+        }
+        .recommendation.even { /* どちらも同じくらいお得な場合 */
+            background-color: #28a745; /* 緑背景 */
+            color: #fff; /* 白文字 */
+            border: 1px solid #28a745; /* 緑色の枠線 */
+        }
+        .controls {
+            margin-top: 1em;
+            text-align: center;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6em 1.2em;
+            border-radius: 0.5em;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 0.8em;
+        }
+        button:hover {
+            background-color: #1e7136;
+        }
+        .price-one {
+            color: black !important;
+        }
 
-    @media (max-width: 600px) {
-      .item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .input-row {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-      .triangle-row {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        justify-content: flex-start; /* 左揃え */
-      }
-      .triangle {
-        margin-right: 0.25em;
-      }
-      .result::before {
-        content: " ";
-      }
-      input {
-        width: 45%;
-      }
-      .line-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.8em;
+                border-radius: 0.5em;
+                border: 1px solid #000; /* スマホ表示でも枠線 */
+            }
+            h1 {
+                font-size: 1.1em;
+                margin-bottom: 0.6em;
+            }
+            .item {
+                padding: 0.6em;
+                margin-bottom: 0.6em;
+                border: 1px solid #000; /* スマホ表示でも枠線 */
+            }
+            label {
+                font-size: 0.8em;
+            }
+            input[type="number"] {
+                font-size: 0.8em;
+                padding: 0.4em;
+                width: 50%;
+            }
+            .result-container {
+                font-size: 0.8em;
+            }
+            .triangle {
+                font-size: 0.9em;
+            }
+            .recommendation {
+                background-color: #fff; /* 通常時は白背景 */
+                color: #333; /* 通常時は黒に近いグレー */
+                padding: 0.6em;
+                border-radius: 0.3em;
+                margin-top: 0.6em;
+                margin-bottom: 0.6em;
+                font-size: 0.8em;
+                border: 1px solid #000; /* スマホ表示でも枠線 */
+                font-weight: normal; /* ボールドを解除 */
+            }
+            .recommendation.advantage { /* お得な場合 */
+                background-color: #28a745; /* 緑背景 */
+                color: #fff; /* 白文字 */
+                border: 1px solid #28a745; /* 緑色の枠線 */
+            }
+            .recommendation.even { /* どちらも同じくらいお得な場合 */
+                background-color: #28a745; /* 緑背景 */
+                color: #fff; /* 白文字 */
+                border: 1px solid #28a745; /* 緑色の枠線 */
+            }
+            button {
+                font-size: 0.8em;
+                padding: 0.5em 1em;
+                border-radius: 0.3em;
+                margin-top: 0.6em;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            input[type="number"] {
+                width: 60%;
+                margin-top: 0.3em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>価格比較</h1>
-    <div class="divider"></div>
-
-    <div class="section">
-      <div class="line-container">
-        <div id="itemA" class="item">
-          <label>商品A：</label>
-          <div class="input-row">
-            <input id="weightA" type="number" placeholder="重さ" /> g
-            <input id="priceA" type="number" placeholder="価格" /> 円
-          </div>
-          <div class="triangle-row">
-            <span class="triangle">▶</span><span id="resultA" class="result">-- 円/g</span>
-          </div>
+    <div class="container">
+        <h1>価格比較</h1>
+        <div class="section">
+            <div id="itemA" class="item">
+                <label for="weightA">商品A：</label>
+                <div class="input-group">
+                    <input id="weightA" type="number" placeholder="重さ" /> g
+                    <input id="priceA" type="number" placeholder="価格" /> 円
+                </div>
+                <div class="result-container">
+                    <span class="triangle">▶</span><span id="resultA" class="result">-- 円/g</span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="divider"></div>
-    </div>
 
-    <div class="section">
-      <div class="line-container">
-        <div id="itemB" class="item">
-          <label>商品B：</label>
-          <div class="input-row">
-            <input id="weightB" type="number" placeholder="重さ" /> g
-            <input id="priceB" type="number" placeholder="価格" /> 円
-          </div>
-          <div class="triangle-row">
-            <span class="triangle">▶</span><span id="resultB" class="result">-- 円/g</span>
-          </div>
+        <div class="section">
+            <div id="itemB" class="item">
+                <label for="weightB">商品B：</label>
+                <div class="input-group">
+                    <input id="weightB" type="number" placeholder="重さ" /> g
+                    <input id="priceB" type="number" placeholder="価格" /> 円
+                </div>
+                <div class="result-container">
+                    <span class="triangle">▶</span><span id="resultB" class="result">-- 円/g</span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="divider"></div>
+
+        <div id="recommendation" class="recommendation">
+            どちらの商品がお得か比較します。
+        </div>
+
+        <div class="controls">
+            <button onclick="resetFields()">リセット</button>
+        </div>
     </div>
 
-    <div id="recommendation" class="recommendation" style="display:none;"></div>
+    <script>
+        const weightA = document.getElementById("weightA");
+        const priceA = document.getElementById("priceA");
+        const resultA = document.getElementById("resultA");
+        const itemA = document.getElementById("itemA");
 
-    <div class="controls">
-      <button onclick="resetFields()">リセット</button>
-    </div>
-  </div>
+        const weightB = document.getElementById("weightB");
+        const priceB = document.getElementById("priceB");
+        const resultB = document.getElementById("resultB");
+        const itemB = document.getElementById("itemB");
 
-  <script>
-    const weightA = document.getElementById("weightA");
-    const priceA = document.getElementById("priceA");
-    const resultA = document.getElementById("resultA");
-    const itemA = document.getElementById("itemA");
+        const recommendation = document.getElementById("recommendation");
 
-    const weightB = document.getElementById("weightB");
-    const priceB = document.getElementById("priceB");
-    const resultB = document.getElementById("resultB");
-    const itemB = document.getElementById("itemB");
+        function calculate() {
+            const wA = parseFloat(weightA.value);
+            const pA = parseFloat(priceA.value);
+            const wB = parseFloat(weightB.value);
+            const pB = parseFloat(priceB.value);
 
-    const recommendation = document.getElementById("recommendation");
+            let unitA = wA && pA ? pA / wA : null;
+            let unitB = wB && pB ? pB / wB : null;
 
-    function calculate() {
-      const wA = parseFloat(weightA.value);
-      const pA = parseFloat(priceA.value);
-      const wB = parseFloat(weightB.value);
-      const pB = parseFloat(priceB.value);
+            resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
+            resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
 
-      let unitA = wA && pA ? pA / wA : null;
-      let unitB = wB && pB ? pB / wB : null;
+            // 1.00 円/g の場合に文字色を黒にする処理
+            if (unitA && unitA.toFixed(2) === "1.00") {
+                resultA.classList.add("price-one");
+            } else {
+                resultA.classList.remove("price-one");
+            }
 
-      resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
-      resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
+            if (unitB && unitB.toFixed(2) === "1.00") {
+                resultB.classList.add("price-one");
+            } else {
+                resultB.classList.remove("price-one");
+            }
 
-      itemA.classList.remove("highlight");
-      itemB.classList.remove("highlight");
-      recommendation.style.display = "none";
+            itemA.classList.remove("highlight");
+            itemB.classList.remove("highlight");
+            recommendation.classList.remove("advantage");
+            recommendation.classList.remove("even");
 
-      if (unitA && unitB) {
-        if (unitA < unitB) {
-          itemA.classList.add("highlight");
-          recommendation.textContent = "商品Aのほうがお得！";
-          recommendation.style.display = "block";
-        } else if (unitB < unitA) {
-          itemB.classList.add("highlight");
-          recommendation.textContent = "商品Bのほうがお得！";
-          recommendation.style.display = "block";
+            if (unitA && unitB) {
+                if (unitA < unitB) {
+                    itemA.classList.add("highlight");
+                    recommendation.textContent = "商品Aがお得！";
+                    recommendation.classList.add("advantage");
+                } else if (unitB < unitA) {
+                    itemB.classList.add("highlight");
+                    recommendation.textContent = "商品Bがお得！";
+                    recommendation.classList.add("advantage");
+                } else {
+                    recommendation.textContent = "どちらも同じくらいお得です。";
+                    recommendation.classList.add("even");
+                }
+            } else if (unitA && !unitB) {
+                recommendation.textContent = "どちらの商品がお得か比較します。";
+            } else if (!unitA && unitB) {
+                recommendation.textContent = "どちらの商品がお得か比較します。";
+            } else {
+                recommendation.textContent = "どちらの商品がお得か比較します。"; // 初期メッセージを維持
+            }
         }
-      }
-    }
 
-    function resetFields() {
-      weightA.value = "";
-      priceA.value = "";
-      resultA.textContent = "-- 円/g";
-      itemA.classList.remove("highlight");
+        function resetFields() {
+            weightA.value = "";
+            priceA.value = "";
+            resultA.textContent = "-- 円/g";
+            resultA.classList.remove("price-one");
+            itemA.classList.remove("highlight");
 
-      weightB.value = "";
-      priceB.value = "";
-      resultB.textContent = "-- 円/g";
-      itemB.classList.remove("highlight");
+            weightB.value = "";
+            priceB.value = "";
+            resultB.textContent = "-- 円/g";
+            resultB.classList.remove("price-one");
+            itemB.classList.remove("highlight");
 
-      recommendation.style.display = "none";
-    }
+            recommendation.textContent = "どちらの商品がお得か比較します。"; // リセット時も初期メッセージ
+            recommendation.classList.remove("advantage");
+            recommendation.classList.remove("even");
+        }
 
-    weightA.addEventListener("input", calculate);
-    priceA.addEventListener("input", calculate);
-    weightB.addEventListener("input", calculate);
-    priceB.addEventListener("input", calculate);
-  </script>
+        weightA.addEventListener("input", calculate);
+        priceA.addEventListener("input", calculate);
+        weightB.addEventListener("input", calculate);
+        priceB.addEventListener("input", calculate);
+    </script>
 </body>
 </html>
