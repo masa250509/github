@@ -35,7 +35,7 @@
     }
 
     .row.highlight {
-      background-color: #FFE600; /* お得な商品 → 濃い黄色 */
+      background-color: #FFE600; /* 入力行のハイライト → 濃い黄色 */
     }
 
     .row label {
@@ -50,7 +50,7 @@
     }
 
     .triangle {
-      color: #00B140; /* 三角▶ 緑 */
+      color: #00B140; /* ▶の色 */
       font-size: 20px;
       margin: 0 4px;
     }
@@ -68,15 +68,7 @@
       padding: 12px;
       border-radius: 6px;
       margin-top: 20px;
-    }
-
-    .highlight-a {
-      background-color: #007F33; /* 商品Aが安い → 深緑 */
-    }
-
-    .highlight-b {
-      background-color: #FFFF00; /* 商品Bが安い → 明るい黄色 */
-      color: black;
+      background-color: #007F33; /* 深緑に統一 */
     }
 
     .buttons {
@@ -185,13 +177,13 @@
         pricePerB.textContent = `${unitB.toFixed(2)} 円/g`;
 
         if (unitA < unitB) {
-          highlight.innerHTML = `<div class="highlight-bar highlight-a">商品Aのほうがお得！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar">商品Aのほうがお得！</div>`;
           rowA.classList.add("highlight");
         } else if (unitB < unitA) {
-          highlight.innerHTML = `<div class="highlight-bar highlight-b">商品Bのほうがお得！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar">商品Bのほうがお得！</div>`;
           rowB.classList.add("highlight");
         } else {
-          highlight.innerHTML = `<div class="highlight-bar highlight-b" style="background-color: #ccc; color: black;">どちらも同じ価格です！</div>`;
+          highlight.innerHTML = `<div class="highlight-bar" style="background-color: #ccc; color: black;">どちらも同じ価格です！</div>`;
         }
       } else {
         alert("すべての値を正しく入力してください。");
