@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>価格比較</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #ffffff;
+      padding: 1em;
+      margin: 0;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+      text-align: left;
+    }
+    .section {
+      border-top: 1px solid #ccc;
+      padding: 1em 0;
+    }
+    .item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5em;
+      margin-bottom: 0.5em;
+      padding: 0.5em;
+      transition: background-color 0.3s;
+    }
+    .highlight {
+      background-color: rgb(255, 230, 0);
+    }
+    .triangle {
+      color: rgb(255, 136, 0);
+      font-size: 1.2em;
+      margin: 0 0.5em;
+    }
+    .result {
+      min-width: 6em;
+    }
+    .recommendation {
+      color: #fff;
+      background-color: rgb(0, 102, 0);
+      padding: 1em;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 0.5em;
+      margin-top: 1em;
+    }
+    button {
+      background-color: rgb(255, 136, 0);
+      color: white;
+      border: none;
+      padding: 0.6em 1.2em;
+      margin-right: 1em;
+      border-radius: 0.5em;
+      font-size: 1em;
+    }
+    .controls {
+      margin-top: 1em;
+    }
+    input {
+      width: 6em;
+      padding: 0.3em;
+      font-size: 1em;
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .triangle {
+        margin: 0.5em 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>価格比較</h1>
+
+  <div class="section">
+    <div id="itemA" class="item">
+      <label>商品A：</label>
+      <input id="weightA" type="number" placeholder="重さ" /> g
+      <input id="priceA" type="number" placeholder="価格" /> 円
+      <span class="triangle">▶</span>
+      <span id="resultA" class="result">-- 円/g</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div id="itemB" class="item">
+      <label>商品B：</label>
+      <input id="weightB" type="number" placeholder="重さ" /> g
+      <input id="priceB" type="number" placeholder="価格" /> 円
+      <span class="triangle">▶</span>
+      <span id="resultB" class="result">-- 円/g</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="resetFields()">リセット</button>
+  </div>
+
+  <div id="recommendation" class="recommendation" style="display:none;"></div>
+
+  <script>
+    const weightA = document.getElementById("weightA");
+    const priceA = document.getElementById("priceA");
+    const resultA = document.getElementById("resultA");
+    const itemA = document.getElementById("itemA");
+
+    const weightB = document.getElementById("weightB");
+    const priceB = document.getElementById("priceB");
+    const resultB = document.getElementById("resultB");
+    const itemB = document.getElementById("itemB");
+
+    const recommendation = document.getElementById("recommendation");
+
+    function calculate() {
+      const wA = parseFloat(weightA.value);
+      const pA = parseFloat(priceA.value);
+      const wB = parseFloat(weightB.value);
+      const pB = parseFloat(priceB.value);
+
+      let unitA = wA && pA ? pA / wA : null;
+      let unitB = wB && pB ? pB / wB : null;
+
+      resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
+      resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
+
+      itemA.classList.remove("highlight");
+      itemB.classList.remove("highlight");
+      recommendation.style.display = "none";
+
+      if (unitA && unitB) {
+        if (unitA < unitB) {
+          itemA.classList.add("highlight");
+          recommendation.textContent = "商品Aのほうがお得！";
+          recommendation.style.display = "block";
+        } else if (unitB < unitA) {
+          itemB.classList.add("highlight");
+          recommendation.textContent = "商品Bのほうがお得！";
+          recommendation.style.display = "block";
+        }
+      }
+    }
+
+    function resetFields() {
+      weightA.value = "";
+      priceA.value = "";
+      resultA.textContent = "-- 円/g";
+      itemA.classList.remove("highlight");
+
+      weightB.value = "";
+      priceB.value = "";
+      resultB.textContent = "-- 円/g";
+      itemB.classList.remove("highlight");
+
+      recommendation.style.display = "none";
+    }
+
+    weightA.addEventListener("input", calculate);
+    priceA.addEventListener("input", calculate);
+    weightB.addEventListener("input", calculate);
+    priceB.addEventListener("input", calculate);
+  </script>
+</body>
+</html>
