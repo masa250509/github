@@ -78,9 +78,10 @@
     <div class="checkbox-group">
       <label><input type="checkbox" id="convertHalfWidthToFullWidth" checked> 英数字を全角 → 半角に変換</label>
       <label><input type="checkbox" id="convertFullWidthKana" checked> カタカナを半角 → 全角に変換</label>
-      <label><input type="checkbox" id="convertSymbols" checked> 記号を全角に変換（※英数字記号は除く）</label>
+      <label><input type="checkbox" id="convertSymbols" checked> 特定の記号（カンマ・読点・中点・括弧・カギ括弧など）を全角に変換</label>
       <label><input type="checkbox" id="consolidateSpaces" checked> 半角の複数スペースを1つに統一</label>
       <label><input type="checkbox" id="removeExtraSpaces" checked> 不要なスペースの削除（英数字間のスペースは残す）</label>
+      <label><input type="checkbox" id="removeLineBreaks"> 改行を削除</label>
     </div>
     <button onclick="resetDefaults()">デフォルトに戻す</button>
   </div>
@@ -100,14 +101,13 @@
       convertSymbols: true,
       consolidateSpaces: true,
       removeExtraSpaces: true,
+      removeLineBreaks: false
     };
 
     function resetDefaults() {
-      document.getElementById('convertHalfWidthToFullWidth').checked = defaultSettings.convertHalfWidthToFullWidth;
-      document.getElementById('convertFullWidthKana').checked = defaultSettings.convertFullWidthKana;
-      document.getElementById('convertSymbols').checked = defaultSettings.convertSymbols;
-      document.getElementById('consolidateSpaces').checked = defaultSettings.consolidateSpaces;
-      document.getElementById('removeExtraSpaces').checked = defaultSettings.removeExtraSpaces;
+      for (const setting in defaultSettings) {
+        document.getElementById(setting).checked = defaultSettings[setting];
+      }
       convert();
     }
 
@@ -148,14 +148,11 @@
       }
 
       if (document.getElementById('convertSymbols').checked) {
-        // 記号のみ全角に（英数記号と分離してるときだけ）
-        const toFullWidth = {
-          "(": "（", ")": "）", ":": "：", "~": "〜",
-          "･": "・", "「": "「", "」": "」"
+        const symbolMap = {
+          ',': '，', '､': '、', '･': '・', ':': '：', '~': '〜',
+          '(': '（', ')': '）', '｢': '「', '｣': '」'
         };
-        text = text.replace(/([\s\u3000]|^)[\(\):~･「」]([\s\u3000]|$)/g, (match) => {
-          return match.split('').map(s => toFullWidth[s] || s).join('');
-        });
+        text = text.replace(/[,､･:~\(\)｢｣]/g, s => symbolMap[s] || s);
       }
 
       if (document.getElementById('consolidateSpaces').checked) {
@@ -164,6 +161,10 @@
 
       if (document.getElementById('removeExtraSpaces').checked) {
         text = text.replace(/([^0-9a-zA-Z]) ([^0-9a-zA-Z])/g, "$1$2");
+      }
+
+      if (document.getElementById('removeLineBreaks').checked) {
+        text = text.replace(/[\r\n]+/g, "");
       }
 
       document.getElementById("output").value = text.trim();
