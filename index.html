@@ -73,32 +73,27 @@
   <h1>半角全角変換ツール</h1>
   <p class="description">テキスト内の半角・全角を変換するための設定ができます。以下のルールから変換方法を選んでください。</p>
 
-  <!-- チェックボックスでルールを選択 -->
   <div class="rules">
     <strong>変換ルール：</strong>
     <div class="checkbox-group">
       <label><input type="checkbox" id="convertHalfWidthToFullWidth" checked> 英数字を全角 → 半角に変換</label>
       <label><input type="checkbox" id="convertFullWidthKana" checked> カタカナを半角 → 全角に変換</label>
-      <label><input type="checkbox" id="convertSymbols" checked> 記号を全角に変換（例: 、。：「」）</label>
-      <label><input type="checkbox" id="consolidateSpaces" checked> 複数の半角スペースを1つに統一</label>
+      <label><input type="checkbox" id="convertSymbols" checked> 記号を全角に変換（※英数字記号は除く）</label>
+      <label><input type="checkbox" id="consolidateSpaces" checked> 半角の複数スペースを1つに統一</label>
       <label><input type="checkbox" id="removeExtraSpaces" checked> 不要なスペースの削除（英数字間のスペースは残す）</label>
     </div>
     <button onclick="resetDefaults()">デフォルトに戻す</button>
   </div>
 
   <label class="label" for="input">入力テキスト：</label>
-  <textarea id="input"></textarea>
-
-  <button onclick="convert()">変換する</button>
+  <textarea id="input" oninput="convert()"></textarea>
 
   <label class="label" for="output">変換後テキスト：</label>
   <textarea id="output" readonly></textarea>
 
-  <!-- 変換後テキストをコピーするボタン -->
   <button onclick="copyText()">変換後テキストをコピー</button>
 
   <script>
-    // 初期状態（デフォルトのチェックボックス設定）
     const defaultSettings = {
       convertHalfWidthToFullWidth: true,
       convertFullWidthKana: true,
@@ -107,20 +102,18 @@
       removeExtraSpaces: true,
     };
 
-    // デフォルトの状態に戻す関数
     function resetDefaults() {
       document.getElementById('convertHalfWidthToFullWidth').checked = defaultSettings.convertHalfWidthToFullWidth;
       document.getElementById('convertFullWidthKana').checked = defaultSettings.convertFullWidthKana;
       document.getElementById('convertSymbols').checked = defaultSettings.convertSymbols;
       document.getElementById('consolidateSpaces').checked = defaultSettings.consolidateSpaces;
       document.getElementById('removeExtraSpaces').checked = defaultSettings.removeExtraSpaces;
+      convert();
     }
 
-    // 変換処理
     function convert() {
       let text = document.getElementById("input").value;
 
-      // チェックボックスの状態を確認して、変換ルールを適用
       if (document.getElementById('convertHalfWidthToFullWidth').checked) {
         text = text.replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch =>
           String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)
@@ -128,33 +121,41 @@
       }
 
       if (document.getElementById('convertFullWidthKana').checked) {
-        text = text.replace(/[\uFF65-\uFF9F]/g, s => {
-          const kana = {
-            'ｱ':'ア','ｲ':'イ','ｳ':'ウ','ｴ':'エ','ｵ':'オ',
-            'ｶ':'カ','ｷ':'キ','ｸ':'ク','ｹ':'ケ','ｺ':'コ',
-            'ｻ':'サ','ｼ':'シ','ｽ':'ス','ｾ':'セ','ｿ':'ソ',
-            'ﾀ':'タ','ﾁ':'チ','ﾂ':'ツ','ﾃ':'テ','ﾄ':'ト',
-            'ﾅ':'ナ','ﾆ':'ニ','ﾇ':'ヌ','ﾈ':'ネ','ﾉ':'ノ',
-            'ﾊ':'ハ','ﾋ':'ヒ','ﾌ':'フ','ﾍ':'ヘ','ﾎ':'ホ',
-            'ﾏ':'マ','ﾐ':'ミ','ﾑ':'ム','ﾒ':'メ','ﾓ':'モ',
-            'ﾔ':'ヤ','ﾕ':'ユ','ﾖ':'ヨ','ﾗ':'ラ','ﾘ':'リ',
-            'ﾙ':'ル','ﾚ':'レ','ﾛ':'ロ','ﾜ':'ワ','ｦ':'ヲ',
-            'ﾝ':'ン','ｧ':'ァ','ｨ':'ィ','ｩ':'ゥ','ｪ':'ェ',
-            'ｫ':'ォ','ｬ':'ャ','ｭ':'ュ','ｮ':'ョ','ｯ':'ッ',
-            'ｰ':'ー','ﾞ':'゛','ﾟ':'゜'
-          };
-          return kana[s] || s;
-        });
+        const kanaMap = {
+          'ｶﾞ':'ガ','ｷﾞ':'ギ','ｸﾞ':'グ','ｹﾞ':'ゲ','ｺﾞ':'ゴ',
+          'ｻﾞ':'ザ','ｼﾞ':'ジ','ｽﾞ':'ズ','ｾﾞ':'ゼ','ｿﾞ':'ゾ',
+          'ﾀﾞ':'ダ','ﾁﾞ':'ヂ','ﾂﾞ':'ヅ','ﾃﾞ':'デ','ﾄﾞ':'ド',
+          'ﾊﾞ':'バ','ﾋﾞ':'ビ','ﾌﾞ':'ブ','ﾍﾞ':'ベ','ﾎﾞ':'ボ',
+          'ﾊﾟ':'パ','ﾋﾟ':'ピ','ﾌﾟ':'プ','ﾍﾟ':'ペ','ﾎﾟ':'ポ',
+          'ｳﾞ':'ヴ',
+
+          'ｱ':'ア','ｲ':'イ','ｳ':'ウ','ｴ':'エ','ｵ':'オ',
+          'ｶ':'カ','ｷ':'キ','ｸ':'ク','ｹ':'ケ','ｺ':'コ',
+          'ｻ':'サ','ｼ':'シ','ｽ':'ス','ｾ':'セ','ｿ':'ソ',
+          'ﾀ':'タ','ﾁ':'チ','ﾂ':'ツ','ﾃ':'テ','ﾄ':'ト',
+          'ﾅ':'ナ','ﾆ':'ニ','ﾇ':'ヌ','ﾈ':'ネ','ﾉ':'ノ',
+          'ﾊ':'ハ','ﾋ':'ヒ','ﾌ':'フ','ﾍ':'ヘ','ﾎ':'ホ',
+          'ﾏ':'マ','ﾐ':'ミ','ﾑ':'ム','ﾒ':'メ','ﾓ':'モ',
+          'ﾔ':'ヤ','ﾕ':'ユ','ﾖ':'ヨ','ﾗ':'ラ','ﾘ':'リ',
+          'ﾙ':'ル','ﾚ':'レ','ﾛ':'ロ','ﾜ':'ワ','ｦ':'ヲ',
+          'ﾝ':'ン','ｧ':'ァ','ｨ':'ィ','ｩ':'ゥ','ｪ':'ェ',
+          'ｫ':'ォ','ｬ':'ャ','ｭ':'ュ','ｮ':'ョ','ｯ':'ッ',
+          'ｰ':'ー'
+        };
+
+        text = text.replace(/(?:[ｶ-ﾄﾊﾋﾌﾍﾎｳｷｼｽｾｿﾁﾂﾃﾄ])(?:ﾞ|ﾟ)/g, pair => kanaMap[pair] || pair);
+        text = text.replace(/[\uFF65-\uFF9F]/g, s => kanaMap[s] || s);
       }
 
       if (document.getElementById('convertSymbols').checked) {
+        // 記号のみ全角に（英数記号と分離してるときだけ）
         const toFullWidth = {
-          "(": "（", ")": "）",
-          ":": "：", "~": "〜",
-          ".": "。", ",": "、",
+          "(": "（", ")": "）", ":": "：", "~": "〜",
           "･": "・", "「": "「", "」": "」"
         };
-        text = text.replace(/[\(\):~\.,･「」]/g, s => toFullWidth[s] || s);
+        text = text.replace(/([\s\u3000]|^)[\(\):~･「」]([\s\u3000]|$)/g, (match) => {
+          return match.split('').map(s => toFullWidth[s] || s).join('');
+        });
       }
 
       if (document.getElementById('consolidateSpaces').checked) {
@@ -165,11 +166,9 @@
         text = text.replace(/([^0-9a-zA-Z]) ([^0-9a-zA-Z])/g, "$1$2");
       }
 
-      text = text.trim();
-      document.getElementById("output").value = text;
+      document.getElementById("output").value = text.trim();
     }
 
-    // 変換後テキストをコピーする関数
     function copyText() {
       const outputText = document.getElementById("output").value;
       if (outputText) {
