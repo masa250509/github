@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: sans-serif;
-            background-color: #f0f0f0; /* 外側の背景は薄いグレーのまま */
+            background-color: #f0f0f0;
             padding: 1em;
             margin: 0;
             display: flex;
@@ -18,8 +18,8 @@
         .container {
             max-width: 400px;
             width: 100%;
-            background-color: #fff; /* 囲み部分を白に */
-            border: 1px solid #000; /* 黒色の細い枠線 */
+            background-color: #fff;
+            border: 1px solid #000;
             border-radius: 0.8em;
             box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.1);
             padding: 1em;
@@ -34,10 +34,10 @@
             padding: 0;
         }
         .item {
-            background-color: #fff; /* 通常時も白色 */
+            background-color: #fff;
             margin-bottom: 0.8em;
             padding: 0.8em;
-            border: 1px solid #000; /* 黒色の細い枠線を追加 */
+            border: 1px solid #000;
             border-radius: 0.5em;
         }
         .input-group {
@@ -79,30 +79,30 @@
             color: #000;
         }
         .highlight {
-            background-color: rgb(255, 230, 0); /* 黄色 */
+            background-color: rgb(255, 230, 0);
             color: #333;
         }
         .recommendation {
-            background-color: #fff; /* 通常時は白背景 */
-            color: #333; /* 通常時は黒に近いグレー */
+            background-color: #fff;
+            color: #333;
             padding: 0.8em;
             text-align: center;
             border-radius: 0.5em;
             margin-top: 0.8em;
             margin-bottom: 0.8em;
             font-size: 0.9em;
-            border: 1px solid #000; /* 黒色の細い枠線を追加 */
-            font-weight: normal; /* ボールドを解除 */
+            border: 1px solid #000;
+            font-weight: normal;
         }
-        .recommendation.advantage { /* お得な場合 */
-            background-color: #28a745; /* 緑背景 */
-            color: #fff; /* 白文字 */
-            border: 1px solid #28a745; /* 緑色の枠線 */
+        .recommendation.advantage {
+            background-color: #28a745;
+            color: #fff;
+            border: 1px solid #28a745;
         }
-        .recommendation.even { /* どちらも同じくらいお得な場合 */
-            background-color: #28a745; /* 緑背景 */
-            color: #fff; /* 白文字 */
-            border: 1px solid #28a745; /* 緑色の枠線 */
+        .recommendation.even {
+            background-color: #28a745;
+            color: #fff;
+            border: 1px solid #28a745;
         }
         .controls {
             margin-top: 1em;
@@ -130,7 +130,7 @@
             .container {
                 padding: 0.8em;
                 border-radius: 0.5em;
-                border: 1px solid #000; /* スマホ表示でも枠線 */
+                border: 1px solid #000;
             }
             h1 {
                 font-size: 1em;
@@ -261,7 +261,6 @@
             resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
             resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
 
-            // 1.00 円/g の場合に文字色を黒にする処理
             if (unitA && unitA.toFixed(2) === "1.00") {
                 resultA.classList.add("price-one");
             } else {
@@ -276,28 +275,25 @@
 
             itemA.classList.remove("highlight");
             itemB.classList.remove("highlight");
-            recommendation.classList.remove("advantage");
-            recommendation.classList.remove("even");
+            recommendation.classList.remove("advantage", "even");
 
             if (unitA && unitB) {
                 if (unitA < unitB) {
                     itemA.classList.add("highlight");
-                    recommendation.textContent = "商品Aがお得！";
+                    recommendation.textContent = "商品Aの方がお得です！";
                     recommendation.classList.add("advantage");
                 } else if (unitB < unitA) {
                     itemB.classList.add("highlight");
-                    recommendation.textContent = "商品Bがお得！";
+                    recommendation.textContent = "商品Bの方がお得です！";
                     recommendation.classList.add("advantage");
                 } else {
+                    itemA.classList.add("highlight");
+                    itemB.classList.add("highlight");
                     recommendation.textContent = "どちらも同じくらいお得です。";
                     recommendation.classList.add("even");
                 }
-            } else if (unitA && !unitB) {
-                recommendation.textContent = "どちらの商品がお得か比較します。";
-            } else if (!unitA && unitB) {
-                recommendation.textContent = "どちらの商品がお得か比較します。";
             } else {
-                recommendation.textContent = "どちらの商品がお得か比較します。"; // 初期メッセージを維持
+                recommendation.textContent = "どちらの商品がお得か比較します。";
             }
         }
 
@@ -314,9 +310,8 @@
             resultB.classList.remove("price-one");
             itemB.classList.remove("highlight");
 
-            recommendation.textContent = "どちらの商品がお得か比較します。"; // リセット時も初期メッセージ
-            recommendation.classList.remove("advantage");
-            recommendation.classList.remove("even");
+            recommendation.textContent = "どちらの商品がお得か比較します。";
+            recommendation.classList.remove("advantage", "even");
         }
 
         weightA.addEventListener("input", calculate);
