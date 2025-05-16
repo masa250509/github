@@ -14,7 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>価格比較</title>
     <style>
-        /* あなたのCSS部分（省略せずすべて入ってます） */
         body {
             font-family: sans-serif;
             background-color: #f0f0f0;
@@ -104,11 +103,7 @@
             border: 1px solid #000;
             font-weight: normal;
         }
-        .recommendation.advantage {
-            background-color: #28a745;
-            color: #fff;
-            border: 1px solid #28a745;
-        }
+        .recommendation.advantage,
         .recommendation.even {
             background-color: #28a745;
             color: #fff;
@@ -135,7 +130,6 @@
         .price-one {
             color: black !important;
         }
-
         @media (max-width: 480px) {
             .container {
                 padding: 0.8em;
@@ -189,11 +183,7 @@
                 border: 1px solid #000;
                 font-weight: normal;
             }
-            .recommendation.advantage {
-                background-color: #28a745;
-                color: #fff;
-                border: 1px solid #28a745;
-            }
+            .recommendation.advantage,
             .recommendation.even {
                 background-color: #28a745;
                 color: #fff;
@@ -209,7 +199,125 @@
     </style>
 </head>
 <body>
-    <!-- ここ以下は元のコードと変更なし -->
     <div class="container">
         <h1>価格比較</h1>
-        <!-- 省略せずそのまま続く -->
+        <div class="section">
+            <div id="itemA" class="item">
+                <label for="weightA">商品A：</label>
+                <div class="input-group">
+                    <input id="weightA" type="number" placeholder="重さ" /> g
+                    <input id="priceA" type="number" placeholder="価格" /> 円
+                </div>
+                <div class="result-container">
+                    <span class="triangle">▶</span><span id="resultA" class="result">-- 円/g</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div id="itemB" class="item">
+                <label for="weightB">商品B：</label>
+                <div class="input-group">
+                    <input id="weightB" type="number" placeholder="重さ" /> g
+                    <input id="priceB" type="number" placeholder="価格" /> 円
+                </div>
+                <div class="result-container">
+                    <span class="triangle">▶</span><span id="resultB" class="result">-- 円/g</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="recommendation" class="recommendation">
+            どちらの商品がお得か比較します。
+        </div>
+
+        <div class="controls">
+            <button onclick="resetFields()">リセット</button>
+        </div>
+    </div>
+
+    <script>
+        const weightA = document.getElementById("weightA");
+        const priceA = document.getElementById("priceA");
+        const resultA = document.getElementById("resultA");
+        const itemA = document.getElementById("itemA");
+
+        const weightB = document.getElementById("weightB");
+        const priceB = document.getElementById("priceB");
+        const resultB = document.getElementById("resultB");
+        const itemB = document.getElementById("itemB");
+
+        const recommendation = document.getElementById("recommendation");
+
+        function calculate() {
+            const wA = parseFloat(weightA.value);
+            const pA = parseFloat(priceA.value);
+            const wB = parseFloat(weightB.value);
+            const pB = parseFloat(priceB.value);
+
+            let unitA = wA && pA ? pA / wA : null;
+            let unitB = wB && pB ? pB / wB : null;
+
+            resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
+            resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
+
+            if (unitA && unitA.toFixed(2) === "1.00") {
+                resultA.classList.add("price-one");
+            } else {
+                resultA.classList.remove("price-one");
+            }
+
+            if (unitB && unitB.toFixed(2) === "1.00") {
+                resultB.classList.add("price-one");
+            } else {
+                resultB.classList.remove("price-one");
+            }
+
+            itemA.classList.remove("highlight");
+            itemB.classList.remove("highlight");
+            recommendation.classList.remove("advantage", "even");
+
+            if (unitA && unitB) {
+                if (unitA < unitB) {
+                    itemA.classList.add("highlight");
+                    recommendation.textContent = "商品Aの方がお得です！";
+                    recommendation.classList.add("advantage");
+                } else if (unitB < unitA) {
+                    itemB.classList.add("highlight");
+                    recommendation.textContent = "商品Bの方がお得です！";
+                    recommendation.classList.add("advantage");
+                } else {
+                    itemA.classList.add("highlight");
+                    itemB.classList.add("highlight");
+                    recommendation.textContent = "どちらも同じくらいお得です。";
+                    recommendation.classList.add("even");
+                }
+            } else {
+                recommendation.textContent = "どちらの商品がお得か比較します。";
+            }
+        }
+
+        function resetFields() {
+            weightA.value = "";
+            priceA.value = "";
+            resultA.textContent = "-- 円/g";
+            resultA.classList.remove("price-one");
+            itemA.classList.remove("highlight");
+
+            weightB.value = "";
+            priceB.value = "";
+            resultB.textContent = "-- 円/g";
+            resultB.classList.remove("price-one");
+            itemB.classList.remove("highlight");
+
+            recommendation.textContent = "どちらの商品がお得か比較します。";
+            recommendation.classList.remove("advantage", "even");
+        }
+
+        weightA.addEventListener("input", calculate);
+        priceA.addEventListener("input", calculate);
+        weightB.addEventListener("input", calculate);
+        priceB.addEventListener("input", calculate);
+    </script>
+</body>
+</html>
