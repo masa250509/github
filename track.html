@@ -2,37 +2,77 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>荷物追跡リンク生成ツール</title>
   <style>
     body {
       font-family: sans-serif;
       padding: 20px;
+      margin: 0;
       background: #f4f4f4;
+      line-height: 1.6;
     }
-    input {
-      padding: 8px;
-      font-size: 16px;
-      width: 100%;
-      max-width: 400px;
+
+    h1 {
+      font-size: 1.5rem;
       margin-bottom: 10px;
     }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 500px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
     #results {
       margin-top: 20px;
       background: #fff;
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      word-break: break-word;
     }
+
     a {
       color: #0074cc;
       text-decoration: none;
     }
+
     a:hover {
       text-decoration: underline;
     }
+
     .note {
       font-size: 14px;
       color: #555;
+    }
+
+    ul {
+      padding-left: 1.2em;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      #results {
+        padding: 12px;
+        font-size: 15px;
+      }
     }
   </style>
 </head>
@@ -77,10 +117,9 @@
       }
     }
 
-    // 入力 or ペースト後に反映（入力のたびにチェック）
     input.addEventListener("input", () => {
       const value = input.value.trim();
-      if (value.length >= 8) { // 短すぎると誤検出が多いため制限
+      if (value.length >= 8) {
         generateLinks(value);
       } else {
         resultArea.innerHTML = "";
