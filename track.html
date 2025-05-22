@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>荷物追跡リンク生成ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    input {
+      padding: 8px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 10px;
+    }
+    #results {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    a {
+      color: #0074cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .note {
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>荷物追跡リンク生成ツール</h1>
+  <p>追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
+  <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789">
+
+  <div id="results"></div>
+
+  <script>
+    const input = document.getElementById("trackingNumber");
+    const resultArea = document.getElementById("results");
+
+    function generateLinks(num) {
+      resultArea.innerHTML = "";
+
+      if (!num) return;
+
+      const isAmazon = /^TBA\d{10,}$/i.test(num.trim());
+
+      if (isAmazon) {
+        resultArea.innerHTML = `
+          <h2>Amazon配送の可能性があります</h2>
+          <p>Amazonの追跡は直接リンクがありません。以下のページからご確認ください。</p>
+          <p><a href="https://www.amazon.co.jp/gp/your-account/order-history" target="_blank">Amazonの注文履歴ページを開く</a></p>
+          <p class="note">※ TBAで始まる番号（例: TBA123456789）などはAmazon Logisticsの番号です。</p>
+        `;
+      } else {
+        const yamato = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${num}`;
+        const sagawa = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${num}`;
+        const jpPost = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${num}`;
+
+        resultArea.innerHTML = `
+          <h2>追跡リンク</h2>
+          <ul>
+            <li><a href="${yamato}" target="_blank">ヤマト運輸で追跡</a></li>
+            <li><a href="${sagawa}" target="_blank">佐川急便で追跡</a></li>
+            <li><a href="${jpPost}" target="_blank">日本郵便で追跡</a></li>
+          </ul>
+        `;
+      }
+    }
+
+    // 入力 or ペースト後に反映（入力のたびにチェック）
+    input.addEventListener("input", () => {
+      const value = input.value.trim();
+      if (value.length >= 8) { // 短すぎると誤検出が多いため制限
+        generateLinks(value);
+      } else {
+        resultArea.innerHTML = "";
+      }
+    });
+  </script>
+</body>
+</html>
