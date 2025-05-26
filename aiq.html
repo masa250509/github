@@ -44,7 +44,7 @@
       color: black;
       border-radius: 6px;
       cursor: pointer;
-      max-width: 280px; /* Perplexityの幅に合わせた固定幅 */
+      max-width: 280px;
       width: 100%;
       text-align: center;
       transition: background-color 0.3s ease, color 0.3s ease;
@@ -82,44 +82,41 @@
   </p>
 
   <div class="buttons">
-    <button onclick="openAI('chatgpt')">ChatGPTを開く</button>
-    <button onclick="openAI('gemini')">Geminiを開く</button>
-    <button onclick="openAI('grok')">Grokを開く</button>
-    <button onclick="openAI('claude')">Claudeを開く</button>
-    <button onclick="openAI('perplexity')">Perplexityを開く</button>
+    <button onclick="openAI('chatgpt')">ChatGPT</button>
+    <button onclick="openAI('gemini')">Gemini</button>
+    <button onclick="openAI('grok')">Grok</button>
+    <button onclick="openAI('claude')">Claude</button>
+    <button onclick="openAI('perplexity')">Perplexity</button>
   </div>
 
   <script>
     function openAI(service) {
       const question = document.getElementById("question").value.trim();
-      if (!question) {
-        alert("質問を入力してください。");
-        return;
-      }
 
-      navigator.clipboard.writeText(question).then(() => {
-        let url = "";
-        switch (service) {
-          case "chatgpt":
-            url = "https://chat.openai.com/";
-            break;
-          case "gemini":
-            url = "https://gemini.google.com/app";
-            break;
-          case "grok":
-            url = "https://x.com/i/grok";
-            break;
-          case "claude":
-            url = "https://claude.ai/chat";
-            break;
-          case "perplexity":
-            url = "https://www.perplexity.ai/";
-            break;
-        }
-        window.open(url, "_blank");
-      }).catch((err) => {
-        alert("クリップボードへのコピーに失敗しました: " + err);
+      // 空でもOK。コピーだけ試みて、その後リンクを開く。
+      navigator.clipboard.writeText(question).catch((err) => {
+        console.warn("クリップボードコピーに失敗しました:", err);
       });
+
+      let url = "";
+      switch (service) {
+        case "chatgpt":
+          url = "https://chat.openai.com/";
+          break;
+        case "gemini":
+          url = "https://gemini.google.com/app";
+          break;
+        case "grok":
+          url = "https://x.com/i/grok";
+          break;
+        case "claude":
+          url = "https://claude.ai/chat";
+          break;
+        case "perplexity":
+          url = "https://www.perplexity.ai/";
+          break;
+      }
+      window.open(url, "_blank");
     }
   </script>
 </body>
