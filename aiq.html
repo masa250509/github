@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI比較質問ツール</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI質問ツール</title>
   <style>
     body {
       font-family: sans-serif;
@@ -12,112 +12,128 @@
       background: #f4f4f4;
       line-height: 1.6;
     }
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-    }
     textarea {
-      padding: 10px;
-      font-size: 16px;
       width: 100%;
       max-width: 600px;
-      height: 100px;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
+      height: 120px;
+      padding: 10px;
+      font-size: 16px;
       border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
       resize: vertical;
     }
     .note {
       font-size: 14px;
       color: #555;
-      margin-bottom: 20px;
-      max-width: 600px;
+      margin: 10px 0;
     }
-    .buttons button {
-      display: block;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      font-size: 16px;
-      border: 2px solid black;
-      background-color: white;
+    .button-row {
+      margin: 15px 0;
+    }
+    button {
+      background: white;
       color: black;
-      border-radius: 6px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 15px;
+      margin: 5px;
       cursor: pointer;
-      max-width: 280px;
-      width: 100%;
-      text-align: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-sizing: border-box;
-      font-weight: 600;
+      min-width: 170px;
     }
-    .buttons button:hover {
-      background-color: black;
-      color: white;
+    button:hover {
+      border-color: #888;
     }
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      h1 {
-        font-size: 1.2rem;
-      }
-      textarea {
-        font-size: 15px;
-      }
-      .buttons button {
-        font-size: 15px;
-        max-width: 100%;
-      }
+    #history {
+      margin-top: 30px;
+      max-width: 600px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    #history ul {
+      list-style: none;
+      padding-left: 0;
+      max-height: 224px;
+      overflow-y: auto;
+    }
+    #history li {
+      margin: 5px 0;
+      cursor: pointer;
+      color: #0074cc;
+    }
+    #history li:hover {
+      text-decoration: underline;
+    }
+    #clearHistory {
+      margin-top: 15px;
+      background: #f8f8f8;
     }
   </style>
 </head>
 <body>
-  <h1>AI比較質問ツール</h1>
-  <p>AIに聞きたい質問を入力してください（複数行OK）</p>
-  <textarea id="question" placeholder="ここに質問を入力してください"></textarea>
+  <h2>AIに聞きたい質問を入力してください（複数行OK）</h2>
+  <textarea id="question" placeholder="ここに質問を入力..."></textarea>
+  <p class="note">下の各ボタンを押すと質問がクリップボードにコピーされ、各AIが新しいタブで開きます。開いた先で貼り付けてご利用ください。</p>
 
-  <p class="note">
-    下の各ボタンを押すと質問がクリップボードにコピーされ、各AIが新しいタブで開きます。開いた先で貼り付けてご利用ください。
-  </p>
-
-  <div class="buttons">
-    <button onclick="openAI('chatgpt')">ChatGPT</button>
-    <button onclick="openAI('gemini')">Gemini</button>
-    <button onclick="openAI('grok')">Grok</button>
-    <button onclick="openAI('claude')">Claude</button>
-    <button onclick="openAI('perplexity')">Perplexity</button>
+  <div class="button-row">
+    <button onclick="copyAndOpen('https://chat.openai.com/')">ChatGPT</button>
+    <button onclick="copyAndOpen('https://gemini.google.com/app')">Gemini</button>
+    <button onclick="copyAndOpen('https://x.com/i/grok')">Grok</button>
+    <button onclick="copyAndOpen('https://claude.ai/')">Claude</button>
+    <button onclick="copyAndOpen('https://www.perplexity.ai/')">Perplexity</button>
   </div>
 
+  <div id="history">
+    <strong>📜 質問履歴</strong>
+    <ul id="historyList"></ul>
+  </div>
+  <button id="clearHistory">履歴をすべて削除</button>
+
   <script>
-    function openAI(service) {
-      const question = document.getElementById("question").value.trim();
+    const textarea = document.getElementById("question");
+    const historyList = document.getElementById("historyList");
+    const clearBtn = document.getElementById("clearHistory");
 
-      // 空でもOK。コピーだけ試みて、その後リンクを開く。
-      navigator.clipboard.writeText(question).catch((err) => {
-        console.warn("クリップボードコピーに失敗しました:", err);
+    function loadHistory() {
+      const items = JSON.parse(localStorage.getItem("questionHistory") || "[]");
+      historyList.innerHTML = "";
+      items.forEach((q, i) => {
+        const li = document.createElement("li");
+        li.textContent = q.length > 20 ? q.slice(0, 20) + "..." : q;
+        li.title = q;
+        li.onclick = () => {
+          textarea.value = q;
+        };
+        historyList.appendChild(li);
       });
+    }
 
-      let url = "";
-      switch (service) {
-        case "chatgpt":
-          url = "https://chat.openai.com/";
-          break;
-        case "gemini":
-          url = "https://gemini.google.com/app";
-          break;
-        case "grok":
-          url = "https://x.com/i/grok";
-          break;
-        case "claude":
-          url = "https://claude.ai/chat";
-          break;
-        case "perplexity":
-          url = "https://www.perplexity.ai/";
-          break;
-      }
+    function saveToHistory(text) {
+      let items = JSON.parse(localStorage.getItem("questionHistory") || "[]");
+      items = items.filter(item => item !== text); // 重複削除
+      items.unshift(text);
+      items = items.slice(0, 20); // 最大20件保存
+      localStorage.setItem("questionHistory", JSON.stringify(items));
+      loadHistory();
+    }
+
+    function copyAndOpen(url) {
+      const text = textarea.value.trim();
+      navigator.clipboard.writeText(text);
+      if (text) saveToHistory(text);
       window.open(url, "_blank");
     }
+
+    clearBtn.onclick = () => {
+      localStorage.removeItem("questionHistory");
+      loadHistory();
+    };
+
+    // 初回読み込み
+    loadHistory();
   </script>
 </body>
 </html>
