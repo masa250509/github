@@ -56,7 +56,7 @@
     #history ul {
       list-style: none;
       padding-left: 0;
-      max-height: 224px;
+      max-height: 140px;
       overflow-y: auto;
     }
     #history li {
@@ -115,7 +115,7 @@
       let items = JSON.parse(localStorage.getItem("questionHistory") || "[]");
       items = items.filter(item => item !== text); // 重複削除
       items.unshift(text);
-      items = items.slice(0, 20); // 最大20件保存
+      items = items.slice(0, 30); // 最大30件保存
       localStorage.setItem("questionHistory", JSON.stringify(items));
       loadHistory();
     }
