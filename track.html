@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>荷物追跡リンク生成ツール</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>荷物追跡ツール</title>
   <style>
     body {
       font-family: sans-serif;
@@ -30,13 +30,22 @@
     }
 
     button {
-      margin: 5px 5px 5px 0;
-      padding: 8px 12px;
-      font-size: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background-color: #0074cc;
+      color: white;
       cursor: pointer;
+      margin-bottom: 10px;
     }
 
-    #results, #history {
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    #results {
       margin-top: 20px;
       background: #fff;
       padding: 15px;
@@ -45,10 +54,63 @@
       word-break: break-word;
     }
 
-    .history-item {
-      cursor: pointer;
+    a {
       color: #0074cc;
+      text-decoration: none;
+    }
+
+    a:hover {
       text-decoration: underline;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #555;
+    }
+
+    ul {
+      padding-left: 1.2em;
+    }
+
+    #history {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+
+    #history h2 {
+      margin-top: 0;
+    }
+
+    #historyList {
+      list-style: none;
+      padding-left: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #historyList li {
+      padding: 6px 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+
+    #historyList li:hover {
+      background-color: #e6f0ff;
+    }
+
+    #clearHistory {
+      margin-top: 10px;
+      padding: 8px 15px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      background-color: #cc0000;
+      color: white;
+      cursor: pointer;
     }
 
     @media (max-width: 600px) {
@@ -60,11 +122,11 @@
         font-size: 1.2rem;
       }
 
-      input {
+      input, button {
         font-size: 16px;
       }
 
-      #results {
+      #results, #history {
         padding: 12px;
         font-size: 15px;
       }
@@ -72,87 +134,122 @@
   </style>
 </head>
 <body>
-  <h1>荷物追跡リンク生成ツール</h1>
+  <h1>荷物追跡ツール</h1>
   <p>追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
-  <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789">
+  <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
 
-  <div>
-    <button onclick="openLink('yamato')">ヤマトで調べる</button>
-    <button onclick="openLink('sagawa')">佐川で調べる</button>
-    <button onclick="openLink('jp')">日本郵便で調べる</button>
-  </div>
+  <button id="yamatoBtn">ヤマトで調べる</button>
+  <button id="sagawaBtn">佐川で調べる</button>
+  <button id="jpPostBtn">日本郵便で調べる</button>
 
-  <div id="results" style="display:none;"></div>
+  <div id="results"></div>
 
   <div id="history">
-    <h2>履歴</h2>
+    <h2>履歴（最大10件）</h2>
     <ul id="historyList"></ul>
-    <button onclick="clearHistory()">履歴を削除</button>
+    <button id="clearHistory">履歴を削除</button>
   </div>
 
   <script>
     const input = document.getElementById("trackingNumber");
+    const resultArea = document.getElementById("results");
+
+    const yamatoBtn = document.getElementById("yamatoBtn");
+    const sagawaBtn = document.getElementById("sagawaBtn");
+    const jpPostBtn = document.getElementById("jpPostBtn");
+
     const historyList = document.getElementById("historyList");
+    const clearHistoryBtn = document.getElementById("clearHistory");
 
-    function openLink(carrier) {
-      const num = input.value.trim();
-
-      const isAmazon = /^TBA\d{10,}$/i.test(num);
-      if (isAmazon) {
-        window.open("https://www.amazon.co.jp/gp/your-account/order-history", "_blank");
-        saveHistory(num);
-        return;
+    // 履歴はlocalStorageで管理。最大10件、重複なし
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem("trackingHistory")) || [];
+      } catch {
+        return [];
       }
-
-      if (!num) {
-        alert("追跡番号を入力してください");
-        return;
-      }
-
-      saveHistory(num);
-
-      const yamato = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${num}`;
-      const sagawa = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${num}`;
-      const jpPost = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${num}`;
-
-      let url = "";
-      switch (carrier) {
-        case 'yamato': url = yamato; break;
-        case 'sagawa': url = sagawa; break;
-        case 'jp':     url = jpPost; break;
-      }
-
-      window.open(url, "_blank");
     }
 
-    function saveHistory(num) {
-      let history = JSON.parse(localStorage.getItem("trackingHistory") || "[]");
-      history = history.filter(item => item !== num);
-      history.unshift(num);
-      if (history.length > 10) history = history.slice(0, 10);
-      localStorage.setItem("trackingHistory", JSON.stringify(history));
+    function saveHistory(history) {
+      localStorage.setItem("trackingHistory", JSON.stringify(history.slice(0,10)));
+    }
+
+    function addToHistory(number) {
+      let history = getHistory();
+      number = number.trim();
+      if (!number) return;
+      // 重複を除いて先頭に追加
+      history = history.filter(n => n !== number);
+      history.unshift(number);
+      saveHistory(history);
       renderHistory();
     }
 
     function renderHistory() {
-      const history = JSON.parse(localStorage.getItem("trackingHistory") || "[]");
+      const history = getHistory();
       historyList.innerHTML = "";
       history.forEach(num => {
         const li = document.createElement("li");
         li.textContent = num;
-        li.className = "history-item";
-        li.onclick = () => {
+        li.addEventListener("click", () => {
           input.value = num;
-        };
+          resultArea.innerHTML = "";
+        });
         historyList.appendChild(li);
       });
+      clearHistoryBtn.disabled = history.length === 0;
     }
 
-    function clearHistory() {
+    clearHistoryBtn.addEventListener("click", () => {
       localStorage.removeItem("trackingHistory");
       renderHistory();
+    });
+
+    function openTrackingUrl(url) {
+      window.open(url, "_blank");
     }
 
+    function validateInput() {
+      if (!input.value.trim()) {
+        alert("追跡番号を入力してください。");
+        return false;
+      }
+      return true;
+    }
+
+    yamatoBtn.addEventListener("click", () => {
+      if (!validateInput()) return;
+      const num = input.value.trim();
+      const url = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${encodeURIComponent(num)}`;
+      openTrackingUrl(url);
+      addToHistory(num);
+      resultArea.innerHTML = "";
+    });
+
+    sagawaBtn.addEventListener("click", () => {
+      if (!validateInput()) return;
+      const num = input.value.trim();
+      const url = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${encodeURIComponent(num)}`;
+      openTrackingUrl(url);
+      addToHistory(num);
+      resultArea.innerHTML = "";
+    });
+
+    jpPostBtn.addEventListener("click", () => {
+      if (!validateInput()) return;
+      const num = input.value.trim();
+      const url = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${encodeURIComponent(num)}`;
+      openTrackingUrl(url);
+      addToHistory(num);
+      resultArea.innerHTML = "";
+    });
+
+    // ペースト・入力時に履歴表示は更新しつつ、リンク表示はしない
+    input.addEventListener("input", () => {
+      resultArea.innerHTML = "";
+    });
+
+    // 初期表示で履歴をレンダー
     renderHistory();
   </script>
 </body>
