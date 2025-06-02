@@ -11,37 +11,51 @@
       margin: 0;
       background: #f4f4f4;
       line-height: 1.6;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px; /* パソコン時の最大幅 */
     }
 
     h1 {
       font-size: 1.5rem;
       margin-bottom: 10px;
+      text-align: center;
     }
 
     input {
       padding: 10px;
       font-size: 16px;
       width: 100%;
-      max-width: 500px;
       box-sizing: border-box;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      display: block;
     }
 
     button {
+      display: block;
       padding: 10px 20px;
       font-size: 16px;
       border-radius: 6px;
-      border: none;
-      background-color: #0074cc;
-      color: white;
+      border: 1px solid #000;
+      background-color: #fff;
+      color: #000;
       cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
       margin-bottom: 10px;
+      text-align: center;
     }
 
     button:disabled {
-      background-color: #cccccc;
+      background-color: #f0f0f0;
+      color: #999;
+      border-color: #ccc;
       cursor: not-allowed;
     }
 
@@ -78,11 +92,11 @@
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      max-width: 500px;
     }
 
     #history h2 {
       margin-top: 0;
+      text-align: center;
     }
 
     #historyList {
@@ -90,6 +104,7 @@
       padding-left: 0;
       max-height: 200px;
       overflow-y: auto;
+      margin-bottom: 10px;
     }
 
     #historyList li {
@@ -102,20 +117,14 @@
       background-color: #e6f0ff;
     }
 
-    #clearHistory {
-      margin-top: 10px;
-      padding: 8px 15px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: none;
-      background-color: #cc0000;
-      color: white;
-      cursor: pointer;
-    }
-
     @media (max-width: 600px) {
       body {
         padding: 10px;
+        display: block;
+      }
+
+      .container {
+        max-width: 100%;
       }
 
       h1 {
@@ -124,6 +133,7 @@
 
       input, button {
         font-size: 16px;
+        width: 100%;
       }
 
       #results, #history {
@@ -134,20 +144,23 @@
   </style>
 </head>
 <body>
-  <h1>荷物追跡ツール</h1>
-  <p>追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
-  <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
+  <div class="container">
+    <h1>荷物追跡ツール</h1>
+    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
+    <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
 
-  <button id="yamatoBtn">ヤマトで調べる</button>
-  <button id="sagawaBtn">佐川で調べる</button>
-  <button id="jpPostBtn">日本郵便で調べる</button>
+    <button id="yamatoBtn">ヤマトで調べる</button>
+    <button id="sagawaBtn">佐川で調べる</button>
+    <button id="jpPostBtn">日本郵便で調べる</button>
+    <button id="amazonBtn">Amazonで調べる</button>
 
-  <div id="results"></div>
+    <div id="results"></div>
 
-  <div id="history">
-    <h2>履歴（最大10件）</h2>
-    <ul id="historyList"></ul>
-    <button id="clearHistory">履歴を削除</button>
+    <div id="history">
+      <h2>履歴（最大10件）</h2>
+      <ul id="historyList"></ul>
+      <button id="clearHistory">履歴を削除</button>
+    </div>
   </div>
 
   <script>
@@ -157,11 +170,11 @@
     const yamatoBtn = document.getElementById("yamatoBtn");
     const sagawaBtn = document.getElementById("sagawaBtn");
     const jpPostBtn = document.getElementById("jpPostBtn");
+    const amazonBtn = document.getElementById("amazonBtn");
 
     const historyList = document.getElementById("historyList");
     const clearHistoryBtn = document.getElementById("clearHistory");
 
-    // 履歴はlocalStorageで管理。最大10件、重複なし
     function getHistory() {
       try {
         return JSON.parse(localStorage.getItem("trackingHistory")) || [];
@@ -178,7 +191,6 @@
       let history = getHistory();
       number = number.trim();
       if (!number) return;
-      // 重複を除いて先頭に追加
       history = history.filter(n => n !== number);
       history.unshift(number);
       saveHistory(history);
@@ -244,12 +256,23 @@
       resultArea.innerHTML = "";
     });
 
-    // ペースト・入力時に履歴表示は更新しつつ、リンク表示はしない
+    amazonBtn.addEventListener("click", () => {
+      if (!validateInput()) return;
+      const num = input.value.trim();
+      const isAmazon = /^TBA\d{10,}$/i.test(num);
+      if (isAmazon) {
+        openTrackingUrl("https://www.amazon.co.jp/gp/your-account/order-history");
+      } else {
+        alert("Amazonの追跡番号はTBAで始まる番号のみ対応しています。");
+      }
+      addToHistory(num);
+      resultArea.innerHTML = "";
+    });
+
     input.addEventListener("input", () => {
       resultArea.innerHTML = "";
     });
 
-    // 初期表示で履歴をレンダー
     renderHistory();
   </script>
 </body>
