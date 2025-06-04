@@ -2,8 +2,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>荷物追跡ツール</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20id%3D%22contents%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20viewBox%3D%220%200%20668.94%20668.94%22%3E%3Cdefs%3E%3Cstyle%3E.st0%7Bfill%3A%23fff%3B%7D%3C/style%3E%3C/defs%3E%3Crect%20width%3D%22668.94%22%20height%3D%22668.94%22%20rx%3D%2291.37%22%20ry%3D%2291.37%22/%3E%3Cg%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M278.72%2C400.94H97.33v-207.75h108.4v57.56l18.77-11.3%2C15.92%2C9.59l15.93-9.59l15.93%2C9.59l15.93-9.59l18.78%2C11.3.02-57.56h108.4v31.93c10.65.16%2C21.13%2C1.52%2C31.26%2C4.01v-56.74l-91.81-87.44h-196.97l-91.81%2C87.44v259.82h225.37c-5.53-9.9-9.79-20.39-12.72-31.26h0ZM342.35%2C116.21l48.01%2C45.72h-86.65l-12.21-45.72h50.85%2C0ZM170.38%2C116.21h50.85l-12.21%2C45.72h-86.65l48.01-45.72h0Z%22/%3E%3Cg%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M595.65%2C533.27l-34.41-40.56-47.3%2C39.69l34.41%2C40.56c10.96%2C13.06%2C30.43%2C14.77%2C43.49%2C3.81s14.77-30.43%2C3.81-43.49h0Z%22/%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M535.72%2C462.31c-6.04-7.2-14.67-10.94-23.38-11.02l-14.77-17.6c32.69-39.75%2C33.53-98.52-.72-139.34-38.65-46.07-107.58-52.1-153.64-13.44-46.07%2C38.65-52.1%2C107.58-13.44%2C153.64%2C34.25%2C40.82%2C92.27%2C50.2%2C137.09%2C24.91l14.77%2C17.6c-1.43%2C8.59.75%2C17.74%2C6.79%2C24.94l12.63%2C15.05l47.3-39.69-12.63-15.05h0ZM487.49%2C364.18c0%2C40.94-33.19%2C74.13-74.13%2C74.13s-74.13-33.19-74.13-74.13%2C33.19-74.13%2C74.13-74.13s74.13%2C33.19%2C74.13%2C74.13Z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+
   <style>
     body {
       font-family: sans-serif;
@@ -17,128 +19,57 @@
 
     .container {
       width: 100%;
-      max-width: 400px; /* パソコン時の最大幅 */
+      max-width: 500px;
     }
 
     h1 {
       font-size: 1.5rem;
       margin-bottom: 10px;
-      text-align: center;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #000;
+      border-radius: 6px;
+      background: #fff;
+      color: #000;
+      margin-bottom: 10px;
     }
 
     input {
-      padding: 10px;
-      font-size: 16px;
       width: 100%;
       box-sizing: border-box;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      display: block;
     }
 
-    button {
-      display: block;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #000;
-      background-color: #fff;
-      color: #000;
-      cursor: pointer;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-      text-align: center;
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
     }
 
-    button:disabled {
-      background-color: #f0f0f0;
-      color: #999;
-      border-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    #results {
-      margin-top: 20px;
+    #history {
       background: #fff;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 6px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       word-break: break-word;
     }
 
-    a {
-      color: #0074cc;
-      text-decoration: none;
+    #history button {
+      margin-top: 10px;
+      width: 100%;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .note {
-      font-size: 14px;
-      color: #555;
-    }
-
-    ul {
-      padding-left: 1.2em;
-    }
-
-    #history {
-      margin-top: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    #history h2 {
-      margin-top: 0;
-      text-align: center;
-    }
-
-    #historyList {
-      list-style: none;
-      padding-left: 0;
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-
-    #historyList li {
-      padding: 6px 10px;
-      border-bottom: 1px solid #ddd;
+    .history-item {
       cursor: pointer;
-    }
-
-    #historyList li:hover {
-      background-color: #e6f0ff;
+      margin-bottom: 5px;
     }
 
     @media (max-width: 600px) {
       body {
         padding: 10px;
-        display: block;
-      }
-
-      .container {
-        max-width: 100%;
-      }
-
-      h1 {
-        font-size: 1.2rem;
-      }
-
-      input, button {
-        font-size: 16px;
-        width: 100%;
-      }
-
-      #results, #history {
-        padding: 12px;
-        font-size: 15px;
       }
     }
   </style>
@@ -146,132 +77,86 @@
 <body>
   <div class="container">
     <h1>荷物追跡ツール</h1>
-    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
-    <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
-
-    <button id="yamatoBtn">ヤマトで調べる</button>
-    <button id="sagawaBtn">佐川で調べる</button>
-    <button id="jpPostBtn">日本郵便で調べる</button>
-    <button id="amazonBtn">Amazonで調べる</button>
-
-    <div id="results"></div>
-
-    <div id="history">
-      <h2>履歴（最大10件）</h2>
-      <ul id="historyList"></ul>
-      <button id="clearHistory">履歴を削除</button>
+    <input type="text" id="trackingNumber" placeholder="追跡番号を入力してください">
+    <div class="button-group">
+      <button onclick="openCarrier('yamato')">ヤマトで調べる</button>
+      <button onclick="openCarrier('sagawa')">佐川で調べる</button>
+      <button onclick="openCarrier('jppost')">日本郵便で調べる</button>
+      <button onclick="openCarrier('amazon')">アマゾンで調べる</button>
     </div>
+
+    <div id="history"></div>
   </div>
 
   <script>
     const input = document.getElementById("trackingNumber");
-    const resultArea = document.getElementById("results");
-
-    const yamatoBtn = document.getElementById("yamatoBtn");
-    const sagawaBtn = document.getElementById("sagawaBtn");
-    const jpPostBtn = document.getElementById("jpPostBtn");
-    const amazonBtn = document.getElementById("amazonBtn");
-
-    const historyList = document.getElementById("historyList");
-    const clearHistoryBtn = document.getElementById("clearHistory");
+    const historyArea = document.getElementById("history");
 
     function getHistory() {
-      try {
-        return JSON.parse(localStorage.getItem("trackingHistory")) || [];
-      } catch {
-        return [];
-      }
+      return JSON.parse(localStorage.getItem("trackingHistory") || "[]");
     }
 
-    function saveHistory(history) {
-      localStorage.setItem("trackingHistory", JSON.stringify(history.slice(0,10)));
-    }
-
-    function addToHistory(number) {
+    function saveHistory(number) {
       let history = getHistory();
-      number = number.trim();
-      if (!number) return;
-      history = history.filter(n => n !== number);
-      history.unshift(number);
-      saveHistory(history);
-      renderHistory();
+      if (!history.includes(number)) {
+        history.unshift(number);
+        if (history.length > 10) history = history.slice(0, 10);
+        localStorage.setItem("trackingHistory", JSON.stringify(history));
+      }
     }
 
     function renderHistory() {
       const history = getHistory();
-      historyList.innerHTML = "";
-      history.forEach(num => {
-        const li = document.createElement("li");
-        li.textContent = num;
-        li.addEventListener("click", () => {
-          input.value = num;
-          resultArea.innerHTML = "";
-        });
-        historyList.appendChild(li);
-      });
-      clearHistoryBtn.disabled = history.length === 0;
+      if (history.length === 0) {
+        historyArea.innerHTML = "";
+        return;
+      }
+
+      const items = history.map(num => `<div class="history-item" onclick="selectHistory('${num}')">${num}</div>`).join("");
+      historyArea.innerHTML = `
+        <h2>履歴</h2>
+        ${items}
+        <button onclick="clearHistory()">履歴を削除</button>
+      `;
     }
 
-    clearHistoryBtn.addEventListener("click", () => {
+    function clearHistory() {
       localStorage.removeItem("trackingHistory");
       renderHistory();
-    });
+    }
 
-    function openTrackingUrl(url) {
+    function selectHistory(number) {
+      input.value = number;
+    }
+
+    function openCarrier(carrier) {
+      const num = input.value.trim();
+      if (!num) {
+        alert("追跡番号を入力してください。");
+        return;
+      }
+
+      saveHistory(num);
+      renderHistory();
+
+      let url = "";
+      switch (carrier) {
+        case "yamato":
+          url = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${num}`;
+          break;
+        case "sagawa":
+          url = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${num}`;
+          break;
+        case "jppost":
+          url = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${num}`;
+          break;
+        case "amazon":
+          url = `https://www.amazon.co.jp/gp/your-account/order-history`;
+          break;
+      }
+
       window.open(url, "_blank");
     }
-
-    function validateInput() {
-      if (!input.value.trim()) {
-        alert("追跡番号を入力してください。");
-        return false;
-      }
-      return true;
-    }
-
-    yamatoBtn.addEventListener("click", () => {
-      if (!validateInput()) return;
-      const num = input.value.trim();
-      const url = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
-      addToHistory(num);
-      resultArea.innerHTML = "";
-    });
-
-    sagawaBtn.addEventListener("click", () => {
-      if (!validateInput()) return;
-      const num = input.value.trim();
-      const url = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
-      addToHistory(num);
-      resultArea.innerHTML = "";
-    });
-
-    jpPostBtn.addEventListener("click", () => {
-      if (!validateInput()) return;
-      const num = input.value.trim();
-      const url = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
-      addToHistory(num);
-      resultArea.innerHTML = "";
-    });
-
-    amazonBtn.addEventListener("click", () => {
-      if (!validateInput()) return;
-      const num = input.value.trim();
-      const isAmazon = /^TBA\d{10,}$/i.test(num);
-      if (isAmazon) {
-        openTrackingUrl("https://www.amazon.co.jp/gp/your-account/order-history");
-      } else {
-        alert("Amazonの追跡番号はTBAで始まる番号のみ対応しています。");
-      }
-      addToHistory(num);
-      resultArea.innerHTML = "";
-    });
-
-    input.addEventListener("input", () => {
-      resultArea.innerHTML = "";
-    });
 
     renderHistory();
   </script>
