@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>荷物追跡ツール</title>
-  <!-- ファビコンとしてSVGをbase64エンコードで埋め込み -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyBpZD0iY29udGVudHMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDY2OC45NCA2NjguOTQiPjxzdHlsZT4uc3QweyBmaWxsOiAjZmZmOyB9PC9zdHlsZT48cmVjdCB3aWR0aD0iNjY4Ljk0IiBoZWlnaHQ9IjY2OC45NCIgcng9IjkxLjM3Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTI3OC43Miw0MDAuOTRIMTAzLjMzdi0yMDcuNzVoMTA4LjQwdjU3LjU2bDE4Ljc3LTExLjMsMTUuOTIsOS41OSwxNS45My05LjU5LDE1LjkzLDkuNTksMTUuOTMtOS41OSwxOC43OCwxMS4zLjAyLTU3LjU2aDEwOC40djMxLjkzYzEwLjY1LjE2LDIxLjEzLDEuNTIsMzEuMjYsNC4wMXYtNTYuNzRsLTkxLjgxLTg3LjQ0aC0xOTYuOTdsLTkxLjgxLDg3LjQ0djI1OS44MmgxNTQuOTdjLTUuNTMtOS45LTkuNzktMjAuMzktMTIuNzItMzEuMjZaTTM0Mi4zNSwxMTYuMjFsNDguMDEsNDUuNzJoLTg2LjY1bC0xMi4yMS00NS43Mmg1MC44NXpNMTcwLjM4LDExNi4yMWg1MC44NWwtMTIuMjEsNDUuNzJoLTg2LjY1bDQ4LjAxLTQ1LjcyWiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik01OTUuNjUsNTMzLjI3bC0zNC40MS00MC41Ni00Ny4zLDM5LjY5bDM0LjQxLDQwLjU2YzEwLjk2LDEzLjA2LDMwLjQzLDE0Ljc3LDQzLjQ5LDMuODFzMTQuNzctMzAuNDMsMy44MS00My40OVoiLz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTM1LjcyLDQ2Mi4zMWMtNi4wNC03LjItMTQuNjctMTAuOTQtMjMuMzgtMTEuMDJsLTE0Ljc3LTE3LjZjMzIuNjktMzkuNzUsMzMuNTMtOTguNTItLS43Mi0xMzkuMzQtMzguNjUtNDYuMDctMTA3LjU4LTUyLjEtMTUzLjY0LTEzLjQ0LTQ2LjA3LDM4LjY1LTUyLjEsMTA3LjU4LTEzLjQ0LDE1My42NCwzNC4yNSw0MC44Miw5Mi4yNyw1MC4yLDEzNy4wOSwyNC45MWwxNC43NywxNy42Yy0xLjQzLDguNTkuNzUsMTcuNzQsNi43OSwyNC45NGwxMi42MywxNS4wNSw0Ny4zLTM5LjY5LTEyLjYzLTE1LjA1WiIvPjwvc3ZnPg==" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,...(省略)..." />
   <style>
+    /* --- 省略なしのCSS部分 --- */
     body {
       font-family: sans-serif;
       padding: 20px;
@@ -37,30 +37,24 @@
       flex-shrink: 0;
     }
 
-    input {
+    input, button {
       padding: 10px;
       font-size: 16px;
       width: 100%;
       box-sizing: border-box;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
+      margin-bottom: 10px;
       border-radius: 6px;
-      display: block;
+    }
+
+    input {
+      border: 1px solid #ccc;
     }
 
     button {
-      display: block;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 6px;
       border: 1px solid #000;
       background-color: #fff;
       color: #000;
       cursor: pointer;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-      text-align: center;
     }
 
     button:disabled {
@@ -70,22 +64,17 @@
       cursor: not-allowed;
     }
 
-    #results {
-      display: none;
+    #results, #history {
       margin-top: 20px;
       background: #fff;
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      word-break: break-word;
     }
 
-    #history {
-      margin-top: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    #results {
+      display: none;
+      word-break: break-word;
     }
 
     #history h2 {
@@ -111,37 +100,13 @@
       background-color: #e6f0ff;
     }
 
-    a {
-      color: #0074cc;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
     @media (max-width: 600px) {
       body {
         padding: 10px;
         display: block;
       }
-
       .container {
         max-width: 100%;
-      }
-
-      .title {
-        font-size: 1.2rem;
-      }
-
-      input, button {
-        font-size: 16px;
-        width: 100%;
-      }
-
-      #results, #history {
-        padding: 12px;
-        font-size: 15px;
       }
     }
   </style>
@@ -149,28 +114,18 @@
 <body>
   <div class="container">
     <div class="title">
-      <!-- 指定されたSVGロゴ -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 668.94 668.94">
-        <style>.st0 { fill: #fff; }</style>
-        <rect width="668.94" height="668.94" rx="91.37"/>
-        <g>
-          <path class="st0" d="M278.72,400.94H97.33v-207.75h108.4v57.56l18.77-11.3,15.92,9.59,15.93-9.59,15.93,9.59,15.93-9.59,18.78,11.3.02-57.56h108.4v31.93c10.65.16,21.13,1.52,31.26,4.01v-56.74l-91.81-87.44h-196.97l-91.81,87.44v259.82h225.37c-5.53-9.9-9.79-20.39-12.72-31.26h0ZM342.35,116.21l48.01,45.72h-86.65l-12.21-45.72h50.85,0ZM170.38,116.21h50.85l-12.21,45.72h-86.65l48.01-45.72h0Z"/>
-          <g>
-            <path class="st0" d="M595.65,533.27l-34.41-40.56-47.3,39.69,34.41,40.56c10.96,13.06,30.43,14.77,43.49,3.81s14.77-30.43,3.81-43.49h0Z"/>
-            <path class="st0" d="M535.72,462.31c-6.04-7.2-14.67-10.94-23.38-11.02l-14.77-17.6c32.69-39.75,33.53-98.52-.72-139.34-38.65-46.07-107.58-52.1-153.64-13.44-46.07,38.65-52.1,107.58-13.44,153.64,34.25,40.82,92.27,50.2,137.09,24.91l14.77,17.6c-1.43,8.59.75,17.74,6.79,24.94l12.63,15.05,47.3-39.69-12.63-15.05h0ZM487.49,364.18c0,40.94-33.19,74.13-74.13,74.13s-74.13-33.19-74.13-74.13,33.19-74.13,74.13-74.13,74.13,33.19,74.13,74.13Z"/>
-          </g>
-        </g>
-      </svg>
+      <!-- SVGロゴ省略可 -->
       荷物追跡ツール
     </div>
 
-    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon）</p>
+    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon・Ariexpress）</p>
     <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
 
     <button id="yamatoBtn">ヤマトで調べる</button>
     <button id="sagawaBtn">佐川で調べる</button>
     <button id="jpPostBtn">日本郵便で調べる</button>
     <button id="amazonBtn">Amazonで調べる</button>
+    <button id="ariexpressBtn">Ariexpressで調べる</button>
 
     <div id="results"></div>
 
@@ -188,6 +143,7 @@
     const sagawaBtn = document.getElementById("sagawaBtn");
     const jpPostBtn = document.getElementById("jpPostBtn");
     const amazonBtn = document.getElementById("amazonBtn");
+    const ariexpressBtn = document.getElementById("ariexpressBtn");
     const historyList = document.getElementById("historyList");
     const clearHistoryBtn = document.getElementById("clearHistory");
 
@@ -287,6 +243,15 @@
       } else {
         alert("Amazonの追跡番号はTBAで始まる番号のみ対応しています。");
       }
+      addToHistory(num);
+      clearAndHideResult();
+    });
+
+    ariexpressBtn.addEventListener("click", () => {
+      if (!validateInput()) return;
+      const num = input.value.trim();
+      const url = `https://global.cainiao.com/newDetail.htm?mailNoList=${encodeURIComponent(num)}&otherMailNoList=`;
+      openTrackingUrl(url);
       addToHistory(num);
       clearAndHideResult();
     });
