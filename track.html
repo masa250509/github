@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>荷物追跡ツール</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,...(省略)..." />
   <style>
-    /* --- 省略なしのCSS部分 --- */
     body {
       font-family: sans-serif;
       padding: 20px;
@@ -28,13 +26,6 @@
       justify-content: center;
       font-size: 1.5rem;
       margin-bottom: 10px;
-    }
-
-    .title svg {
-      width: 1.5rem;
-      height: 1.5rem;
-      margin-right: 8px;
-      flex-shrink: 0;
     }
 
     input, button {
@@ -91,13 +82,30 @@
     }
 
     #historyList li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 6px 10px;
       border-bottom: 1px solid #ddd;
       cursor: pointer;
     }
 
-    #historyList li:hover {
-      background-color: #e6f0ff;
+    .history-number {
+      flex-grow: 1;
+      font-size: 16px;
+      color: #000;
+    }
+
+    .delete-btn {
+      border: none;
+      background: transparent;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      color: red;
     }
 
     @media (max-width: 600px) {
@@ -113,10 +121,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="title">
-      <!-- SVGロゴ省略可 -->
-      荷物追跡ツール
-    </div>
+    <div class="title">荷物追跡ツール</div>
 
     <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon・Aliexpless）</p>
     <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
@@ -132,18 +137,13 @@
     <div id="history">
       <h2>履歴（最大10件）</h2>
       <ul id="historyList"></ul>
-      <button id="clearHistory">履歴を削除</button>
+      <button id="clearHistory">全履歴を削除</button>
     </div>
   </div>
 
   <script>
     const input = document.getElementById("trackingNumber");
     const resultArea = document.getElementById("results");
-    const yamatoBtn = document.getElementById("yamatoBtn");
-    const sagawaBtn = document.getElementById("sagawaBtn");
-    const jpPostBtn = document.getElementById("jpPostBtn");
-    const amazonBtn = document.getElementById("amazonBtn");
-    const ariexpressBtn = document.getElementById("ariexpressBtn");
     const historyList = document.getElementById("historyList");
     const clearHistoryBtn = document.getElementById("clearHistory");
 
@@ -172,16 +172,35 @@
     function renderHistory() {
       const history = getHistory();
       historyList.innerHTML = "";
+
       history.forEach(num => {
         const li = document.createElement("li");
-        li.textContent = num;
-        li.addEventListener("click", () => {
+
+        const numberDiv = document.createElement("div");
+        numberDiv.textContent = num;
+        numberDiv.className = "history-number";
+        numberDiv.addEventListener("click", () => {
           input.value = num;
           resultArea.innerHTML = "";
           resultArea.style.display = "none";
         });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "×";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.title = "この履歴を削除";
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const newHistory = getHistory().filter(h => h !== num);
+          saveHistory(newHistory);
+          renderHistory();
+        });
+
+        li.appendChild(numberDiv);
+        li.appendChild(deleteBtn);
         historyList.appendChild(li);
       });
+
       clearHistoryBtn.disabled = history.length === 0;
     }
 
@@ -207,34 +226,31 @@
       resultArea.style.display = "none";
     }
 
-    yamatoBtn.addEventListener("click", () => {
+    document.getElementById("yamatoBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      const url = `http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
+      openTrackingUrl(`http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=${encodeURIComponent(num)}`);
       addToHistory(num);
       clearAndHideResult();
     });
 
-    sagawaBtn.addEventListener("click", () => {
+    document.getElementById("sagawaBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      const url = `http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
+      openTrackingUrl(`http://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${encodeURIComponent(num)}`);
       addToHistory(num);
       clearAndHideResult();
     });
 
-    jpPostBtn.addEventListener("click", () => {
+    document.getElementById("jpPostBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      const url = `http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${encodeURIComponent(num)}`;
-      openTrackingUrl(url);
+      openTrackingUrl(`http://tracking.post.japanpost.jp/service/singleSearch.do?searchKind=S002&locale=ja&reqCodeNo1=${encodeURIComponent(num)}`);
       addToHistory(num);
       clearAndHideResult();
     });
 
-    amazonBtn.addEventListener("click", () => {
+    document.getElementById("amazonBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
       const isAmazon = /^TBA\d{10,}$/i.test(num);
@@ -247,19 +263,15 @@
       clearAndHideResult();
     });
 
-    ariexpressBtn.addEventListener("click", () => {
+    document.getElementById("ariexpressBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      const url = `https://global.cainiao.com/newDetail.htm?mailNoList=${encodeURIComponent(num)}&otherMailNoList=`;
-      openTrackingUrl(url);
+      openTrackingUrl(`https://global.cainiao.com/newDetail.htm?mailNoList=${encodeURIComponent(num)}&otherMailNoList=`);
       addToHistory(num);
       clearAndHideResult();
     });
 
-    input.addEventListener("input", () => {
-      clearAndHideResult();
-    });
-
+    input.addEventListener("input", clearAndHideResult);
     renderHistory();
   </script>
 </body>
