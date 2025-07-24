@@ -123,13 +123,13 @@
   <div class="container">
     <div class="title">荷物追跡ツール</div>
 
-    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Amazon・Aliexpless）</p>
+    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・17TRACK・AliExpress）</p>
     <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
 
     <button id="yamatoBtn">ヤマトで調べる</button>
     <button id="sagawaBtn">佐川で調べる</button>
     <button id="jpPostBtn">日本郵便で調べる</button>
-    <button id="amazonBtn">Amazonで調べる</button>
+    <button id="universalBtn">17TRACKで調べる</button>
     <button id="ariexpressBtn">Aliexplessで調べる</button>
 
     <div id="results"></div>
@@ -147,11 +147,18 @@
     const historyList = document.getElementById("historyList");
     const clearHistoryBtn = document.getElementById("clearHistory");
 
-    // 最後の追跡番号を復元
-    window.addEventListener("DOMContentLoaded", () => {
-      const lastNumber = localStorage.getItem("lastTrackingNumber");
-      if (lastNumber) {
-        input.value = lastNumber;
+    // 前回の番号を表示
+    const latestHistory = JSON.parse(localStorage.getItem("trackingHistory") || "[]");
+    if (latestHistory.length > 0) {
+      input.value = latestHistory[0];
+    }
+
+    // 一度だけクリックで消す
+    let hasEdited = false;
+    input.addEventListener("focus", () => {
+      if (!hasEdited) {
+        input.value = "";
+        hasEdited = true;
       }
     });
 
@@ -171,10 +178,6 @@
       let history = getHistory();
       number = number.trim();
       if (!number) return;
-
-      // 保存：前回の追跡番号
-      localStorage.setItem("lastTrackingNumber", number);
-
       history = history.filter(n => n !== number);
       history.unshift(number);
       saveHistory(history);
@@ -193,6 +196,7 @@
         numberDiv.className = "history-number";
         numberDiv.addEventListener("click", () => {
           input.value = num;
+          hasEdited = true;
           resultArea.innerHTML = "";
           resultArea.style.display = "none";
         });
@@ -262,15 +266,10 @@
       clearAndHideResult();
     });
 
-    document.getElementById("amazonBtn").addEventListener("click", () => {
+    document.getElementById("universalBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      const isAmazon = /^TBA\d{10,}$/i.test(num);
-      if (isAmazon) {
-        openTrackingUrl("https://www.amazon.co.jp/gp/your-account/order-history");
-      } else {
-        alert("Amazonの追跡番号はTBAで始まる番号のみ対応しています。");
-      }
+      openTrackingUrl(`https://www.17track.net/ja/track?nums=${encodeURIComponent(num)}`);
       addToHistory(num);
       clearAndHideResult();
     });
