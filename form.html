@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非常用給水袋 注文フォーム</title>
+    <style>
+        body { font-family: "メイリオ", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        fieldset { border: 2px solid #0066cc; margin-bottom: 20px; padding: 15px; border-radius: 8px; }
+        legend { font-weight: bold; font-size: 1.2em; padding: 0 10px; color: #0066cc; }
+        label { display: block; margin: 10px 0 5px; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f0f8ff; }
+        .required { color: red; }
+        button { background: #0066cc; color: white; padding: 15px 30px; font-size: 1.2em; border: none; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 20px; }
+        button:hover { background: #004499; }
+    </style>
+</head>
+<body>
+    <h1>非常用給水袋 注文書</h1>
+    <p style="text-align:center; color:#0066cc;">必要事項をご入力ください。送信ボタンでメールが自動作成されます。</p>
+
+    <form id="orderForm">
+        <!-- ① 事業者情報 -->
+        <fieldset>
+            <legend>① 事業者情報</legend>
+            <label>ご発注事業者名</label>
+            <input type="text" name="company_name" required>
+
+            <label>宛名（部署・ご担当者様名）</label>
+            <input type="text" name="contact_person">
+
+            <label>お電話番号</label>
+            <input type="tel" name="phone" required>
+
+            <label>ご住所</label>
+            <textarea name="address" rows="2"></textarea>
+
+            <label>〒</label>
+            <input type="text" name="postal" placeholder="000-0000" maxlength="8">
+        </fieldset>
+
+        <!-- ② ご注文内容 -->
+        <fieldset>
+            <legend>② ご注文内容</legend>
+            <table>
+                <thead>
+                    <tr>
+                        <th>数量</th>
+                        <th>お届け希望日時</th>
+                        <th>給水袋サイズ</th>
+                        <th>名入れの有無</th>
+                        <th>名入れの印刷色</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" name="qty1" min="0" value="0" style="width:80px;"></td>
+                        <td><input type="text" name="delivery1" placeholder="例: 2026/4/10 10:00"></td>
+                        <td><input type="text" name="size1" placeholder="例: 10L"></td>
+                        <td>
+                            <select name="name_print1">
+                                <option value="">選択</option>
+                                <option value="有">有</option>
+                                <option value="無">無</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="color1" placeholder="例: 黒"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="number" name="qty2" min="0" value="0" style="width:80px;"></td>
+                        <td><input type="text" name="delivery2" placeholder="例: 2026/4/10 10:00"></td>
+                        <td><input type="text" name="size2" placeholder="例: 10L"></td>
+                        <td>
+                            <select name="name_print2">
+                                <option value="">選択</option>
+                                <option value="有">有</option>
+                                <option value="無">無</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="color2" placeholder="例: 黒"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="number" name="qty3" min="0" value="0" style="width:80px;"></td>
+                        <td><input type="text" name="delivery3" placeholder="例: 2026/4/10 10:00"></td>
+                        <td><input type="text" name="size3" placeholder="例: 10L"></td>
+                        <td>
+                            <select name="name_print3">
+                                <option value="">選択</option>
+                                <option value="有">有</option>
+                                <option value="無">無</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="color3" placeholder="例: 黒"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <label>名入れ文言（名入れアリの場合 【例】○○市上下水道局）</label>
+            <input type="text" name="name_text">
+
+            <label>包装・段ボール箱への記載名（※名入れがない場合も必ずご記入ください）</label>
+            <input type="text" name="box_name" required>
+        </fieldset>
+
+        <!-- ③ お届け先情報 -->
+        <fieldset>
+            <legend>③ お届け先情報（①と異なる場合のみ）</legend>
+            <label>お届け先名</label>
+            <input type="text" name="delivery_name">
+
+            <label>お届け先が有人か無人か</label>
+            <div>
+                <input type="radio" name="manned" value="有人" id="manned_yes">
+                <label for="manned_yes">有人</label>
+                &nbsp;&nbsp;&nbsp;
+                <input type="radio" name="manned" value="無人" id="manned_no">
+                <label for="manned_no">無人</label>
+            </div>
+
+            <label>宛名（部署・ご担当者様名）</label>
+            <input type="text" name="delivery_contact">
+
+            <label>ご住所</label>
+            <textarea name="delivery_address" rows="2"></textarea>
+
+            <label>〒</label>
+            <input type="text" name="delivery_postal" placeholder="000-0000">
+
+            <label>お電話番号</label>
+            <input type="tel" name="delivery_phone">
+
+            <label>備考欄</label>
+            <textarea name="delivery_note" rows="3"></textarea>
+            <p style="font-size:0.9em; color:#666;">※無人の場合、配送ドライバーより到着1時間程前に電話いたします。</p>
+        </fieldset>
+
+        <!-- ④ 請求書送付先情報 -->
+        <fieldset>
+            <legend>④ 請求書送付先情報（①と異なる場合のみ）★請求書の宛名は必ずご記入ください</legend>
+            <label class="required">請求書の宛名 ★</label>
+            <input type="text" name="invoice_name" required>
+
+            <label>請求書送付先の宛名（部署・ご担当者様名）</label>
+            <input type="text" name="invoice_contact">
+
+            <label>お電話番号</label>
+            <input type="tel" name="invoice_phone">
+
+            <label>ご住所</label>
+            <textarea name="invoice_address" rows="2"></textarea>
+
+            <label>〒</label>
+            <input type="text" name="invoice_postal" placeholder="000-0000">
+
+            <label>備考欄</label>
+            <textarea name="invoice_note" rows="3"></textarea>
+        </fieldset>
+
+        <button type="submit">注文内容をメールで送信</button>
+    </form>
+
+    <footer style="text-align:center; margin-top:30px; font-size:0.9em; color:#666;">
+        市川甚商事株式会社<br>
+        〒600-8078 京都市下京区松原通堺町東入杉屋町287<br>
+        本社営業部 Tel:075-351-0361　Fax:075-361-5091<br>
+        [担当] 小杉 mobile: 090-7555-8763　[メール] kosugi@ichikawa-jin.co.jp
+    </footer>
+
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 入力値をまとめる
+            let body = "【非常用給水袋 注文書】\n\n";
+            body += "① 事業者情報\n";
+            body += `ご発注事業者名: ${this.company_name.value}\n`;
+            body += `宛名: ${this.contact_person.value}\n`;
+            body += `電話: ${this.phone.value}\n`;
+            body += `住所: ${this.address.value}\n`;
+            body += `〒: ${this.postal.value}\n\n`;
+
+            body += "② ご注文内容\n";
+            body += "数量 | お届け希望日時 | サイズ | 名入れ有無 | 印刷色\n";
+            for (let i = 1; i <= 3; i++) {
+                let qty = this[`qty${i}`].value;
+                if (qty && qty !== "0") {
+                    body += `${qty} | ${this[`delivery${i}`].value} | ${this[`size${i}`].value} | ${this[`name_print${i}`].value} | ${this[`color${i}`].value}\n`;
+                }
+            }
+            body += `\n名入れ文言: ${this.name_text.value}\n`;
+            body += `包装・段ボール記載名: ${this.box_name.value}\n\n`;
+
+            body += "③ お届け先情報\n";
+            body += `お届け先名: ${this.delivery_name.value}\n`;
+            body += `有人/無人: ${document.querySelector('input[name="manned"]:checked') ? document.querySelector('input[name="manned"]:checked').value : ''}\n`;
+            body += `宛名: ${this.delivery_contact.value}\n`;
+            body += `住所: ${this.delivery_address.value}\n`;
+            body += `〒: ${this.delivery_postal.value}\n`;
+            body += `電話: ${this.delivery_phone.value}\n`;
+            body += `備考: ${this.delivery_note.value}\n\n`;
+
+            body += "④ 請求書送付先情報\n";
+            body += `請求書の宛名: ${this.invoice_name.value}\n`;
+            body += `宛名: ${this.invoice_contact.value}\n`;
+            body += `電話: ${this.invoice_phone.value}\n`;
+            body += `住所: ${this.invoice_address.value}\n`;
+            body += `〒: ${this.invoice_postal.value}\n`;
+            body += `備考: ${this.invoice_note.value}\n\n`;
+
+            body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
+
+            // メールを開く
+            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?subject=非常用給水袋注文書&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        });
+    </script>
+</body>
+</html>
