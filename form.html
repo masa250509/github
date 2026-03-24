@@ -17,6 +17,8 @@
         .required { color: red; }
         button { background: #0066cc; color: white; padding: 15px 30px; font-size: 1.2em; border: none; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 20px; }
         button:hover { background: #004499; }
+        .address-block { display: flex; flex-wrap: wrap; gap: 15px; }
+        .address-block > div { flex: 1; min-width: 200px; }
     </style>
 </head>
 <body>
@@ -33,17 +35,23 @@
             <label>宛名（部署・ご担当者様名）</label>
             <input type="text" name="contact_person">
 
-            <label>お電話番号</label>
-            <input type="tel" name="phone" required>
-
-            <label>ご住所</label>
-            <textarea name="address" rows="2"></textarea>
-
-            <label>〒</label>
-            <input type="text" name="postal" placeholder="000-0000" maxlength="8">
+            <div class="address-block">
+                <div>
+                    <label>〒</label>
+                    <input type="text" name="postal" placeholder="000-0000" maxlength="8">
+                </div>
+                <div style="flex: 2;">
+                    <label>ご住所</label>
+                    <textarea name="address" rows="2"></textarea>
+                </div>
+                <div>
+                    <label>お電話番号</label>
+                    <input type="tel" name="phone" required>
+                </div>
+            </div>
         </fieldset>
 
-        <!-- ② ご注文内容 -->
+        <!-- ② ご注文内容（1件のみ） -->
         <fieldset>
             <legend>② ご注文内容</legend>
             <table>
@@ -58,43 +66,31 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="number" name="qty1" min="0" value="0" style="width:80px;"></td>
-                        <td><input type="text" name="delivery1" placeholder="例: 2026/4/10 10:00"></td>
-                        <td><input type="text" name="size1" placeholder="例: 10L"></td>
+                        <td><input type="number" name="qty" min="0" value="0" style="width:80px;" required></td>
+                        <td><input type="text" name="delivery" placeholder="例: 2026/4/10 10:00" required></td>
+                        <!-- ★ ここをプルダウンに変更しました！ -->
                         <td>
-                            <select name="name_print1">
-                                <option value="">選択</option>
+                            <select name="size" required>
+                                <option value="">選択してください</option>
+                                <option value="6L">6L</option>
+                                <option value="10L">10L</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="name_print" required>
+                                <option value="">選択してください</option>
                                 <option value="有">有</option>
                                 <option value="無">無</option>
                             </select>
                         </td>
-                        <td><input type="text" name="color1" placeholder="例: 黒"></td>
-                    </tr>
-                    <tr>
-                        <td><input type="number" name="qty2" min="0" value="0" style="width:80px;"></td>
-                        <td><input type="text" name="delivery2" placeholder="例: 2026/4/10 10:00"></td>
-                        <td><input type="text" name="size2" placeholder="例: 10L"></td>
                         <td>
-                            <select name="name_print2">
-                                <option value="">選択</option>
-                                <option value="有">有</option>
-                                <option value="無">無</option>
+                            <select name="color" required>
+                                <option value="">選択してください</option>
+                                <option value="赤">赤</option>
+                                <option value="黒">黒</option>
+                                <option value="紺">紺</option>
                             </select>
                         </td>
-                        <td><input type="text" name="color2" placeholder="例: 黒"></td>
-                    </tr>
-                    <tr>
-                        <td><input type="number" name="qty3" min="0" value="0" style="width:80px;"></td>
-                        <td><input type="text" name="delivery3" placeholder="例: 2026/4/10 10:00"></td>
-                        <td><input type="text" name="size3" placeholder="例: 10L"></td>
-                        <td>
-                            <select name="name_print3">
-                                <option value="">選択</option>
-                                <option value="有">有</option>
-                                <option value="無">無</option>
-                            </select>
-                        </td>
-                        <td><input type="text" name="color3" placeholder="例: 黒"></td>
                     </tr>
                 </tbody>
             </table>
@@ -113,25 +109,29 @@
             <input type="text" name="delivery_name">
 
             <label>お届け先が有人か無人か</label>
-            <div>
-                <input type="radio" name="manned" value="有人" id="manned_yes">
-                <label for="manned_yes">有人</label>
-                &nbsp;&nbsp;&nbsp;
-                <input type="radio" name="manned" value="無人" id="manned_no">
-                <label for="manned_no">無人</label>
-            </div>
+            <select name="manned">
+                <option value="">選択してください</option>
+                <option value="有人">有人</option>
+                <option value="無人">無人</option>
+            </select>
 
             <label>宛名（部署・ご担当者様名）</label>
             <input type="text" name="delivery_contact">
 
-            <label>ご住所</label>
-            <textarea name="delivery_address" rows="2"></textarea>
-
-            <label>〒</label>
-            <input type="text" name="delivery_postal" placeholder="000-0000">
-
-            <label>お電話番号</label>
-            <input type="tel" name="delivery_phone">
+            <div class="address-block">
+                <div>
+                    <label>〒</label>
+                    <input type="text" name="delivery_postal" placeholder="000-0000" maxlength="8">
+                </div>
+                <div style="flex: 2;">
+                    <label>ご住所</label>
+                    <textarea name="delivery_address" rows="2"></textarea>
+                </div>
+                <div>
+                    <label>お電話番号</label>
+                    <input type="tel" name="delivery_phone">
+                </div>
+            </div>
 
             <label>備考欄</label>
             <textarea name="delivery_note" rows="3"></textarea>
@@ -147,14 +147,20 @@
             <label>請求書送付先の宛名（部署・ご担当者様名）</label>
             <input type="text" name="invoice_contact">
 
-            <label>お電話番号</label>
-            <input type="tel" name="invoice_phone">
-
-            <label>ご住所</label>
-            <textarea name="invoice_address" rows="2"></textarea>
-
-            <label>〒</label>
-            <input type="text" name="invoice_postal" placeholder="000-0000">
+            <div class="address-block">
+                <div>
+                    <label>〒</label>
+                    <input type="text" name="invoice_postal" placeholder="000-0000" maxlength="8">
+                </div>
+                <div style="flex: 2;">
+                    <label>ご住所</label>
+                    <textarea name="invoice_address" rows="2"></textarea>
+                </div>
+                <div>
+                    <label>お電話番号</label>
+                    <input type="tel" name="invoice_phone">
+                </div>
+            </div>
 
             <label>備考欄</label>
             <textarea name="invoice_note" rows="3"></textarea>
@@ -174,46 +180,42 @@
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // 入力値をまとめる
             let body = "【非常用給水袋 注文書】\n\n";
             body += "① 事業者情報\n";
             body += `ご発注事業者名: ${this.company_name.value}\n`;
             body += `宛名: ${this.contact_person.value}\n`;
-            body += `電話: ${this.phone.value}\n`;
+            body += `〒: ${this.postal.value}\n`;
             body += `住所: ${this.address.value}\n`;
-            body += `〒: ${this.postal.value}\n\n`;
+            body += `電話: ${this.phone.value}\n\n`;
 
             body += "② ご注文内容\n";
-            body += "数量 | お届け希望日時 | サイズ | 名入れ有無 | 印刷色\n";
-            for (let i = 1; i <= 3; i++) {
-                let qty = this[`qty${i}`].value;
-                if (qty && qty !== "0") {
-                    body += `${qty} | ${this[`delivery${i}`].value} | ${this[`size${i}`].value} | ${this[`name_print${i}`].value} | ${this[`color${i}`].value}\n`;
-                }
-            }
-            body += `\n名入れ文言: ${this.name_text.value}\n`;
+            body += `数量: ${this.qty.value}\n`;
+            body += `お届け希望日時: ${this.delivery.value}\n`;
+            body += `サイズ: ${this.size.value}\n`;   /* ← プルダウン値が入ります */
+            body += `名入れの有無: ${this.name_print.value}\n`;
+            body += `名入れの印刷色: ${this.color.value}\n`;
+            body += `名入れ文言: ${this.name_text.value}\n`;
             body += `包装・段ボール記載名: ${this.box_name.value}\n\n`;
 
             body += "③ お届け先情報\n";
             body += `お届け先名: ${this.delivery_name.value}\n`;
-            body += `有人/無人: ${document.querySelector('input[name="manned"]:checked') ? document.querySelector('input[name="manned"]:checked').value : ''}\n`;
+            body += `有人/無人: ${this.manned.value}\n`;
             body += `宛名: ${this.delivery_contact.value}\n`;
-            body += `住所: ${this.delivery_address.value}\n`;
             body += `〒: ${this.delivery_postal.value}\n`;
+            body += `住所: ${this.delivery_address.value}\n`;
             body += `電話: ${this.delivery_phone.value}\n`;
             body += `備考: ${this.delivery_note.value}\n\n`;
 
             body += "④ 請求書送付先情報\n";
             body += `請求書の宛名: ${this.invoice_name.value}\n`;
             body += `宛名: ${this.invoice_contact.value}\n`;
-            body += `電話: ${this.invoice_phone.value}\n`;
-            body += `住所: ${this.invoice_address.value}\n`;
             body += `〒: ${this.invoice_postal.value}\n`;
+            body += `住所: ${this.invoice_address.value}\n`;
+            body += `電話: ${this.invoice_phone.value}\n`;
             body += `備考: ${this.invoice_note.value}\n\n`;
 
             body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
 
-            // メールを開く
             const mailto = `mailto:kosugi@ichikawa-jin.co.jp?subject=非常用給水袋注文書&body=${encodeURIComponent(body)}`;
             window.location.href = mailto;
         });
