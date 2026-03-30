@@ -19,22 +19,22 @@
         button:hover { background: #004499; }
         .address-block { display: flex; flex-wrap: wrap; gap: 15px; }
         .address-block > div { flex: 1; min-width: 200px; }
+        .qty-container { display: flex; gap: 10px; align-items: center; }
+        .qty-container input { width: 120px; }
+        .qty-container select { width: 100px; }
     </style>
 </head>
 <body>
     <h1>非常用給水袋 注文書</h1>
     <p style="text-align:center; color:#0066cc;">必要事項をご入力ください。送信ボタンでメールが自動作成されます。</p>
-
     <form id="orderForm">
         <!-- ① 事業者情報 -->
         <fieldset>
             <legend>① 事業者情報</legend>
             <label>ご発注事業者名</label>
             <input type="text" name="company_name" required>
-
             <label>宛名（部署・ご担当者様名）</label>
             <input type="text" name="contact_person">
-
             <div class="address-block">
                 <div>
                     <label>〒</label>
@@ -66,9 +66,20 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="number" name="qty" min="0" value="0" style="width:80px;" required></td>
-                        <td><input type="text" name="delivery" placeholder="例: 2026/4/10 10:00" required></td>
-                        <!-- ★ ここをプルダウンに変更しました！ -->
+                        <td>
+                            <div class="qty-container">
+                                <input type="number" name="qty" min="0" value="0" required>
+                                <select name="unit" required>
+                                    <option value="">単位</option>
+                                    <option value="枚">枚</option>
+                                    <option value="個">個</option>
+                                    <option value="袋">袋</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="delivery" placeholder="例: 2026/4/10" required>
+                        </td>
                         <td>
                             <select name="size" required>
                                 <option value="">選択してください</option>
@@ -97,9 +108,6 @@
 
             <label>名入れ文言（名入れアリの場合 【例】○○市上下水道局）</label>
             <input type="text" name="name_text">
-
-            <label>包装・段ボール箱への記載名（※名入れがない場合も必ずご記入ください）</label>
-            <input type="text" name="box_name" required>
         </fieldset>
 
         <!-- ③ お届け先情報 -->
@@ -107,17 +115,14 @@
             <legend>③ お届け先情報（①と異なる場合のみ）</legend>
             <label>お届け先名</label>
             <input type="text" name="delivery_name">
-
             <label>お届け先が有人か無人か</label>
             <select name="manned">
                 <option value="">選択してください</option>
                 <option value="有人">有人</option>
                 <option value="無人">無人</option>
             </select>
-
             <label>宛名（部署・ご担当者様名）</label>
             <input type="text" name="delivery_contact">
-
             <div class="address-block">
                 <div>
                     <label>〒</label>
@@ -132,7 +137,6 @@
                     <input type="tel" name="delivery_phone">
                 </div>
             </div>
-
             <label>備考欄</label>
             <textarea name="delivery_note" rows="3"></textarea>
             <p style="font-size:0.9em; color:#666;">※無人の場合、配送ドライバーより到着1時間程前に電話いたします。</p>
@@ -143,10 +147,8 @@
             <legend>④ 請求書送付先情報（①と異なる場合のみ）★請求書の宛名は必ずご記入ください</legend>
             <label class="required">請求書の宛名 ★</label>
             <input type="text" name="invoice_name" required>
-
             <label>請求書送付先の宛名（部署・ご担当者様名）</label>
             <input type="text" name="invoice_contact">
-
             <div class="address-block">
                 <div>
                     <label>〒</label>
@@ -161,7 +163,6 @@
                     <input type="tel" name="invoice_phone">
                 </div>
             </div>
-
             <label>備考欄</label>
             <textarea name="invoice_note" rows="3"></textarea>
         </fieldset>
@@ -179,7 +180,6 @@
     <script>
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             let body = "【非常用給水袋 注文書】\n\n";
             body += "① 事業者情報\n";
             body += `ご発注事業者名: ${this.company_name.value}\n`;
@@ -189,13 +189,12 @@
             body += `電話: ${this.phone.value}\n\n`;
 
             body += "② ご注文内容\n";
-            body += `数量: ${this.qty.value}\n`;
+            body += `数量: ${this.qty.value} ${this.unit.value}\n`;
             body += `お届け希望日時: ${this.delivery.value}\n`;
-            body += `サイズ: ${this.size.value}\n`;   /* ← プルダウン値が入ります */
+            body += `サイズ: ${this.size.value}\n`;
             body += `名入れの有無: ${this.name_print.value}\n`;
             body += `名入れの印刷色: ${this.color.value}\n`;
-            body += `名入れ文言: ${this.name_text.value}\n`;
-            body += `包装・段ボール記載名: ${this.box_name.value}\n\n`;
+            body += `名入れ文言: ${this.name_text.value}\n\n`;
 
             body += "③ お届け先情報\n";
             body += `お届け先名: ${this.delivery_name.value}\n`;
