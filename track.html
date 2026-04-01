@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -15,130 +16,136 @@
       justify-content: center;
     }
 
-    .container {
-      width: 100%;
-      max-width: 400px;
-    }
+```
+.container {
+  width: 100%;
+  max-width: 400px;
+}
 
-    .title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-    }
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
 
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-      border-radius: 6px;
-    }
+input, button {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
 
-    input {
-      border: 1px solid #ccc;
-    }
+input {
+  border: 1px solid #ccc;
+}
 
-    button {
-      border: 1px solid #000;
-      background-color: #fff;
-      color: #000;
-      cursor: pointer;
-    }
+button {
+  border: 1px solid #000;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+}
 
-    button:disabled {
-      background-color: #f0f0f0;
-      color: #999;
-      border-color: #ccc;
-      cursor: not-allowed;
-    }
+button:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
 
-    #results, #history {
-      margin-top: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
+#results, #history {
+  margin-top: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
 
-    #results {
-      display: none;
-      word-break: break-word;
-    }
+#results {
+  display: none;
+  word-break: break-word;
+}
 
-    #history h2 {
-      margin-top: 0;
-      text-align: center;
-    }
+#history h2 {
+  margin-top: 0;
+  text-align: center;
+}
 
-    #historyList {
-      list-style: none;
-      padding-left: 0;
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
+#historyList {
+  list-style: none;
+  padding-left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
 
-    #historyList li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 10px;
-      border-bottom: 1px solid #ddd;
-      cursor: pointer;
-    }
+#historyList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
 
-    .history-number {
-      flex-grow: 1;
-      font-size: 16px;
-      color: #000;
-    }
+.history-number {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #000;
+}
 
-    .delete-btn {
-      border: none;
-      background: transparent;
-      color: #000;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.delete-btn {
+  border: none;
+  background: transparent;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    .delete-btn:hover {
-      color: red;
-    }
+.delete-btn:hover {
+  color: red;
+}
 
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-        display: block;
-      }
-      .container {
-        max-width: 100%;
-      }
-    }
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+    display: block;
+  }
+  .container {
+    max-width: 100%;
+  }
+}
+```
+
   </style>
 </head>
 <body>
   <div class="container">
     <div class="title">荷物追跡ツール</div>
 
-    <p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・17TRACK・AliExpress）</p>
-    <input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
+```
+<p style="text-align:center;">追跡番号を入力またはペーストしてください（ヤマト・佐川・日本郵便・Parcels・AliExpress）</p>
+<input type="text" id="trackingNumber" placeholder="例: 123456789012 または TBA123456789" />
 
-    <button id="yamatoBtn">ヤマトで調べる</button>
-    <button id="sagawaBtn">佐川で調べる</button>
-    <button id="jpPostBtn">日本郵便で調べる</button>
-    <button id="universalBtn">17TRACKで調べる</button>
-    <button id="ariexpressBtn">Aliexplessで調べる</button>
+<button id="yamatoBtn">ヤマトで調べる</button>
+<button id="sagawaBtn">佐川で調べる</button>
+<button id="jpPostBtn">日本郵便で調べる</button>
+<button id="universalBtn">Parcelsで調べる</button>
+<button id="ariexpressBtn">Aliexplessで調べる</button>
 
-    <div id="results"></div>
+<div id="results"></div>
 
-    <div id="history">
-      <h2>履歴（最大10件）</h2>
-      <ul id="historyList"></ul>
-      <button id="clearHistory">全履歴を削除</button>
-    </div>
+<div id="history">
+  <h2>履歴（最大10件）</h2>
+  <ul id="historyList"></ul>
+  <button id="clearHistory">全履歴を削除</button>
+</div>
+```
+
   </div>
 
   <script>
@@ -147,13 +154,11 @@
     const historyList = document.getElementById("historyList");
     const clearHistoryBtn = document.getElementById("clearHistory");
 
-    // 前回の番号を表示
     const latestHistory = JSON.parse(localStorage.getItem("trackingHistory") || "[]");
     if (latestHistory.length > 0) {
       input.value = latestHistory[0];
     }
 
-    // 一度だけクリックで消す
     let hasEdited = false;
     input.addEventListener("focus", () => {
       if (!hasEdited) {
@@ -269,7 +274,7 @@
     document.getElementById("universalBtn").addEventListener("click", () => {
       if (!validateInput()) return;
       const num = input.value.trim();
-      openTrackingUrl(`https://www.17track.net/ja/track?nums=${encodeURIComponent(num)}`);
+      openTrackingUrl(`https://parcelsapp.com/en/tracking/${encodeURIComponent(num)}`);
       addToHistory(num);
       clearAndHideResult();
     });
@@ -285,5 +290,6 @@
     input.addEventListener("input", clearAndHideResult);
     renderHistory();
   </script>
+
 </body>
 </html>
