@@ -215,7 +215,7 @@
 
             body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
 
-            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?subject=非常用給水袋注文書&body=${encodeURIComponent(body)}`;
+            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=非常用給水袋注文書&body=${encodeURIComponent(body)}`;
             window.location.href = mailto;
         });
     </script>
