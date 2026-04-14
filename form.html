@@ -836,7 +836,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
         : (v('company_name') || '（事業者名未入力）');
     const subject = `非常用給水袋注文・${suffix}`;
 
-    pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=kyoto-jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     document.getElementById('overlay').classList.add('show');
     document.getElementById('modal').scrollTop = 0;
