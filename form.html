@@ -5,62 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>非常用給水袋 注文フォーム</title>
     <style>
-        body { font-family: "メイリオ", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
+        body { font-family: "メイリオ", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f8ff; }
         h1 { text-align: center; color: #333; }
-        fieldset { border: 2px solid #0066cc; margin-bottom: 20px; padding: 15px; border-radius: 8px; }
+        fieldset { border: 2px solid #0066cc; margin-bottom: 20px; padding: 15px; border-radius: 8px; background: #fff; }
         legend { font-weight: bold; font-size: 1.2em; padding: 0 10px; color: #0066cc; }
         label { display: block; margin: 10px 0 5px; }
-        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input, select, textarea {
+            width: 100%; padding: 8px; margin-bottom: 10px;
+            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #0066cc; box-shadow: 0 0 0 2px rgba(0,102,204,0.15); }
+        input:disabled, select:disabled, textarea:disabled {
+            background: #f0f0f0; color: #aaa; cursor: not-allowed; border-color: #ddd;
+        }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
         th { background-color: #f0f8ff; }
         .required { color: red; }
-        button { background: #0066cc; color: white; padding: 15px 30px; font-size: 1.2em; border: none; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 20px; }
-        button:hover { background: #004499; }
+        button[type="submit"] {
+            background: #0066cc; color: white; padding: 15px 30px;
+            font-size: 1.2em; border: none; border-radius: 6px;
+            cursor: pointer; width: 100%; margin-top: 20px;
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover { background: #004499; }
         .address-block { display: flex; flex-wrap: wrap; gap: 15px; }
         .address-block > div { flex: 1; min-width: 200px; }
         .qty-container { display: flex; gap: 10px; align-items: center; }
         .qty-container input { width: 120px; }
         .qty-container select { width: 100px; }
+
+        /* 郵便番号ボタン */
+        .postal-row { display: flex; gap: 8px; align-items: flex-start; }
+        .postal-row input { flex: 1; margin-bottom: 0; }
+        .btn-postal {
+            white-space: nowrap; padding: 8px 12px; background: #0066cc; color: white;
+            border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em;
+            height: 36px; margin-top: 0;
+        }
+        .btn-postal:hover { background: #004499; }
+        .postal-msg { font-size: 0.8em; color: #e00; margin-top: 2px; min-height: 16px; }
+
+
+
+        /* 名入れグレーアウト対象 */
+        .name-print-fields { transition: opacity 0.3s; }
+        .name-print-fields.disabled-section { opacity: 0.4; pointer-events: none; }
+
+        /* 確認モーダル */
+        #confirmOverlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000;
+            justify-content: center; align-items: flex-start;
+            padding: 20px; overflow-y: auto;
+        }
+        #confirmOverlay.active { display: flex; }
+        #confirmBox {
+            background: white; border-radius: 10px; padding: 30px;
+            max-width: 700px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        #confirmBox h2 { color: #0066cc; margin-top: 0; border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        .confirm-section { margin-bottom: 16px; }
+        .confirm-section h3 { font-size: 1em; color: #0066cc; margin: 0 0 6px; }
+        .confirm-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+        .confirm-table td { padding: 5px 8px; border-bottom: 1px solid #eee; }
+        .confirm-table td:first-child { color: #666; width: 40%; }
+        .confirm-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-back {
+            flex: 1; padding: 12px; background: #888; color: white;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 1em;
+        }
+        .btn-back:hover { background: #666; }
+        .btn-send {
+            flex: 2; padding: 12px; background: #0066cc; color: white;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: bold;
+        }
+        .btn-send:hover { background: #004499; }
     </style>
 </head>
 <body>
     <h1>非常用給水袋 注文書</h1>
     <p style="text-align:center; color:#0066cc;">必要事項をご入力ください。送信ボタンでメールが自動作成されます。</p>
-    <form id="orderForm">
+    <form id="orderForm" novalidate>
+
         <!-- ① 事業者情報 -->
         <fieldset>
             <legend>① 事業者情報</legend>
-            <label>ご発注事業者名</label>
-            <input type="text" name="company_name" required>
+            <label>ご発注事業者名 <span class="required">*</span></label>
+            <input type="text" name="company_name" id="company_name" required>
             <label>宛名（部署・ご担当者様名）</label>
             <input type="text" name="contact_person">
             <div class="address-block">
                 <div>
                     <label>〒</label>
-                    <input type="text" name="postal" placeholder="000-0000" maxlength="8">
+                    <div class="postal-row">
+                        <input type="text" name="postal" id="postal" placeholder="000-0000" maxlength="8">
+                        <button type="button" class="btn-postal" onclick="lookupPostal('postal','address')">住所検索</button>
+                    </div>
+                    <div class="postal-msg" id="postal-msg"></div>
                 </div>
                 <div style="flex: 2;">
                     <label>ご住所</label>
-                    <textarea name="address" rows="2"></textarea>
+                    <textarea name="address" id="address" rows="2"></textarea>
                 </div>
                 <div>
-                    <label>お電話番号</label>
+                    <label>お電話番号 <span class="required">*</span></label>
                     <input type="tel" name="phone" required>
                 </div>
             </div>
         </fieldset>
 
-        <!-- ② ご注文内容（1件のみ） -->
+        <!-- ② ご注文内容 -->
         <fieldset>
             <legend>② ご注文内容</legend>
             <table>
                 <thead>
                     <tr>
-                        <th>数量</th>
-                        <th>お届け希望日時</th>
-                        <th>給水袋サイズ</th>
-                        <th>名入れの有無</th>
+                        <th>数量 <span class="required">*</span></th>
+                        <th>お届け希望日時 <span class="required">*</span></th>
+                        <th>給水袋サイズ <span class="required">*</span></th>
+                        <th>名入れの有無 <span class="required">*</span></th>
                         <th>名入れの印刷色</th>
                     </tr>
                 </thead>
@@ -68,7 +133,7 @@
                     <tr>
                         <td>
                             <div class="qty-container">
-                                <input type="number" name="qty" min="0" value="0" required>
+                                <input type="number" name="qty" id="qty" min="1" value="" placeholder="0" required>
                                 <select name="unit" required>
                                     <option value="">単位</option>
                                     <option value="枚">枚</option>
@@ -78,7 +143,7 @@
                             </div>
                         </td>
                         <td>
-                            <input type="text" name="delivery" placeholder="例: 2026/4/10" required>
+                            <input type="date" name="delivery" required>
                         </td>
                         <td>
                             <select name="size" required>
@@ -94,7 +159,7 @@
                                 <option value="無">無</option>
                             </select>
                         </td>
-                        <td>
+                        <td class="name-print-fields" id="color-cell">
                             <select name="color" id="color">
                                 <option value="">選択してください</option>
                                 <option value="赤">赤</option>
@@ -106,35 +171,41 @@
                 </tbody>
             </table>
 
-            <label>名入れ文言（名入れアリの場合 【例】○○市上下水道局）</label>
-            <input type="text" name="name_text">
+            <div class="name-print-fields" id="name-text-wrap">
+                <label>名入れ文言（名入れアリの場合 【例】○○市上下水道局）</label>
+                <input type="text" name="name_text" id="name_text">
+            </div>
         </fieldset>
 
         <!-- ③ お届け先情報 -->
         <fieldset>
             <legend>③ お届け先情報（①と異なる場合のみ）</legend>
             <label>お届け先名</label>
-            <input type="text" name="delivery_name">
+            <input type="text" name="delivery_name" id="delivery_name">
             <label>お届け先が有人か無人か</label>
-            <select name="manned">
+            <select name="manned" id="manned">
                 <option value="">選択してください</option>
                 <option value="有人">有人</option>
                 <option value="無人">無人</option>
             </select>
             <label>宛名（部署・ご担当者様名）</label>
-            <input type="text" name="delivery_contact">
+            <input type="text" name="delivery_contact" id="delivery_contact">
             <div class="address-block">
                 <div>
                     <label>〒</label>
-                    <input type="text" name="delivery_postal" placeholder="000-0000" maxlength="8">
+                    <div class="postal-row">
+                        <input type="text" name="delivery_postal" id="delivery_postal" placeholder="000-0000" maxlength="8">
+                        <button type="button" class="btn-postal" onclick="lookupPostal('delivery_postal','delivery_address')">住所検索</button>
+                    </div>
+                    <div class="postal-msg" id="delivery_postal-msg"></div>
                 </div>
                 <div style="flex: 2;">
                     <label>ご住所</label>
-                    <textarea name="delivery_address" rows="2"></textarea>
+                    <textarea name="delivery_address" id="delivery_address" rows="2"></textarea>
                 </div>
                 <div>
                     <label>お電話番号</label>
-                    <input type="tel" name="delivery_phone">
+                    <input type="tel" name="delivery_phone" id="delivery_phone">
                 </div>
             </div>
             <label>備考欄</label>
@@ -145,30 +216,46 @@
         <!-- ④ 請求書送付先情報 -->
         <fieldset>
             <legend>④ 請求書送付先情報（①と異なる場合のみ）★請求書の宛名は必ずご記入ください</legend>
-            <label class="required">請求書の宛名 ★</label>
-            <input type="text" name="invoice_name" required>
+            <label class="required">請求書の宛名 ★ <span class="required">*</span></label>
+            <input type="text" name="invoice_name" id="invoice_name" required>
             <label>請求書送付先の宛名（部署・ご担当者様名）</label>
-            <input type="text" name="invoice_contact">
+            <input type="text" name="invoice_contact" id="invoice_contact">
             <div class="address-block">
                 <div>
                     <label>〒</label>
-                    <input type="text" name="invoice_postal" placeholder="000-0000" maxlength="8">
+                    <div class="postal-row">
+                        <input type="text" name="invoice_postal" id="invoice_postal" placeholder="000-0000" maxlength="8">
+                        <button type="button" class="btn-postal" onclick="lookupPostal('invoice_postal','invoice_address')">住所検索</button>
+                    </div>
+                    <div class="postal-msg" id="invoice_postal-msg"></div>
                 </div>
                 <div style="flex: 2;">
                     <label>ご住所</label>
-                    <textarea name="invoice_address" rows="2"></textarea>
+                    <textarea name="invoice_address" id="invoice_address" rows="2"></textarea>
                 </div>
                 <div>
                     <label>お電話番号</label>
-                    <input type="tel" name="invoice_phone">
+                    <input type="tel" name="invoice_phone" id="invoice_phone">
                 </div>
             </div>
             <label>備考欄</label>
-            <textarea name="invoice_note" rows="3"></textarea>
+            <textarea name="invoice_note" id="invoice_note" rows="3"></textarea>
         </fieldset>
 
-        <button type="submit">注文内容をメールで送信</button>
+        <button type="submit">注文内容を確認して送信</button>
     </form>
+
+    <!-- 確認モーダル -->
+    <div id="confirmOverlay">
+        <div id="confirmBox">
+            <h2>📋 注文内容の確認</h2>
+            <div id="confirmContent"></div>
+            <div class="confirm-actions">
+                <button class="btn-back" onclick="closeConfirm()">← 修正する</button>
+                <button class="btn-send" onclick="doSend()">✉️ この内容でメール送信</button>
+            </div>
+        </div>
+    </div>
 
     <footer style="text-align:center; margin-top:30px; font-size:0.9em; color:#666;">
         市川甚商事株式会社<br>
@@ -178,72 +265,222 @@
     </footer>
 
     <script>
-        // 名入れの有無に応じて印刷色のrequired属性を切り替え
-        const namePrintSelect = document.getElementById('name_print');
-        const colorSelect = document.getElementById('color');
+    // =============================================
+    // 1. 名入れ有無 → 印刷色・名入れ文言のグレーアウト
+    // =============================================
+    const namePrintSelect = document.getElementById('name_print');
+    const colorSelect = document.getElementById('color');
+    const colorCell = document.getElementById('color-cell');
+    const nameTextWrap = document.getElementById('name-text-wrap');
+    const nameTextInput = document.getElementById('name_text');
 
-        function updateColorRequired() {
-            if (namePrintSelect.value === '有') {
-                colorSelect.setAttribute('required', 'required');
+    function updateNamePrintFields() {
+        const isAri = namePrintSelect.value === '有';
+        // 印刷色
+        colorCell.classList.toggle('disabled-section', !isAri);
+        colorSelect.disabled = !isAri;
+        colorSelect.required = isAri;
+        if (!isAri) colorSelect.value = '';
+        // 名入れ文言
+        nameTextWrap.classList.toggle('disabled-section', !isAri);
+        nameTextInput.disabled = !isAri;
+        if (!isAri) nameTextInput.value = '';
+    }
+    updateNamePrintFields();
+    namePrintSelect.addEventListener('change', updateNamePrintFields);
+
+    // =============================================
+    // 2. 郵便番号 → 住所自動補完（zipcloud API）
+    // =============================================
+    async function lookupPostal(postalId, addressId) {
+        const postalInput = document.getElementById(postalId);
+        const addressArea = document.getElementById(addressId);
+        const msgEl = document.getElementById(postalId + '-msg');
+        const raw = postalInput.value.replace(/-/g, '').trim();
+        if (!/^\d{7}$/.test(raw)) {
+            msgEl.textContent = '7桁の数字で入力してください';
+            return;
+        }
+        msgEl.textContent = '検索中...';
+        try {
+            const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${raw}`);
+            const data = await res.json();
+            if (data.results) {
+                const r = data.results[0];
+                addressArea.value = r.address1 + r.address2 + r.address3;
+                msgEl.textContent = '';
             } else {
-                colorSelect.removeAttribute('required');
+                msgEl.textContent = '該当する住所が見つかりませんでした';
+            }
+        } catch {
+            msgEl.textContent = '住所検索に失敗しました';
+        }
+    }
+
+    // =============================================
+    // 4. 数量の最小値チェック（min=1）
+    // =============================================
+    // HTML側でmin="1"を設定済み
+
+    // =============================================
+    // 5. 送信前確認モーダル
+    // =============================================
+    let pendingMailto = '';
+
+    function val(name) {
+        const el = document.querySelector(`[name="${name}"]`);
+        return el ? el.value : '';
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+    }
+
+    function makeConfirmRow(label, value) {
+        if (!value) return '';
+        return `<tr><td>${label}</td><td>${value}</td></tr>`;
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 簡易バリデーション
+        const required = [
+            ['company_name', 'ご発注事業者名'],
+            ['phone', 'お電話番号（事業者）'],
+            ['qty', '数量'],
+            ['unit', '単位'],
+            ['delivery', 'お届け希望日時'],
+            ['size', '給水袋サイズ'],
+            ['name_print', '名入れの有無'],
+            ['invoice_name', '請求書の宛名'],
+        ];
+        for (const [name, label] of required) {
+            const el = document.querySelector(`[name="${name}"]`);
+            if (el && !el.value) {
+                alert(`「${label}」を入力・選択してください。`);
+                el.focus();
+                return;
             }
         }
+        const qtyVal = parseInt(val('qty'));
+        if (!qtyVal || qtyVal < 1) {
+            alert('数量は1以上を入力してください。');
+            document.querySelector('[name="qty"]').focus();
+            return;
+        }
+        if (val('name_print') === '有' && !val('color')) {
+            alert('名入れアリの場合、印刷色を選択してください。');
+            colorSelect.focus();
+            return;
+        }
+        if (val('name_print') === '有' && !val('name_text').trim()) {
+            alert('名入れアリの場合、名入れ文言を入力してください。');
+            document.getElementById('name_text').focus();
+            return;
+        }
 
-        // 初期状態はrequiredなし
-        updateColorRequired();
-        namePrintSelect.addEventListener('change', updateColorRequired);
+        // 確認内容を生成
+        const deliveryFmt = formatDate(val('delivery'));
+        let html = '';
 
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let body = "【非常用給水袋 注文書】\n\n";
-            body += "① 事業者情報\n";
-            body += `ご発注事業者名: ${this.company_name.value}\n`;
-            body += `宛名: ${this.contact_person.value}\n`;
-            body += `〒: ${this.postal.value}\n`;
-            body += `住所: ${this.address.value}\n`;
-            body += `電話: ${this.phone.value}\n\n`;
+        html += `<div class="confirm-section"><h3>① 事業者情報</h3><table class="confirm-table">`;
+        html += makeConfirmRow('ご発注事業者名', val('company_name'));
+        html += makeConfirmRow('宛名', val('contact_person'));
+        html += makeConfirmRow('〒', val('postal'));
+        html += makeConfirmRow('住所', val('address'));
+        html += makeConfirmRow('電話', val('phone'));
+        html += `</table></div>`;
 
-            body += "② ご注文内容\n";
-            body += `数量: ${this.qty.value} ${this.unit.value}\n`;
-            body += `お届け希望日時: ${this.delivery.value}\n`;
-            body += `サイズ: ${this.size.value}\n`;
-            body += `名入れの有無: ${this.name_print.value}\n`;
-            body += `名入れの印刷色: ${this.color.value}\n`;
-            body += `名入れ文言: ${this.name_text.value}\n\n`;
+        html += `<div class="confirm-section"><h3>② ご注文内容</h3><table class="confirm-table">`;
+        html += makeConfirmRow('数量', `${val('qty')} ${val('unit')}`);
+        html += makeConfirmRow('お届け希望日時', deliveryFmt);
+        html += makeConfirmRow('サイズ', val('size'));
+        html += makeConfirmRow('名入れの有無', val('name_print'));
+        html += makeConfirmRow('印刷色', val('color'));
+        html += makeConfirmRow('名入れ文言', val('name_text'));
+        html += `</table></div>`;
 
-            body += "③ お届け先情報\n";
-            body += `お届け先名: ${this.delivery_name.value}\n`;
-            body += `有人/無人: ${this.manned.value}\n`;
-            body += `宛名: ${this.delivery_contact.value}\n`;
-            body += `〒: ${this.delivery_postal.value}\n`;
-            body += `住所: ${this.delivery_address.value}\n`;
-            body += `電話: ${this.delivery_phone.value}\n`;
-            body += `備考: ${this.delivery_note.value}\n\n`;
+        html += `<div class="confirm-section"><h3>③ お届け先情報</h3><table class="confirm-table">`;
+        html += makeConfirmRow('お届け先名', val('delivery_name'));
+        html += makeConfirmRow('有人/無人', val('manned'));
+        html += makeConfirmRow('宛名', val('delivery_contact'));
+        html += makeConfirmRow('〒', val('delivery_postal'));
+        html += makeConfirmRow('住所', val('delivery_address'));
+        html += makeConfirmRow('電話', val('delivery_phone'));
+        html += makeConfirmRow('備考', val('delivery_note'));
+        html += `</table></div>`;
 
-            body += "④ 請求書送付先情報\n";
-            body += `請求書の宛名: ${this.invoice_name.value}\n`;
-            body += `宛名: ${this.invoice_contact.value}\n`;
-            body += `〒: ${this.invoice_postal.value}\n`;
-            body += `住所: ${this.invoice_address.value}\n`;
-            body += `電話: ${this.invoice_phone.value}\n`;
-            body += `備考: ${this.invoice_note.value}\n\n`;
+        html += `<div class="confirm-section"><h3>④ 請求書送付先情報</h3><table class="confirm-table">`;
+        html += makeConfirmRow('請求書の宛名', val('invoice_name'));
+        html += makeConfirmRow('宛名', val('invoice_contact'));
+        html += makeConfirmRow('〒', val('invoice_postal'));
+        html += makeConfirmRow('住所', val('invoice_address'));
+        html += makeConfirmRow('電話', val('invoice_phone'));
+        html += makeConfirmRow('備考', val('invoice_note'));
+        html += `</table></div>`;
 
-            body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
+        document.getElementById('confirmContent').innerHTML = html;
 
-            // 件名：名入れ「有」→名入れ文言、「無」または未選択→発注事業者名
-            const namePrint = this.name_print.value;
-            let subjectSuffix = '';
-            if (namePrint === '有') {
-                subjectSuffix = this.name_text.value || '（名入れ文言未入力）';
-            } else {
-                subjectSuffix = this.company_name.value || '（事業者名未入力）';
-            }
-            const subject = `非常用給水袋注文・${subjectSuffix}`;
+        // メール本文を生成して保持
+        let body = "【非常用給水袋 注文書】\n\n";
+        body += "① 事業者情報\n";
+        body += `ご発注事業者名: ${val('company_name')}\n`;
+        body += `宛名: ${val('contact_person')}\n`;
+        body += `〒: ${val('postal')}\n`;
+        body += `住所: ${val('address')}\n`;
+        body += `電話: ${val('phone')}\n\n`;
+        body += "② ご注文内容\n";
+        body += `数量: ${val('qty')} ${val('unit')}\n`;
+        body += `お届け希望日時: ${deliveryFmt}\n`;
+        body += `サイズ: ${val('size')}\n`;
+        body += `名入れの有無: ${val('name_print')}\n`;
+        body += `名入れの印刷色: ${val('color')}\n`;
+        body += `名入れ文言: ${val('name_text')}\n\n`;
+        body += "③ お届け先情報\n";
+        body += `お届け先名: ${val('delivery_name')}\n`;
+        body += `有人/無人: ${val('manned')}\n`;
+        body += `宛名: ${val('delivery_contact')}\n`;
+        body += `〒: ${val('delivery_postal')}\n`;
+        body += `住所: ${val('delivery_address')}\n`;
+        body += `電話: ${val('delivery_phone')}\n`;
+        body += `備考: ${val('delivery_note')}\n\n`;
+        body += "④ 請求書送付先情報\n";
+        body += `請求書の宛名: ${val('invoice_name')}\n`;
+        body += `宛名: ${val('invoice_contact')}\n`;
+        body += `〒: ${val('invoice_postal')}\n`;
+        body += `住所: ${val('invoice_address')}\n`;
+        body += `電話: ${val('invoice_phone')}\n`;
+        body += `備考: ${val('invoice_note')}\n\n`;
+        body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
 
-            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailto;
-        });
+        const namePrint = val('name_print');
+        const subjectSuffix = namePrint === '有'
+            ? (val('name_text') || '（名入れ文言未入力）')
+            : (val('company_name') || '（事業者名未入力）');
+        const subject = `非常用給水袋注文・${subjectSuffix}`;
+
+        pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        document.getElementById('confirmOverlay').classList.add('active');
+        document.getElementById('confirmBox').scrollTop = 0;
+    });
+
+    function closeConfirm() {
+        document.getElementById('confirmOverlay').classList.remove('active');
+    }
+
+    function doSend() {
+        window.location.href = pendingMailto;
+        closeConfirm();
+    }
+
+    // オーバーレイ外クリックで閉じる
+    document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeConfirm();
+    });
     </script>
 </body>
 </html>
