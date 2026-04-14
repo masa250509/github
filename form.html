@@ -88,14 +88,14 @@
                             </select>
                         </td>
                         <td>
-                            <select name="name_print" required>
+                            <select name="name_print" id="name_print" required>
                                 <option value="">選択してください</option>
                                 <option value="有">有</option>
                                 <option value="無">無</option>
                             </select>
                         </td>
                         <td>
-                            <select name="color" required>
+                            <select name="color" id="color">
                                 <option value="">選択してください</option>
                                 <option value="赤">赤</option>
                                 <option value="黒">黒</option>
@@ -178,6 +178,22 @@
     </footer>
 
     <script>
+        // 名入れの有無に応じて印刷色のrequired属性を切り替え
+        const namePrintSelect = document.getElementById('name_print');
+        const colorSelect = document.getElementById('color');
+
+        function updateColorRequired() {
+            if (namePrintSelect.value === '有') {
+                colorSelect.setAttribute('required', 'required');
+            } else {
+                colorSelect.removeAttribute('required');
+            }
+        }
+
+        // 初期状態はrequiredなし
+        updateColorRequired();
+        namePrintSelect.addEventListener('change', updateColorRequired);
+
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let body = "【非常用給水袋 注文書】\n\n";
@@ -215,7 +231,17 @@
 
             body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
 
-            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=非常用給水袋注文書&body=${encodeURIComponent(body)}`;
+            // 件名：名入れ「有」→名入れ文言、「無」または未選択→発注事業者名
+            const namePrint = this.name_print.value;
+            let subjectSuffix = '';
+            if (namePrint === '有') {
+                subjectSuffix = this.name_text.value || '（名入れ文言未入力）';
+            } else {
+                subjectSuffix = this.company_name.value || '（事業者名未入力）';
+            }
+            const subject = `非常用給水袋注文・${subjectSuffix}`;
+
+            const mailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.location.href = mailto;
         });
     </script>
