@@ -3,484 +3,858 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>非常用給水袋 注文フォーム</title>
+    <title>非常用給水袋 注文フォーム｜市川甚商事</title>
     <style>
-        body { font-family: "メイリオ", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f8ff; }
-        h1 { text-align: center; color: #333; }
-        fieldset { border: 2px solid #0066cc; margin-bottom: 20px; padding: 15px; border-radius: 8px; background: #fff; }
-        legend { font-weight: bold; font-size: 1.2em; padding: 0 10px; color: #0066cc; }
-        label { display: block; margin: 10px 0 5px; }
-        input, select, textarea {
-            width: 100%; padding: 8px; margin-bottom: 10px;
-            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-            transition: border-color 0.2s;
+        /* ===== 基本設定 ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --blue:      #1a5fa8;
+            --blue-dark: #0f3f72;
+            --blue-light:#e8f0fb;
+            --blue-mid:  #c5d9f5;
+            --accent:    #d04a00;
+            --gray-1:    #f7f8fa;
+            --gray-2:    #e8eaed;
+            --gray-3:    #b0b8c4;
+            --gray-4:    #6b7280;
+            --text:      #1a1f2e;
+            --white:     #ffffff;
+            --ok:        #1a7a4a;
+            --radius:    10px;
+            --shadow:    0 2px 12px rgba(0,0,0,0.08);
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #0066cc; box-shadow: 0 0 0 2px rgba(0,102,204,0.15); }
+
+        body {
+            font-family: "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN", sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--gray-1);
+            padding: 0 0 60px;
+        }
+
+        /* ===== ヘッダー ===== */
+        .site-header {
+            background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+            color: var(--white);
+            padding: 28px 40px 24px;
+            border-bottom: 4px solid #f0a030;
+        }
+        .site-header .company {
+            font-size: 13px;
+            opacity: 0.85;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        .site-header h1 {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+        }
+        .site-header .subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        /* ===== 説明バー ===== */
+        .info-bar {
+            background: var(--blue-light);
+            border-left: 5px solid var(--blue);
+            margin: 28px auto;
+            max-width: 780px;
+            padding: 16px 22px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 15px;
+            color: var(--blue-dark);
+        }
+        .info-bar strong { display: block; font-size: 16px; margin-bottom: 4px; }
+
+        /* ===== メインコンテナ ===== */
+        .container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== セクション ===== */
+        .section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .section-head {
+            background: var(--blue);
+            color: var(--white);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-head .num {
+            background: var(--white);
+            color: var(--blue);
+            font-weight: bold;
+            font-size: 15px;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-head h2 {
+            font-size: 17px;
+            font-weight: bold;
+            letter-spacing: 0.03em;
+        }
+        .section-head .note {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        .section-body { padding: 24px; }
+
+        /* ===== フォームフィールド ===== */
+        .field { margin-bottom: 20px; }
+        .field:last-child { margin-bottom: 0; }
+
+        .field label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--gray-4);
+            margin-bottom: 6px;
+            letter-spacing: 0.02em;
+        }
+        .field label .req {
+            color: var(--accent);
+            font-size: 13px;
+            margin-left: 4px;
+        }
+        .field label .hint {
+            font-weight: normal;
+            font-size: 12px;
+            color: var(--gray-3);
+            margin-left: 6px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid var(--gray-2);
+            border-radius: 8px;
+            background: var(--white);
+            color: var(--text);
+            transition: border-color 0.18s, box-shadow 0.18s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(26,95,168,0.12);
+        }
         input:disabled, select:disabled, textarea:disabled {
-            background: #f0f0f0; color: #aaa; cursor: not-allowed; border-color: #ddd;
+            background: var(--gray-1);
+            color: var(--gray-3);
+            border-color: var(--gray-2);
+            cursor: not-allowed;
         }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background-color: #f0f8ff; }
-        .required { color: red; }
-        button[type="submit"] {
-            background: #0066cc; color: white; padding: 15px 30px;
-            font-size: 1.2em; border: none; border-radius: 6px;
-            cursor: pointer; width: 100%; margin-top: 20px;
-            transition: background 0.2s;
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%236b7280' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
         }
-        button[type="submit"]:hover { background: #004499; }
-        .address-block { display: flex; flex-wrap: wrap; gap: 15px; }
-        .address-block > div { flex: 1; min-width: 200px; }
-        .qty-container { display: flex; gap: 10px; align-items: center; }
-        .qty-container input { width: 120px; }
-        .qty-container select { width: 100px; }
+        textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
 
-        /* 郵便番号ボタン */
-        .postal-row { display: flex; gap: 8px; align-items: flex-start; }
-        .postal-row input { flex: 1; margin-bottom: 0; }
+        /* ===== 横並びレイアウト ===== */
+        .row { display: flex; gap: 16px; flex-wrap: wrap; }
+        .row .field { flex: 1; min-width: 180px; }
+        .row .field-sm { flex: 0 0 160px; }
+        .row .field-lg { flex: 2; min-width: 240px; }
+
+        /* ===== 郵便番号 ===== */
+        .postal-wrap { display: flex; gap: 8px; align-items: flex-start; }
+        .postal-wrap input { flex: 1; }
         .btn-postal {
-            white-space: nowrap; padding: 8px 12px; background: #0066cc; color: white;
-            border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em;
-            height: 36px; margin-top: 0;
+            flex-shrink: 0;
+            padding: 12px 14px;
+            background: var(--blue-light);
+            color: var(--blue-dark);
+            border: 2px solid var(--blue-mid);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
         }
-        .btn-postal:hover { background: #004499; }
-        .postal-msg { font-size: 0.8em; color: #e00; margin-top: 2px; min-height: 16px; }
+        .btn-postal:hover { background: var(--blue-mid); }
+        .postal-msg { font-size: 12px; color: var(--accent); margin-top: 4px; min-height: 16px; }
 
-
-
-        /* 名入れグレーアウト対象 */
-        .name-print-fields { transition: opacity 0.3s; }
-        .name-print-fields.disabled-section { opacity: 0.4; pointer-events: none; }
-
-        /* 確認モーダル */
-        #confirmOverlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 1000;
-            justify-content: center; align-items: flex-start;
-            padding: 20px; overflow-y: auto;
+        /* ===== 注文テーブル（横並び） ===== */
+        .order-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
-        #confirmOverlay.active { display: flex; }
-        #confirmBox {
-            background: white; border-radius: 10px; padding: 30px;
-            max-width: 700px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        @media (max-width: 560px) {
+            .order-grid { grid-template-columns: 1fr; }
         }
-        #confirmBox h2 { color: #0066cc; margin-top: 0; border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
-        .confirm-section { margin-bottom: 16px; }
-        .confirm-section h3 { font-size: 1em; color: #0066cc; margin: 0 0 6px; }
-        .confirm-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
-        .confirm-table td { padding: 5px 8px; border-bottom: 1px solid #eee; }
-        .confirm-table td:first-child { color: #666; width: 40%; }
-        .confirm-actions { display: flex; gap: 12px; margin-top: 20px; }
+
+        /* ===== 名入れグレーアウト ===== */
+        .name-print-area {
+            border: 2px dashed var(--gray-2);
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 4px;
+            transition: opacity 0.25s, border-color 0.25s;
+        }
+        .name-print-area.inactive {
+            opacity: 0.35;
+            pointer-events: none;
+            border-color: var(--gray-2);
+        }
+        .name-print-area.active {
+            border-color: var(--blue-mid);
+            background: var(--blue-light);
+        }
+
+        /* ===== 注意書き ===== */
+        .caution {
+            background: #fff8e6;
+            border-left: 4px solid #f0a030;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #7a5000;
+            border-radius: 0 6px 6px 0;
+            margin-top: 12px;
+        }
+
+        /* ===== 送信ボタン ===== */
+        .submit-wrap {
+            margin-top: 8px;
+            text-align: center;
+        }
+        .btn-submit {
+            display: inline-block;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            color: var(--white);
+            font-size: 18px;
+            font-weight: bold;
+            font-family: inherit;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 18px rgba(15,63,114,0.3);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 24px rgba(15,63,114,0.38);
+        }
+        .btn-submit:active { transform: translateY(0); }
+        .submit-note {
+            font-size: 13px;
+            color: var(--gray-4);
+            margin-top: 10px;
+        }
+
+        /* ===== 確認モーダル ===== */
+        #overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(10,20,40,0.55);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+        #overlay.show { display: block; }
+        #modal {
+            background: var(--white);
+            border-radius: 14px;
+            max-width: 680px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+        .modal-head {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+            color: var(--white);
+            padding: 22px 28px;
+        }
+        .modal-head h2 { font-size: 19px; }
+        .modal-head p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+        .modal-body { padding: 24px 28px; }
+
+        .confirm-block { margin-bottom: 20px; }
+        .confirm-block h3 {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--blue);
+            border-bottom: 2px solid var(--blue-mid);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            letter-spacing: 0.04em;
+        }
+        .confirm-row {
+            display: flex;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--gray-1);
+            font-size: 15px;
+        }
+        .confirm-row:last-child { border-bottom: none; }
+        .confirm-row .lbl {
+            color: var(--gray-4);
+            font-size: 13px;
+            width: 150px;
+            flex-shrink: 0;
+            padding-top: 1px;
+        }
+        .confirm-row .val { color: var(--text); flex: 1; font-weight: 500; }
+        .confirm-row .val.empty { color: var(--gray-3); font-weight: normal; font-style: italic; }
+
+        .modal-foot {
+            padding: 18px 28px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid var(--gray-2);
+        }
         .btn-back {
-            flex: 1; padding: 12px; background: #888; color: white;
-            border: none; border-radius: 6px; cursor: pointer; font-size: 1em;
+            flex: 1;
+            padding: 14px;
+            background: var(--white);
+            color: var(--gray-4);
+            border: 2px solid var(--gray-2);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.15s;
         }
-        .btn-back:hover { background: #666; }
+        .btn-back:hover { background: var(--gray-1); }
         .btn-send {
-            flex: 2; padding: 12px; background: #0066cc; color: white;
-            border: none; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: bold;
+            flex: 2;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(15,63,114,0.25);
+            transition: opacity 0.15s;
         }
-        .btn-send:hover { background: #004499; }
+        .btn-send:hover { opacity: 0.9; }
+
+        /* ===== フッター ===== */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--gray-4);
+            line-height: 1.9;
+        }
+        footer a { color: var(--blue); text-decoration: none; }
     </style>
 </head>
 <body>
-    <h1>非常用給水袋 注文書</h1>
-    <p style="text-align:center; color:#0066cc;">必要事項をご入力ください。送信ボタンでメールが自動作成されます。</p>
+
+<header class="site-header">
+    <div class="company">市川甚商事株式会社</div>
+    <h1>非常用給水袋 注文フォーム</h1>
+    <div class="subtitle">必要事項をご入力のうえ、送信ボタンを押してください</div>
+</header>
+
+<div class="container">
+
+    <div class="info-bar">
+        <strong>📋 ご注文の流れ</strong>
+        ①〜④をご入力 → 「内容を確認する」ボタンを押す → 内容をご確認 → メールソフトが開きますので、そのまま送信してください
+    </div>
+
     <form id="orderForm" novalidate>
 
         <!-- ① 事業者情報 -->
-        <fieldset>
-            <legend>① 事業者情報</legend>
-            <label>ご発注事業者名 <span class="required">*</span></label>
-            <input type="text" name="company_name" id="company_name" required>
-            <label>宛名（部署・ご担当者様名）</label>
-            <input type="text" name="contact_person">
-            <div class="address-block">
-                <div>
-                    <label>〒</label>
-                    <div class="postal-row">
-                        <input type="text" name="postal" id="postal" placeholder="000-0000" maxlength="8">
-                        <button type="button" class="btn-postal" onclick="lookupPostal('postal','address')">住所検索</button>
-                    </div>
-                    <div class="postal-msg" id="postal-msg"></div>
-                </div>
-                <div style="flex: 2;">
-                    <label>ご住所</label>
-                    <textarea name="address" id="address" rows="2"></textarea>
-                </div>
-                <div>
-                    <label>お電話番号 <span class="required">*</span></label>
-                    <input type="tel" name="phone" required>
-                </div>
+        <div class="section">
+            <div class="section-head">
+                <div class="num">①</div>
+                <h2>事業者情報</h2>
+                <span class="note">必須項目です</span>
             </div>
-        </fieldset>
+            <div class="section-body">
+
+                <div class="field">
+                    <label>ご発注事業者名<span class="req">★必須</span></label>
+                    <input type="text" id="company_name" name="company_name" placeholder="例：○○市上下水道局" required>
+                </div>
+
+                <div class="row">
+                    <div class="field field-lg">
+                        <label>ご担当者様のお名前（部署名・役職など）</label>
+                        <input type="text" name="contact_person" placeholder="例：総務部　山田 太郎">
+                    </div>
+                    <div class="field">
+                        <label>お電話番号<span class="req">★必須</span></label>
+                        <input type="tel" name="phone" placeholder="例：075-000-0000" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field field-sm">
+                        <label>郵便番号</label>
+                        <div class="postal-wrap">
+                            <input type="text" id="postal" name="postal" placeholder="0000000" maxlength="8">
+                            <button type="button" class="btn-postal" onclick="lookupPostal('postal','address','postal-msg')">住所を<br>検索</button>
+                        </div>
+                        <div class="postal-msg" id="postal-msg"></div>
+                    </div>
+                    <div class="field field-lg">
+                        <label>ご住所<span class="hint">※郵便番号検索後、番地・建物名をご追記ください</span></label>
+                        <input type="text" id="address" name="address" placeholder="例：京都市下京区○○町123">
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- ② ご注文内容 -->
-        <fieldset>
-            <legend>② ご注文内容</legend>
-            <table>
-                <thead>
-                    <tr>
-                        <th>数量 <span class="required">*</span></th>
-                        <th>お届け希望日時 <span class="required">*</span></th>
-                        <th>給水袋サイズ <span class="required">*</span></th>
-                        <th>名入れの有無 <span class="required">*</span></th>
-                        <th>名入れの印刷色</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="qty-container">
-                                <input type="number" name="qty" id="qty" min="1" value="" placeholder="0" required>
-                                <select name="unit" required>
-                                    <option value="">単位</option>
-                                    <option value="枚">枚</option>
-                                    <option value="個">個</option>
-                                    <option value="袋">袋</option>
-                                </select>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="date" name="delivery" required>
-                        </td>
-                        <td>
-                            <select name="size" required>
-                                <option value="">選択してください</option>
-                                <option value="6L">6L</option>
-                                <option value="10L">10L</option>
+        <div class="section">
+            <div class="section-head">
+                <div class="num">②</div>
+                <h2>ご注文内容</h2>
+                <span class="note">必須項目です</span>
+            </div>
+            <div class="section-body">
+
+                <div class="order-grid">
+                    <div class="field">
+                        <label>数量<span class="req">★必須</span></label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="number" name="qty" id="qty" min="1" placeholder="例：1000" style="flex:1;" required>
+                            <select name="unit" style="width:90px;flex-shrink:0;" required>
+                                <option value="">単位</option>
+                                <option value="枚">枚</option>
+                                <option value="個">個</option>
+                                <option value="袋">袋</option>
                             </select>
-                        </td>
-                        <td>
-                            <select name="name_print" id="name_print" required>
-                                <option value="">選択してください</option>
-                                <option value="有">有</option>
-                                <option value="無">無</option>
-                            </select>
-                        </td>
-                        <td class="name-print-fields" id="color-cell">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>お届け希望日<span class="req">★必須</span></label>
+                        <input type="date" name="delivery" required>
+                    </div>
+
+                    <div class="field">
+                        <label>給水袋のサイズ<span class="req">★必須</span></label>
+                        <select name="size" required>
+                            <option value="">▼ 選んでください</option>
+                            <option value="6L">6リットル（6L）</option>
+                            <option value="10L">10リットル（10L）</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>名入れ印刷<span class="req">★必須</span></label>
+                        <select name="name_print" id="name_print" required>
+                            <option value="">▼ 選んでください</option>
+                            <option value="有">あり（社名などを印刷）</option>
+                            <option value="無">なし</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 名入れオプション -->
+                <div class="name-print-area inactive" id="namePrintArea">
+                    <div class="row">
+                        <div class="field">
+                            <label>印刷する色<span class="req">★必須</span><span class="hint">（名入れあり の場合）</span></label>
                             <select name="color" id="color">
-                                <option value="">選択してください</option>
+                                <option value="">▼ 選んでください</option>
                                 <option value="赤">赤</option>
                                 <option value="黒">黒</option>
                                 <option value="紺">紺</option>
                             </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="name-print-fields" id="name-text-wrap">
-                <label>名入れ文言（名入れアリの場合 【例】○○市上下水道局）</label>
-                <input type="text" name="name_text" id="name_text">
-            </div>
-        </fieldset>
-
-        <!-- ③ お届け先情報 -->
-        <fieldset>
-            <legend>③ お届け先情報（①と異なる場合のみ）</legend>
-            <label>お届け先名</label>
-            <input type="text" name="delivery_name" id="delivery_name">
-            <label>お届け先が有人か無人か</label>
-            <select name="manned" id="manned">
-                <option value="">選択してください</option>
-                <option value="有人">有人</option>
-                <option value="無人">無人</option>
-            </select>
-            <label>宛名（部署・ご担当者様名）</label>
-            <input type="text" name="delivery_contact" id="delivery_contact">
-            <div class="address-block">
-                <div>
-                    <label>〒</label>
-                    <div class="postal-row">
-                        <input type="text" name="delivery_postal" id="delivery_postal" placeholder="000-0000" maxlength="8">
-                        <button type="button" class="btn-postal" onclick="lookupPostal('delivery_postal','delivery_address')">住所検索</button>
+                        </div>
+                        <div class="field field-lg">
+                            <label>印刷する文言<span class="req">★必須</span><span class="hint">（名入れあり の場合）</span></label>
+                            <input type="text" name="name_text" id="name_text" placeholder="例：○○市上下水道局">
+                        </div>
                     </div>
-                    <div class="postal-msg" id="delivery_postal-msg"></div>
                 </div>
-                <div style="flex: 2;">
-                    <label>ご住所</label>
-                    <textarea name="delivery_address" id="delivery_address" rows="2"></textarea>
-                </div>
-                <div>
-                    <label>お電話番号</label>
-                    <input type="tel" name="delivery_phone" id="delivery_phone">
-                </div>
-            </div>
-            <label>備考欄</label>
-            <textarea name="delivery_note" rows="3"></textarea>
-            <p style="font-size:0.9em; color:#666;">※無人の場合、配送ドライバーより到着1時間程前に電話いたします。</p>
-        </fieldset>
 
-        <!-- ④ 請求書送付先情報 -->
-        <fieldset>
-            <legend>④ 請求書送付先情報（①と異なる場合のみ）★請求書の宛名は必ずご記入ください</legend>
-            <label class="required">請求書の宛名 ★ <span class="required">*</span></label>
-            <input type="text" name="invoice_name" id="invoice_name" required>
-            <label>請求書送付先の宛名（部署・ご担当者様名）</label>
-            <input type="text" name="invoice_contact" id="invoice_contact">
-            <div class="address-block">
-                <div>
-                    <label>〒</label>
-                    <div class="postal-row">
-                        <input type="text" name="invoice_postal" id="invoice_postal" placeholder="000-0000" maxlength="8">
-                        <button type="button" class="btn-postal" onclick="lookupPostal('invoice_postal','invoice_address')">住所検索</button>
-                    </div>
-                    <div class="postal-msg" id="invoice_postal-msg"></div>
-                </div>
-                <div style="flex: 2;">
-                    <label>ご住所</label>
-                    <textarea name="invoice_address" id="invoice_address" rows="2"></textarea>
-                </div>
-                <div>
-                    <label>お電話番号</label>
-                    <input type="tel" name="invoice_phone" id="invoice_phone">
-                </div>
-            </div>
-            <label>備考欄</label>
-            <textarea name="invoice_note" id="invoice_note" rows="3"></textarea>
-        </fieldset>
-
-        <button type="submit">注文内容を確認して送信</button>
-    </form>
-
-    <!-- 確認モーダル -->
-    <div id="confirmOverlay">
-        <div id="confirmBox">
-            <h2>📋 注文内容の確認</h2>
-            <div id="confirmContent"></div>
-            <div class="confirm-actions">
-                <button class="btn-back" onclick="closeConfirm()">← 修正する</button>
-                <button class="btn-send" onclick="doSend()">✉️ この内容でメール送信</button>
             </div>
         </div>
+
+        <!-- ③ お届け先情報 -->
+        <div class="section">
+            <div class="section-head">
+                <div class="num">③</div>
+                <h2>お届け先</h2>
+                <span class="note">①と異なる場合のみ</span>
+            </div>
+            <div class="section-body">
+
+                <div class="row">
+                    <div class="field field-lg">
+                        <label>お届け先の名称</label>
+                        <input type="text" name="delivery_name" placeholder="例：○○市○○倉庫">
+                    </div>
+                    <div class="field">
+                        <label>建物の状況</label>
+                        <select name="manned">
+                            <option value="">▼ 選んでください</option>
+                            <option value="有人">有人（人がいる）</option>
+                            <option value="無人">無人（人がいない）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="caution">
+                    ⚠️ 無人の場合、配送ドライバーより到着の約1時間前にお電話いたします。
+                </div>
+
+                <div style="margin-top:18px;">
+                    <div class="field">
+                        <label>担当者様のお名前（部署名など）</label>
+                        <input type="text" name="delivery_contact" placeholder="例：○○部　鈴木 花子">
+                    </div>
+
+                    <div class="row">
+                        <div class="field field-sm">
+                            <label>郵便番号</label>
+                            <div class="postal-wrap">
+                                <input type="text" id="delivery_postal" name="delivery_postal" placeholder="0000000" maxlength="8">
+                                <button type="button" class="btn-postal" onclick="lookupPostal('delivery_postal','delivery_address','delivery_postal-msg')">住所を<br>検索</button>
+                            </div>
+                            <div class="postal-msg" id="delivery_postal-msg"></div>
+                        </div>
+                        <div class="field field-lg">
+                            <label>ご住所</label>
+                            <input type="text" id="delivery_address" name="delivery_address" placeholder="例：大阪市○○区○○町456">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="field">
+                            <label>お電話番号</label>
+                            <input type="tel" name="delivery_phone" placeholder="例：06-000-0000">
+                        </div>
+                        <div class="field field-lg">
+                            <label>備考・連絡事項</label>
+                            <input type="text" name="delivery_note" placeholder="例：午前中の配送をご希望の場合など">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ④ 請求書送付先 -->
+        <div class="section">
+            <div class="section-head">
+                <div class="num">④</div>
+                <h2>請求書の送付先</h2>
+                <span class="note">宛名は必須です</span>
+            </div>
+            <div class="section-body">
+
+                <div class="row">
+                    <div class="field field-lg">
+                        <label>請求書の宛名<span class="req">★必須</span></label>
+                        <input type="text" name="invoice_name" id="invoice_name" placeholder="例：○○市上下水道局 御中" required>
+                    </div>
+                    <div class="field">
+                        <label>ご担当者様（部署名など）</label>
+                        <input type="text" name="invoice_contact" placeholder="例：経理部　田中様">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field field-sm">
+                        <label>郵便番号</label>
+                        <div class="postal-wrap">
+                            <input type="text" id="invoice_postal" name="invoice_postal" placeholder="0000000" maxlength="8">
+                            <button type="button" class="btn-postal" onclick="lookupPostal('invoice_postal','invoice_address','invoice_postal-msg')">住所を<br>検索</button>
+                        </div>
+                        <div class="postal-msg" id="invoice_postal-msg"></div>
+                    </div>
+                    <div class="field field-lg">
+                        <label>ご住所<span class="hint">（①と異なる場合のみ）</span></label>
+                        <input type="text" id="invoice_address" name="invoice_address" placeholder="例：神戸市○○区○○町789">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field">
+                        <label>お電話番号</label>
+                        <input type="tel" name="invoice_phone" placeholder="例：078-000-0000">
+                    </div>
+                    <div class="field field-lg">
+                        <label>備考</label>
+                        <input type="text" name="invoice_note" placeholder="例：請求書はPDFでのご送付をご希望の場合など">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 送信ボタン -->
+        <div class="submit-wrap">
+            <button type="submit" class="btn-submit">入力内容を確認する　→</button>
+            <div class="submit-note">確認画面が表示されます。送信前に内容をご確認いただけます。</div>
+        </div>
+
+    </form>
+</div>
+
+<!-- ===== 確認モーダル ===== -->
+<div id="overlay">
+    <div id="modal">
+        <div class="modal-head">
+            <h2>📋 注文内容のご確認</h2>
+            <p>以下の内容でよろしければ「メールを送信する」ボタンを押してください</p>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-foot">
+            <button class="btn-back" onclick="closeModal()">← 入力画面に戻る</button>
+            <button class="btn-send" onclick="doSend()">✉️ メールを送信する</button>
+        </div>
     </div>
+</div>
 
-    <footer style="text-align:center; margin-top:30px; font-size:0.9em; color:#666;">
-        市川甚商事株式会社<br>
-        〒600-8078 京都市下京区松原通堺町東入杉屋町287<br>
-        本社営業部 Tel:075-351-0361　Fax:075-361-5091<br>
-        [担当] 小杉 mobile: 090-7555-8763　[メール] kosugi@ichikawa-jin.co.jp
-    </footer>
+<footer>
+    市川甚商事株式会社<br>
+    〒600-8078 京都市下京区松原通堺町東入杉屋町287<br>
+    本社営業部　Tel：075-351-0361　Fax：075-361-5091<br>
+    【担当】小杉　mobile：090-7555-8763　メール：kosugi@ichikawa-jin.co.jp
+</footer>
 
-    <script>
-    // =============================================
-    // 1. 名入れ有無 → 印刷色・名入れ文言のグレーアウト
-    // =============================================
-    const namePrintSelect = document.getElementById('name_print');
-    const colorSelect = document.getElementById('color');
-    const colorCell = document.getElementById('color-cell');
-    const nameTextWrap = document.getElementById('name-text-wrap');
-    const nameTextInput = document.getElementById('name_text');
+<script>
+// =============================
+// 名入れ有無でエリアを切り替え
+// =============================
+const namePrintSel = document.getElementById('name_print');
+const namePrintArea = document.getElementById('namePrintArea');
+const colorSel = document.getElementById('color');
+const nameTextInp = document.getElementById('name_text');
 
-    function updateNamePrintFields() {
-        const isAri = namePrintSelect.value === '有';
-        // 印刷色
-        colorCell.classList.toggle('disabled-section', !isAri);
-        colorSelect.disabled = !isAri;
-        colorSelect.required = isAri;
-        if (!isAri) colorSelect.value = '';
-        // 名入れ文言
-        nameTextWrap.classList.toggle('disabled-section', !isAri);
-        nameTextInput.disabled = !isAri;
-        if (!isAri) nameTextInput.value = '';
-    }
-    updateNamePrintFields();
-    namePrintSelect.addEventListener('change', updateNamePrintFields);
+function toggleNamePrint() {
+    const isAri = namePrintSel.value === '有';
+    namePrintArea.classList.toggle('active', isAri);
+    namePrintArea.classList.toggle('inactive', !isAri);
+    colorSel.disabled = !isAri;
+    nameTextInp.disabled = !isAri;
+    if (!isAri) { colorSel.value = ''; nameTextInp.value = ''; }
+}
+toggleNamePrint();
+namePrintSel.addEventListener('change', toggleNamePrint);
 
-    // =============================================
-    // 2. 郵便番号 → 住所自動補完（zipcloud API）
-    // =============================================
-    async function lookupPostal(postalId, addressId) {
-        const postalInput = document.getElementById(postalId);
-        const addressArea = document.getElementById(addressId);
-        const msgEl = document.getElementById(postalId + '-msg');
-        const raw = postalInput.value.replace(/-/g, '').trim();
-        if (!/^\d{7}$/.test(raw)) {
-            msgEl.textContent = '7桁の数字で入力してください';
-            return;
+// =============================
+// 郵便番号 → 住所自動補完
+// =============================
+async function lookupPostal(postalId, addressId, msgId) {
+    const raw = document.getElementById(postalId).value.replace(/-/g, '').trim();
+    const msg = document.getElementById(msgId);
+    if (!/^\d{7}$/.test(raw)) { msg.textContent = '7桁の数字で入力してください'; return; }
+    msg.textContent = '検索中...';
+    try {
+        const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${raw}`);
+        const data = await res.json();
+        if (data.results) {
+            const r = data.results[0];
+            document.getElementById(addressId).value = r.address1 + r.address2 + r.address3;
+            msg.textContent = '✔ 住所を入力しました。番地・建物名を追記してください。';
+            msg.style.color = '#1a7a4a';
+        } else {
+            msg.textContent = '該当する住所が見つかりませんでした';
+            msg.style.color = '';
         }
-        msgEl.textContent = '検索中...';
-        try {
-            const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${raw}`);
-            const data = await res.json();
-            if (data.results) {
-                const r = data.results[0];
-                addressArea.value = r.address1 + r.address2 + r.address3;
-                msgEl.textContent = '';
-            } else {
-                msgEl.textContent = '該当する住所が見つかりませんでした';
-            }
-        } catch {
-            msgEl.textContent = '住所検索に失敗しました';
-        }
-    }
+    } catch { msg.textContent = '住所検索に失敗しました'; msg.style.color = ''; }
+}
 
-    // =============================================
-    // 4. 数量の最小値チェック（min=1）
-    // =============================================
-    // HTML側でmin="1"を設定済み
+// =============================
+// フォーム値の取得ヘルパー
+// =============================
+function v(name) {
+    const el = document.querySelector(`[name="${name}"]`);
+    return el ? el.value.trim() : '';
+}
 
-    // =============================================
-    // 5. 送信前確認モーダル
-    // =============================================
-    let pendingMailto = '';
+function formatDate(s) {
+    if (!s) return '';
+    const d = new Date(s);
+    return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
 
-    function val(name) {
-        const el = document.querySelector(`[name="${name}"]`);
-        return el ? el.value : '';
-    }
+// =============================
+// 確認モーダル生成
+// =============================
+let pendingMailto = '';
 
-    function formatDate(dateStr) {
-        if (!dateStr) return '';
-        const d = new Date(dateStr);
-        return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-    }
+function row(label, value) {
+    const isEmpty = !value;
+    return `<div class="confirm-row">
+        <span class="lbl">${label}</span>
+        <span class="val${isEmpty ? ' empty' : ''}">${isEmpty ? '（未入力）' : value}</span>
+    </div>`;
+}
 
-    function makeConfirmRow(label, value) {
-        if (!value) return '';
-        return `<tr><td>${label}</td><td>${value}</td></tr>`;
-    }
+function block(title, rows) {
+    return `<div class="confirm-block"><h3>${title}</h3>${rows}</div>`;
+}
 
-    document.getElementById('orderForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        // 簡易バリデーション
-        const required = [
-            ['company_name', 'ご発注事業者名'],
-            ['phone', 'お電話番号（事業者）'],
-            ['qty', '数量'],
-            ['unit', '単位'],
-            ['delivery', 'お届け希望日時'],
-            ['size', '給水袋サイズ'],
-            ['name_print', '名入れの有無'],
-            ['invoice_name', '請求書の宛名'],
-        ];
-        for (const [name, label] of required) {
+    // バリデーション
+    const checks = [
+        ['company_name', 'ご発注事業者名'],
+        ['phone',        'お電話番号'],
+        ['qty',          '数量'],
+        ['unit',         '単位'],
+        ['delivery',     'お届け希望日'],
+        ['size',         '給水袋のサイズ'],
+        ['name_print',   '名入れ印刷の有無'],
+        ['invoice_name', '請求書の宛名'],
+    ];
+    for (const [name, label] of checks) {
+        if (!v(name)) {
+            alert(`「${label}」が入力されていません。\nご確認ください。`);
             const el = document.querySelector(`[name="${name}"]`);
-            if (el && !el.value) {
-                alert(`「${label}」を入力・選択してください。`);
-                el.focus();
-                return;
-            }
-        }
-        const qtyVal = parseInt(val('qty'));
-        if (!qtyVal || qtyVal < 1) {
-            alert('数量は1以上を入力してください。');
-            document.querySelector('[name="qty"]').focus();
+            if (el) el.focus();
             return;
         }
-        if (val('name_print') === '有' && !val('color')) {
-            alert('名入れアリの場合、印刷色を選択してください。');
-            colorSelect.focus();
-            return;
+    }
+    if (parseInt(v('qty')) < 1) {
+        alert('数量は1以上を入力してください。');
+        document.querySelector('[name="qty"]').focus();
+        return;
+    }
+    if (v('name_print') === '有') {
+        if (!v('color')) {
+            alert('名入れ「あり」の場合、印刷する色を選択してください。');
+            colorSel.focus(); return;
         }
-        if (val('name_print') === '有' && !val('name_text').trim()) {
-            alert('名入れアリの場合、名入れ文言を入力してください。');
-            document.getElementById('name_text').focus();
-            return;
+        if (!v('name_text')) {
+            alert('名入れ「あり」の場合、印刷する文言を入力してください。');
+            nameTextInp.focus(); return;
         }
-
-        // 確認内容を生成
-        const deliveryFmt = formatDate(val('delivery'));
-        let html = '';
-
-        html += `<div class="confirm-section"><h3>① 事業者情報</h3><table class="confirm-table">`;
-        html += makeConfirmRow('ご発注事業者名', val('company_name'));
-        html += makeConfirmRow('宛名', val('contact_person'));
-        html += makeConfirmRow('〒', val('postal'));
-        html += makeConfirmRow('住所', val('address'));
-        html += makeConfirmRow('電話', val('phone'));
-        html += `</table></div>`;
-
-        html += `<div class="confirm-section"><h3>② ご注文内容</h3><table class="confirm-table">`;
-        html += makeConfirmRow('数量', `${val('qty')} ${val('unit')}`);
-        html += makeConfirmRow('お届け希望日時', deliveryFmt);
-        html += makeConfirmRow('サイズ', val('size'));
-        html += makeConfirmRow('名入れの有無', val('name_print'));
-        html += makeConfirmRow('印刷色', val('color'));
-        html += makeConfirmRow('名入れ文言', val('name_text'));
-        html += `</table></div>`;
-
-        html += `<div class="confirm-section"><h3>③ お届け先情報</h3><table class="confirm-table">`;
-        html += makeConfirmRow('お届け先名', val('delivery_name'));
-        html += makeConfirmRow('有人/無人', val('manned'));
-        html += makeConfirmRow('宛名', val('delivery_contact'));
-        html += makeConfirmRow('〒', val('delivery_postal'));
-        html += makeConfirmRow('住所', val('delivery_address'));
-        html += makeConfirmRow('電話', val('delivery_phone'));
-        html += makeConfirmRow('備考', val('delivery_note'));
-        html += `</table></div>`;
-
-        html += `<div class="confirm-section"><h3>④ 請求書送付先情報</h3><table class="confirm-table">`;
-        html += makeConfirmRow('請求書の宛名', val('invoice_name'));
-        html += makeConfirmRow('宛名', val('invoice_contact'));
-        html += makeConfirmRow('〒', val('invoice_postal'));
-        html += makeConfirmRow('住所', val('invoice_address'));
-        html += makeConfirmRow('電話', val('invoice_phone'));
-        html += makeConfirmRow('備考', val('invoice_note'));
-        html += `</table></div>`;
-
-        document.getElementById('confirmContent').innerHTML = html;
-
-        // メール本文を生成して保持
-        let body = "【非常用給水袋 注文書】\n\n";
-        body += "① 事業者情報\n";
-        body += `ご発注事業者名: ${val('company_name')}\n`;
-        body += `宛名: ${val('contact_person')}\n`;
-        body += `〒: ${val('postal')}\n`;
-        body += `住所: ${val('address')}\n`;
-        body += `電話: ${val('phone')}\n\n`;
-        body += "② ご注文内容\n";
-        body += `数量: ${val('qty')} ${val('unit')}\n`;
-        body += `お届け希望日時: ${deliveryFmt}\n`;
-        body += `サイズ: ${val('size')}\n`;
-        body += `名入れの有無: ${val('name_print')}\n`;
-        body += `名入れの印刷色: ${val('color')}\n`;
-        body += `名入れ文言: ${val('name_text')}\n\n`;
-        body += "③ お届け先情報\n";
-        body += `お届け先名: ${val('delivery_name')}\n`;
-        body += `有人/無人: ${val('manned')}\n`;
-        body += `宛名: ${val('delivery_contact')}\n`;
-        body += `〒: ${val('delivery_postal')}\n`;
-        body += `住所: ${val('delivery_address')}\n`;
-        body += `電話: ${val('delivery_phone')}\n`;
-        body += `備考: ${val('delivery_note')}\n\n`;
-        body += "④ 請求書送付先情報\n";
-        body += `請求書の宛名: ${val('invoice_name')}\n`;
-        body += `宛名: ${val('invoice_contact')}\n`;
-        body += `〒: ${val('invoice_postal')}\n`;
-        body += `住所: ${val('invoice_address')}\n`;
-        body += `電話: ${val('invoice_phone')}\n`;
-        body += `備考: ${val('invoice_note')}\n\n`;
-        body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
-
-        const namePrint = val('name_print');
-        const subjectSuffix = namePrint === '有'
-            ? (val('name_text') || '（名入れ文言未入力）')
-            : (val('company_name') || '（事業者名未入力）');
-        const subject = `非常用給水袋注文・${subjectSuffix}`;
-
-        pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-        document.getElementById('confirmOverlay').classList.add('active');
-        document.getElementById('confirmBox').scrollTop = 0;
-    });
-
-    function closeConfirm() {
-        document.getElementById('confirmOverlay').classList.remove('active');
     }
 
-    function doSend() {
-        window.location.href = pendingMailto;
-        closeConfirm();
-    }
+    // 確認HTML
+    const deliveryFmt = formatDate(v('delivery'));
+    const namePrintLabel = v('name_print') === '有' ? 'あり（印刷する）' : v('name_print') === '無' ? 'なし' : '';
 
-    // オーバーレイ外クリックで閉じる
-    document.getElementById('confirmOverlay').addEventListener('click', function(e) {
-        if (e.target === this) closeConfirm();
-    });
-    </script>
+    let html = '';
+    html += block('① 事業者情報',
+        row('ご発注事業者名', v('company_name')) +
+        row('ご担当者様', v('contact_person')) +
+        row('電話番号', v('phone')) +
+        row('郵便番号', v('postal')) +
+        row('ご住所', v('address'))
+    );
+    html += block('② ご注文内容',
+        row('数量', `${v('qty')} ${v('unit')}`) +
+        row('お届け希望日', deliveryFmt) +
+        row('給水袋のサイズ', v('size')) +
+        row('名入れ印刷', namePrintLabel) +
+        (v('name_print') === '有' ? row('印刷する色', v('color')) + row('印刷する文言', v('name_text')) : '')
+    );
+    html += block('③ お届け先（①と異なる場合）',
+        row('お届け先名', v('delivery_name')) +
+        row('建物の状況', v('manned')) +
+        row('担当者様', v('delivery_contact')) +
+        row('郵便番号', v('delivery_postal')) +
+        row('ご住所', v('delivery_address')) +
+        row('電話番号', v('delivery_phone')) +
+        row('備考', v('delivery_note'))
+    );
+    html += block('④ 請求書の送付先',
+        row('請求書の宛名', v('invoice_name')) +
+        row('ご担当者様', v('invoice_contact')) +
+        row('郵便番号', v('invoice_postal')) +
+        row('ご住所', v('invoice_address')) +
+        row('電話番号', v('invoice_phone')) +
+        row('備考', v('invoice_note'))
+    );
+
+    document.getElementById('modalBody').innerHTML = html;
+
+    // メール本文
+    let body = '【非常用給水袋 注文書】\n\n';
+    body += '① 事業者情報\n';
+    body += `ご発注事業者名: ${v('company_name')}\n`;
+    body += `ご担当者様: ${v('contact_person')}\n`;
+    body += `電話番号: ${v('phone')}\n`;
+    body += `〒: ${v('postal')}\n`;
+    body += `住所: ${v('address')}\n\n`;
+    body += '② ご注文内容\n';
+    body += `数量: ${v('qty')} ${v('unit')}\n`;
+    body += `お届け希望日: ${deliveryFmt}\n`;
+    body += `給水袋サイズ: ${v('size')}\n`;
+    body += `名入れ印刷: ${namePrintLabel}\n`;
+    if (v('name_print') === '有') {
+        body += `印刷する色: ${v('color')}\n`;
+        body += `印刷する文言: ${v('name_text')}\n`;
+    }
+    body += '\n③ お届け先\n';
+    body += `お届け先名: ${v('delivery_name')}\n`;
+    body += `建物の状況: ${v('manned')}\n`;
+    body += `担当者様: ${v('delivery_contact')}\n`;
+    body += `〒: ${v('delivery_postal')}\n`;
+    body += `住所: ${v('delivery_address')}\n`;
+    body += `電話番号: ${v('delivery_phone')}\n`;
+    body += `備考: ${v('delivery_note')}\n\n`;
+    body += '④ 請求書の送付先\n';
+    body += `請求書の宛名: ${v('invoice_name')}\n`;
+    body += `担当者様: ${v('invoice_contact')}\n`;
+    body += `〒: ${v('invoice_postal')}\n`;
+    body += `住所: ${v('invoice_address')}\n`;
+    body += `電話番号: ${v('invoice_phone')}\n`;
+    body += `備考: ${v('invoice_note')}\n\n`;
+    body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
+
+    // 件名
+    const suffix = v('name_print') === '有'
+        ? (v('name_text') || '（名入れ文言未入力）')
+        : (v('company_name') || '（事業者名未入力）');
+    const subject = `非常用給水袋注文・${suffix}`;
+
+    pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('modal').scrollTop = 0;
+    window.scrollTo(0, 0);
+});
+
+function closeModal() {
+    document.getElementById('overlay').classList.remove('show');
+}
+
+function doSend() {
+    window.location.href = pendingMailto;
+    closeModal();
+}
+
+document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+</script>
 </body>
 </html>
