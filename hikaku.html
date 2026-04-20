@@ -1,323 +1,402 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <!-- Google Analytics（GA4） -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBE8QC5LWP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CBE8QC5LWP');
-    </script>
+  <!-- Google Analytics（GA4） -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBE8QC5LWP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CBE8QC5LWP');
+  </script>
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>価格比較</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f0f0f0;
-            padding: 1em;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 400px;
-            width: 100%;
-            background-color: #fff;
-            border: 1px solid #000;
-            border-radius: 0.8em;
-            box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.1);
-            padding: 1em;
-        }
-        h1 {
-            font-size: 1.3em;
-            margin-bottom: 0.8em;
-            text-align: center;
-            color: #333;
-        }
-        .section {
-            padding: 0;
-        }
-        .item {
-            background-color: #fff;
-            margin-bottom: 0.8em;
-            padding: 0.8em;
-            border: 1px solid #000;
-            border-radius: 0.5em;
-        }
-        .input-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-            margin-top: 0.3em;
-        }
-        label {
-            font-size: 0.9em;
-            color: #555;
-            display: block;
-            margin-bottom: 0.3em;
-        }
-        input[type="number"] {
-            width: 40%;
-            padding: 0.5em;
-            font-size: 0.9em;
-            text-align: right;
-            border: 1px solid #ccc;
-            border-radius: 0.3em;
-        }
-        .result-container {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5em;
-            font-size: 0.9em;
-            color: #000;
-        }
-        .triangle {
-            color: #28a745;
-            font-size: 1em;
-            margin-right: 0.3em;
-        }
-        .result {
-            font-weight: bold;
-            min-width: 6em;
-            text-align: left;
-            color: #000;
-        }
-        .highlight {
-            background-color: rgb(255, 230, 0);
-            color: #333;
-        }
-        .recommendation {
-            background-color: #fff;
-            color: #333;
-            padding: 0.8em;
-            text-align: center;
-            border-radius: 0.5em;
-            margin-top: 0.8em;
-            margin-bottom: 0.8em;
-            font-size: 0.9em;
-            border: 1px solid #000;
-            font-weight: normal;
-        }
-        .recommendation.advantage,
-        .recommendation.even {
-            background-color: #28a745;
-            color: #fff;
-            border: 1px solid #28a745;
-        }
-        .controls {
-            margin-top: 1em;
-            text-align: center;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 0.6em 1.2em;
-            border-radius: 0.5em;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 0.8em;
-        }
-        button:hover {
-            background-color: #1e7136;
-        }
-        .price-one {
-            color: black !important;
-        }
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.8em;
-                border-radius: 0.5em;
-                border: 1px solid #000;
-            }
-            h1 {
-                font-size: 1em;
-                margin-bottom: 0.4em;
-                text-align: center;
-            }
-            .item {
-                padding: 0.4em;
-                margin-bottom: 0.4em;
-                border: 1px solid #000;
-            }
-            label {
-                font-size: 0.8em;
-                margin-bottom: 0.1em;
-                display: inline-block;
-                width: 30%;
-                text-align: left;
-            }
-            .input-group {
-                flex-direction: row;
-                align-items: center;
-                gap: 0.2em;
-                margin-top: 0em;
-            }
-            input[type="number"] {
-                font-size: 0.8em;
-                padding: 0.3em;
-                width: 30%;
-                margin-top: 0em;
-                text-align: right;
-            }
-            .result-container {
-                font-size: 0.8em;
-                margin-top: 0.3em;
-                margin-bottom: 0em;
-            }
-            .triangle {
-                font-size: 0.9em;
-                margin-right: 0.2em;
-            }
-            .recommendation {
-                padding: 0.4em;
-                margin-top: 0.4em;
-                margin-bottom: 0.4em;
-                font-size: 0.8em;
-                border: 1px solid #000;
-                font-weight: normal;
-            }
-            .recommendation.advantage,
-            .recommendation.even {
-                background-color: #28a745;
-                color: #fff;
-                border: 1px solid #28a745;
-            }
-            button {
-                font-size: 0.8em;
-                padding: 0.4em 0.8em;
-                border-radius: 0.3em;
-                margin-top: 0.4em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>価格比較</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --border: #e0e0dc;
+      --border-dark: #222;
+      --text: #111;
+      --text-muted: #999;
+      --radius: 8px;
+      --radius-sm: 5px;
+      --winner-bg: #f0faf4;
+      --winner-border: #2a7a4b;
+      --winner-accent: #2a7a4b;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 16px 64px;
+      color: var(--text);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .header p {
+      margin-top: 5px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* Item card */
+    .item-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .item-card.winner {
+      border-color: var(--winner-border);
+      background: var(--winner-bg);
+    }
+
+    .card-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .item-card.winner .card-label {
+      color: var(--winner-accent);
+    }
+
+    /* Name input */
+    .name-input {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--text);
+      padding: 4px 0 6px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .name-input::placeholder { color: var(--text-muted); font-weight: 300; }
+    .name-input:focus { border-bottom-color: var(--border-dark); }
+
+    /* Number inputs row */
+    .inputs-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+    .input-unit {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+    .num-input {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      padding: 8px 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      text-align: right;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    .num-input:focus { border-color: var(--border-dark); }
+    .num-input::-webkit-inner-spin-button,
+    .num-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .item-card.winner .num-input {
+      background: #e8f5ee;
+      border-color: #b8ddc8;
+    }
+
+    .unit-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .divider {
+      font-size: 0.8rem;
+      color: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Result display */
+    .result-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      margin-top: 12px;
+      gap: 4px;
+    }
+    .result-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      letter-spacing: -0.01em;
+    }
+    .item-card.winner .result-value {
+      color: var(--winner-accent);
+    }
+    .result-unit {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-left: 2px;
+    }
+
+    /* Winner badge */
+    .winner-badge {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--winner-accent);
+      border: 1px solid var(--winner-accent);
+      border-radius: 20px;
+      padding: 2px 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .item-card.winner .winner-badge { opacity: 1; }
+
+    /* Verdict bar */
+    .verdict {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .verdict.active {
+      border-color: var(--winner-border);
+      background: var(--winner-bg);
+      color: var(--winner-accent);
+      font-weight: 400;
+    }
+    .verdict.even {
+      border-color: #999;
+      background: #fafafa;
+      color: #555;
+    }
+
+    /* Diff detail */
+    .diff-detail {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .verdict.active .diff-detail { color: #4a9a6a; }
+
+    /* Reset button */
+    .reset-btn {
+      width: 100%;
+      padding: 11px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.13s, color 0.13s;
+    }
+    .reset-btn:hover {
+      border-color: var(--border-dark);
+      color: var(--text);
+    }
+    .reset-btn:active { transform: scale(0.98); }
+
+    @media (max-width: 480px) {
+      body { padding: 28px 12px 64px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>価格比較</h1>
-        <div class="section">
-            <div id="itemA" class="item">
-                <label for="weightA">商品A：</label>
-                <div class="input-group">
-                    <input id="weightA" type="number" placeholder="重さ" /> g
-                    <input id="priceA" type="number" placeholder="価格" /> 円
-                </div>
-                <div class="result-container">
-                    <span class="triangle">▶</span><span id="resultA" class="result">-- 円/g</span>
-                </div>
-            </div>
-        </div>
+<div class="container">
 
-        <div class="section">
-            <div id="itemB" class="item">
-                <label for="weightB">商品B：</label>
-                <div class="input-group">
-                    <input id="weightB" type="number" placeholder="重さ" /> g
-                    <input id="priceB" type="number" placeholder="価格" /> 円
-                </div>
-                <div class="result-container">
-                    <span class="triangle">▶</span><span id="resultB" class="result">-- 円/g</span>
-                </div>
-            </div>
-        </div>
+  <div class="header">
+    <h1>価格比較</h1>
+    <p>数量と価格を入力すると、お得な方がわかります</p>
+  </div>
 
-        <div id="recommendation" class="recommendation">
-            どちらの商品がお得か比較します。
-        </div>
-
-        <div class="controls">
-            <button onclick="resetFields()">リセット</button>
-        </div>
+  <!-- Card A -->
+  <div class="item-card" id="cardA">
+    <div class="card-label">商品 A</div>
+    <div class="winner-badge">お得</div>
+    <input class="name-input" id="nameA" type="text" placeholder="商品名（任意）" maxlength="30" />
+    <div class="inputs-row">
+      <div class="input-unit">
+        <input class="num-input" id="quantityA" type="number" inputmode="decimal" placeholder="数量" min="0" />
+        <span class="unit-label">単位</span>
+      </div>
+      <span class="divider">/</span>
+      <div class="input-unit">
+        <input class="num-input" id="priceA" type="number" inputmode="decimal" placeholder="価格" min="0" />
+        <span class="unit-label">円</span>
+      </div>
     </div>
+    <div class="result-row">
+      <span class="result-value" id="resultA">--</span>
+      <span class="result-unit">円 / 単位</span>
+    </div>
+  </div>
 
-    <script>
-        const weightA = document.getElementById("weightA");
-        const priceA = document.getElementById("priceA");
-        const resultA = document.getElementById("resultA");
-        const itemA = document.getElementById("itemA");
+  <!-- Card B -->
+  <div class="item-card" id="cardB">
+    <div class="card-label">商品 B</div>
+    <div class="winner-badge">お得</div>
+    <input class="name-input" id="nameB" type="text" placeholder="商品名（任意）" maxlength="30" />
+    <div class="inputs-row">
+      <div class="input-unit">
+        <input class="num-input" id="quantityB" type="number" inputmode="decimal" placeholder="数量" min="0" />
+        <span class="unit-label">単位</span>
+      </div>
+      <span class="divider">/</span>
+      <div class="input-unit">
+        <input class="num-input" id="priceB" type="number" inputmode="decimal" placeholder="価格" min="0" />
+        <span class="unit-label">円</span>
+      </div>
+    </div>
+    <div class="result-row">
+      <span class="result-value" id="resultB">--</span>
+      <span class="result-unit">円 / 単位</span>
+    </div>
+  </div>
 
-        const weightB = document.getElementById("weightB");
-        const priceB = document.getElementById("priceB");
-        const resultB = document.getElementById("resultB");
-        const itemB = document.getElementById("itemB");
+  <!-- Verdict -->
+  <div class="verdict" id="verdict">
+    数量と価格を入力してください
+    <div class="diff-detail" id="diffDetail"></div>
+  </div>
 
-        const recommendation = document.getElementById("recommendation");
+  <button class="reset-btn" onclick="resetFields()">リセット</button>
 
-        function calculate() {
-            const wA = parseFloat(weightA.value);
-            const pA = parseFloat(priceA.value);
-            const wB = parseFloat(weightB.value);
-            const pB = parseFloat(priceB.value);
+</div>
+<script>
+  const qA = document.getElementById("quantityA");
+  const pA = document.getElementById("priceA");
+  const qB = document.getElementById("quantityB");
+  const pB = document.getElementById("priceB");
+  const nameA = document.getElementById("nameA");
+  const nameB = document.getElementById("nameB");
+  const resultA = document.getElementById("resultA");
+  const resultB = document.getElementById("resultB");
+  const cardA = document.getElementById("cardA");
+  const cardB = document.getElementById("cardB");
+  const verdict = document.getElementById("verdict");
+  const diffDetail = document.getElementById("diffDetail");
 
-            let unitA = wA && pA ? pA / wA : null;
-            let unitB = wB && pB ? pB / wB : null;
+  function getLabelA() { return nameA.value.trim() || "商品A"; }
+  function getLabelB() { return nameB.value.trim() || "商品B"; }
 
-            resultA.textContent = unitA ? unitA.toFixed(2) + " 円/g" : "-- 円/g";
-            resultB.textContent = unitB ? unitB.toFixed(2) + " 円/g" : "-- 円/g";
+  function calculate() {
+    const wA = parseFloat(qA.value);
+    const prA = parseFloat(pA.value);
+    const wB = parseFloat(qB.value);
+    const prB = parseFloat(pB.value);
 
-            if (unitA && unitA.toFixed(2) === "1.00") {
-                resultA.classList.add("price-one");
-            } else {
-                resultA.classList.remove("price-one");
-            }
+    const unitA = (wA > 0 && prA > 0) ? prA / wA : null;
+    const unitB = (wB > 0 && prB > 0) ? prB / wB : null;
 
-            if (unitB && unitB.toFixed(2) === "1.00") {
-                resultB.classList.add("price-one");
-            } else {
-                resultB.classList.remove("price-one");
-            }
+    resultA.textContent = unitA ? unitA.toFixed(2) : "--";
+    resultB.textContent = unitB ? unitB.toFixed(2) : "--";
 
-            itemA.classList.remove("highlight");
-            itemB.classList.remove("highlight");
-            recommendation.classList.remove("advantage", "even");
+    cardA.classList.remove("winner");
+    cardB.classList.remove("winner");
+    verdict.classList.remove("active", "even");
+    diffDetail.textContent = "";
 
-            if (unitA && unitB) {
-                if (unitA < unitB) {
-                    itemA.classList.add("highlight");
-                    recommendation.textContent = "商品Aの方がお得です！";
-                    recommendation.classList.add("advantage");
-                } else if (unitB < unitA) {
-                    itemB.classList.add("highlight");
-                    recommendation.textContent = "商品Bの方がお得です！";
-                    recommendation.classList.add("advantage");
-                } else {
-                    itemA.classList.add("highlight");
-                    itemB.classList.add("highlight");
-                    recommendation.textContent = "どちらも同じくらいお得です。";
-                    recommendation.classList.add("even");
-                }
-            } else {
-                recommendation.textContent = "どちらの商品がお得か比較します。";
-            }
-        }
+    if (unitA && unitB) {
+      if (unitA < unitB) {
+        cardA.classList.add("winner");
+        verdict.classList.add("active");
+        verdict.firstChild.textContent = `${getLabelA()} の方がお得です`;
+        const pct = (((unitB - unitA) / unitB) * 100).toFixed(1);
+        diffDetail.textContent = `${getLabelB()} より ${pct}% 安い`;
+      } else if (unitB < unitA) {
+        cardB.classList.add("winner");
+        verdict.classList.add("active");
+        verdict.firstChild.textContent = `${getLabelB()} の方がお得です`;
+        const pct = (((unitA - unitB) / unitA) * 100).toFixed(1);
+        diffDetail.textContent = `${getLabelA()} より ${pct}% 安い`;
+      } else {
+        cardA.classList.add("winner");
+        cardB.classList.add("winner");
+        verdict.classList.add("even");
+        verdict.firstChild.textContent = "どちらも同じ価格です";
+      }
+    } else {
+      verdict.firstChild.textContent = "数量と価格を入力してください";
+    }
+  }
 
-        function resetFields() {
-            weightA.value = "";
-            priceA.value = "";
-            resultA.textContent = "-- 円/g";
-            resultA.classList.remove("price-one");
-            itemA.classList.remove("highlight");
+  function resetFields() {
+    [qA, pA, qB, pB, nameA, nameB].forEach(el => el.value = "");
+    resultA.textContent = "--";
+    resultB.textContent = "--";
+    cardA.classList.remove("winner");
+    cardB.classList.remove("winner");
+    verdict.classList.remove("active", "even");
+    verdict.firstChild.textContent = "数量と価格を入力してください";
+    diffDetail.textContent = "";
+  }
 
-            weightB.value = "";
-            priceB.value = "";
-            resultB.textContent = "-- 円/g";
-            resultB.classList.remove("price-one");
-            itemB.classList.remove("highlight");
-
-            recommendation.textContent = "どちらの商品がお得か比較します。";
-            recommendation.classList.remove("advantage", "even");
-        }
-
-        weightA.addEventListener("input", calculate);
-        priceA.addEventListener("input", calculate);
-        weightB.addEventListener("input", calculate);
-        priceB.addEventListener("input", calculate);
-    </script>
+  [qA, pA, qB, pB, nameA, nameB].forEach(el => el.addEventListener("input", calculate));
+</script>
 </body>
 </html>
