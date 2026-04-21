@@ -4,136 +4,313 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI質問ツール</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --border: #e0e0dc;
+      --border-dark: #222;
+      --text: #111;
+      --text-muted: #999;
+      --radius: 8px;
+      --radius-sm: 5px;
+    }
+
     body {
-      font-family: sans-serif;
-      padding: 20px;
-      margin: 0;
-      background: #f4f4f4;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 16px 64px;
+      color: var(--text);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .header p {
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
       line-height: 1.6;
     }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Textarea */
     textarea {
       width: 100%;
-      max-width: 600px;
-      height: 120px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      min-height: 120px;
+      padding: 12px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
       resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
     }
-    .note {
-      font-size: 14px;
-      color: #555;
-      margin: 10px 0;
+    textarea:focus { border-color: var(--border-dark); }
+    textarea::placeholder { color: var(--text-muted); font-size: 0.85rem; }
+
+    /* Section label */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
     }
-    .button-row {
-      margin: 15px 0;
+
+    /* AI button grid 3x2 */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
     }
-    button {
-      background: white;
-      color: black;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 15px;
-      margin: 5px;
+
+    .ai-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 12px 8px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
       cursor: pointer;
-      min-width: 170px;
+      transition: background 0.13s, color 0.13s;
+      line-height: 1;
     }
-    button:hover {
-      border-color: #888;
+    .ai-btn:hover {
+      background: var(--border-dark);
+      color: #fff;
     }
-    #history {
-      margin-top: 30px;
-      max-width: 600px;
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    .ai-btn:active { transform: scale(0.97); }
+
+    .ai-btn .ai-icon {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      opacity: 0.45;
     }
-    #history ul {
-      list-style: none;
-      padding-left: 0;
-      max-height: 140px;
-      overflow-y: auto;
+    .ai-btn:hover .ai-icon { opacity: 0.7; }
+
+    /* History */
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    #history li {
-      margin: 5px 0;
+    .clear-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
       cursor: pointer;
-      color: #0074cc;
-    }
-    #history li:hover {
       text-decoration: underline;
+      text-underline-offset: 2px;
+      padding: 0;
+      transition: color 0.13s;
     }
-    #clearHistory {
-      margin-top: 15px;
-      background: #f8f8f8;
+    .clear-btn:hover { color: var(--text); }
+    .clear-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    #historyList {
+      list-style: none;
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    #historyList li {
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid transparent;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    #historyList li:hover {
+      background: var(--bg);
+      border-color: var(--border);
+    }
+
+    /* Copy notice */
+    #copyNotice {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+      min-height: 1em;
+      transition: opacity 0.3s;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 28px 12px 64px; }
+      .ai-btn { font-size: 0.74rem; padding: 11px 6px; }
     }
   </style>
 </head>
 <body>
-  <h2>AIに聞きたい質問を入力してください（複数行OK）</h2>
-  <textarea id="question" placeholder="ここに質問を入力..."></textarea>
-  <p class="note">下の各ボタンを押すと質問がクリップボードにコピーされ、各AIが新しいタブで開きます。開いた先で貼り付けてご利用ください。</p>
+<div class="container">
 
-  <div class="button-row">
-    <button onclick="copyAndOpen('https://chat.openai.com/')">ChatGPT</button>
-    <button onclick="copyAndOpen('https://gemini.google.com/app')">Gemini</button>
-    <button onclick="copyAndOpen('https://x.com/i/grok')">Grok</button>
-    <button onclick="copyAndOpen('https://claude.ai/')">Claude</button>
-    <button onclick="copyAndOpen('https://www.perplexity.ai/')">Perplexity</button>
+  <div class="header">
+    <h1>AI 質問ツール</h1>
+    <p>質問を入力してAIを選ぶと、クリップボードにコピーされて各AIが開きます</p>
   </div>
 
-  <div id="history">
-    <strong>📜 質問履歴</strong>
+  <div class="card">
+    <textarea id="question" placeholder="ここに質問を入力…"></textarea>
+    <div id="copyNotice"></div>
+
+    <div class="section-label">送る先を選択</div>
+    <div class="ai-grid">
+      <button class="ai-btn" onclick="copyAndOpen('https://chat.openai.com/')">
+        <span class="ai-icon">OpenAI</span>ChatGPT
+      </button>
+      <button class="ai-btn" onclick="copyAndOpen('https://gemini.google.com/app')">
+        <span class="ai-icon">Google</span>Gemini
+      </button>
+      <button class="ai-btn" onclick="copyAndOpen('https://copilot.microsoft.com/')">
+        <span class="ai-icon">Microsoft</span>Copilot
+      </button>
+      <button class="ai-btn" onclick="copyAndOpen('https://claude.ai/')">
+        <span class="ai-icon">Anthropic</span>Claude
+      </button>
+      <button class="ai-btn" onclick="copyAndOpen('https://x.com/i/grok')">
+        <span class="ai-icon">xAI</span>Grok
+      </button>
+      <button class="ai-btn" onclick="copyAndOpen('https://www.perplexity.ai/')">
+        <span class="ai-icon">Search</span>Perplexity
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="history-header">
+      <span class="section-label">履歴</span>
+      <button class="clear-btn" id="clearBtn">全削除</button>
+    </div>
     <ul id="historyList"></ul>
   </div>
-  <button id="clearHistory">履歴をすべて削除</button>
 
-  <script>
-    const textarea = document.getElementById("question");
-    const historyList = document.getElementById("historyList");
-    const clearBtn = document.getElementById("clearHistory");
+</div>
 
-    function loadHistory() {
-      const items = JSON.parse(localStorage.getItem("questionHistory") || "[]");
-      historyList.innerHTML = "";
-      items.forEach((q, i) => {
-        const li = document.createElement("li");
-        li.textContent = q.length > 20 ? q.slice(0, 20) + "..." : q;
-        li.title = q;
-        li.onclick = () => {
-          textarea.value = q;
-        };
-        historyList.appendChild(li);
-      });
+<script>
+  const textarea = document.getElementById("question");
+  const historyList = document.getElementById("historyList");
+  const clearBtn = document.getElementById("clearBtn");
+  const copyNotice = document.getElementById("copyNotice");
+  let noticeTimer = null;
+
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem("questionHistory")) || []; }
+    catch { return []; }
+  }
+  function saveHistory(h) {
+    localStorage.setItem("questionHistory", JSON.stringify(h.slice(0, 30)));
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    historyList.innerHTML = "";
+    clearBtn.disabled = history.length === 0;
+    history.forEach(q => {
+      const li = document.createElement("li");
+      li.textContent = q.length > 40 ? q.slice(0, 40) + "…" : q;
+      li.title = q;
+      li.addEventListener("click", () => { textarea.value = q; });
+      historyList.appendChild(li);
+    });
+  }
+
+  function addToHistory(text) {
+    let h = getHistory().filter(q => q !== text);
+    h.unshift(text);
+    saveHistory(h);
+    renderHistory();
+  }
+
+  function showNotice(msg) {
+    copyNotice.textContent = msg;
+    copyNotice.style.opacity = "1";
+    if (noticeTimer) clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(() => { copyNotice.style.opacity = "0"; }, 2000);
+  }
+
+  function copyAndOpen(url) {
+    const text = textarea.value.trim();
+    if (!text) {
+      showNotice("質問を入力してください");
+      return;
     }
+    navigator.clipboard.writeText(text).then(() => {
+      showNotice("コピーしました — 開いたページで貼り付けてください");
+    }).catch(() => {
+      showNotice("コピーに失敗しました");
+    });
+    addToHistory(text);
+    window.open(url, "_blank");
+  }
 
-    function saveToHistory(text) {
-      let items = JSON.parse(localStorage.getItem("questionHistory") || "[]");
-      items = items.filter(item => item !== text); // 重複削除
-      items.unshift(text);
-      items = items.slice(0, 30); // 最大30件保存
-      localStorage.setItem("questionHistory", JSON.stringify(items));
-      loadHistory();
-    }
+  clearBtn.addEventListener("click", () => {
+    localStorage.removeItem("questionHistory");
+    renderHistory();
+  });
 
-    function copyAndOpen(url) {
-      const text = textarea.value.trim();
-      navigator.clipboard.writeText(text);
-      if (text) saveToHistory(text);
-      window.open(url, "_blank");
-    }
-
-    clearBtn.onclick = () => {
-      localStorage.removeItem("questionHistory");
-      loadHistory();
-    };
-
-    // 初回読み込み
-    loadHistory();
-  </script>
+  renderHistory();
+</script>
 </body>
 </html>
