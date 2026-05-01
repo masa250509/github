@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>非常用給水袋 注文フォーム｜市川甚商事</title>
     <style>
-        /* ===== 基本設定 ===== */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
@@ -34,31 +33,16 @@
             padding: 0 0 60px;
         }
 
-        /* ===== ヘッダー ===== */
         .site-header {
             background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
             color: var(--white);
             padding: 28px 40px 24px;
             border-bottom: 4px solid #f0a030;
         }
-        .site-header .company {
-            font-size: 13px;
-            opacity: 0.85;
-            letter-spacing: 0.05em;
-            margin-bottom: 6px;
-        }
-        .site-header h1 {
-            font-size: 26px;
-            font-weight: bold;
-            letter-spacing: 0.04em;
-        }
-        .site-header .subtitle {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-top: 4px;
-        }
+        .site-header .company { font-size: 13px; opacity: 0.85; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .site-header h1 { font-size: 26px; font-weight: bold; letter-spacing: 0.04em; }
+        .site-header .subtitle { font-size: 14px; opacity: 0.8; margin-top: 4px; }
 
-        /* ===== 説明バー ===== */
         .info-bar {
             background: var(--blue-light);
             border-left: 5px solid var(--blue);
@@ -71,10 +55,8 @@
         }
         .info-bar strong { display: block; font-size: 16px; margin-bottom: 4px; }
 
-        /* ===== メインコンテナ ===== */
         .container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
 
-        /* ===== セクション ===== */
         .section {
             background: var(--white);
             border-radius: var(--radius);
@@ -100,49 +82,18 @@
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
         }
-        .section-head h2 {
-            font-size: 17px;
-            font-weight: bold;
-            letter-spacing: 0.03em;
-        }
-        .section-head .note {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-left: auto;
-            white-space: nowrap;
-        }
+        .section-head h2 { font-size: 17px; font-weight: bold; letter-spacing: 0.03em; }
+        .section-head .note { font-size: 12px; opacity: 0.8; margin-left: auto; white-space: nowrap; }
         .section-body { padding: 24px; }
 
-        /* ===== フォームフィールド ===== */
         .field { margin-bottom: 20px; }
         .field:last-child { margin-bottom: 0; }
+        .field label { display: block; font-size: 14px; font-weight: bold; color: var(--gray-4); margin-bottom: 6px; letter-spacing: 0.02em; }
+        .field label .req { color: var(--accent); font-size: 13px; margin-left: 4px; }
+        .field label .hint { font-weight: normal; font-size: 12px; color: var(--gray-3); margin-left: 6px; }
 
-        .field label {
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--gray-4);
-            margin-bottom: 6px;
-            letter-spacing: 0.02em;
-        }
-        .field label .req {
-            color: var(--accent);
-            font-size: 13px;
-            margin-left: 4px;
-        }
-        .field label .hint {
-            font-weight: normal;
-            font-size: 12px;
-            color: var(--gray-3);
-            margin-left: 6px;
-        }
-
-        input[type="text"],
-        input[type="tel"],
-        input[type="date"],
-        input[type="number"],
-        select,
-        textarea {
+        input[type="text"], input[type="tel"], input[type="date"],
+        input[type="number"], input[type="email"], select, textarea {
             width: 100%;
             padding: 12px 14px;
             font-size: 16px;
@@ -174,13 +125,11 @@
         }
         textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
 
-        /* ===== 横並びレイアウト ===== */
         .row { display: flex; gap: 16px; flex-wrap: wrap; }
         .row .field { flex: 1; min-width: 180px; }
         .row .field-sm { flex: 0 0 160px; }
         .row .field-lg { flex: 2; min-width: 240px; }
 
-        /* ===== 郵便番号 ===== */
         .postal-wrap { display: flex; gap: 8px; align-items: flex-start; }
         .postal-wrap input { flex: 1; }
         .btn-postal {
@@ -199,17 +148,9 @@
         .btn-postal:hover { background: var(--blue-mid); }
         .postal-msg { font-size: 12px; color: var(--accent); margin-top: 4px; min-height: 16px; }
 
-        /* ===== 注文テーブル（横並び） ===== */
-        .order-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        @media (max-width: 560px) {
-            .order-grid { grid-template-columns: 1fr; }
-        }
+        .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 560px) { .order-grid { grid-template-columns: 1fr; } }
 
-        /* ===== 名入れグレーアウト ===== */
         .name-print-area {
             border: 2px dashed var(--gray-2);
             border-radius: 8px;
@@ -217,17 +158,9 @@
             margin-top: 4px;
             transition: opacity 0.25s, border-color 0.25s;
         }
-        .name-print-area.inactive {
-            opacity: 0.35;
-            pointer-events: none;
-            border-color: var(--gray-2);
-        }
-        .name-print-area.active {
-            border-color: var(--blue-mid);
-            background: var(--blue-light);
-        }
+        .name-print-area.inactive { opacity: 0.35; pointer-events: none; border-color: var(--gray-2); }
+        .name-print-area.active { border-color: var(--blue-mid); background: var(--blue-light); }
 
-        /* ===== 注意書き ===== */
         .caution {
             background: #fff8e6;
             border-left: 4px solid #f0a030;
@@ -238,11 +171,7 @@
             margin-top: 12px;
         }
 
-        /* ===== 送信ボタン ===== */
-        .submit-wrap {
-            margin-top: 8px;
-            text-align: center;
-        }
+        .submit-wrap { margin-top: 8px; text-align: center; }
         .btn-submit {
             display: inline-block;
             width: 100%;
@@ -260,18 +189,25 @@
             box-shadow: 0 4px 18px rgba(15,63,114,0.3);
             transition: transform 0.15s, box-shadow 0.15s;
         }
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 24px rgba(15,63,114,0.38);
-        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 7px 24px rgba(15,63,114,0.38); }
         .btn-submit:active { transform: translateY(0); }
-        .submit-note {
-            font-size: 13px;
-            color: var(--gray-4);
-            margin-top: 10px;
-        }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .submit-note { font-size: 13px; color: var(--gray-4); margin-top: 10px; }
 
-        /* ===== 確認モーダル ===== */
+        /* 送信完了メッセージ */
+        #successMsg {
+            display: none;
+            background: #e8f8ee;
+            border: 2px solid #1a7a4a;
+            border-radius: var(--radius);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        #successMsg h2 { color: #1a7a4a; font-size: 20px; margin-bottom: 10px; }
+        #successMsg p { color: var(--text); font-size: 15px; line-height: 1.8; }
+
+        /* 確認モーダル */
         #overlay {
             display: none;
             position: fixed; inset: 0;
@@ -289,87 +225,45 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.25);
             overflow: hidden;
         }
-        .modal-head {
-            background: linear-gradient(135deg, var(--blue-dark), var(--blue));
-            color: var(--white);
-            padding: 22px 28px;
-        }
+        .modal-head { background: linear-gradient(135deg, var(--blue-dark), var(--blue)); color: var(--white); padding: 22px 28px; }
         .modal-head h2 { font-size: 19px; }
         .modal-head p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
         .modal-body { padding: 24px 28px; }
 
         .confirm-block { margin-bottom: 20px; }
         .confirm-block h3 {
-            font-size: 13px;
-            font-weight: bold;
-            color: var(--blue);
+            font-size: 13px; font-weight: bold; color: var(--blue);
             border-bottom: 2px solid var(--blue-mid);
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-            letter-spacing: 0.04em;
+            padding-bottom: 5px; margin-bottom: 10px; letter-spacing: 0.04em;
         }
-        .confirm-row {
-            display: flex;
-            gap: 12px;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--gray-1);
-            font-size: 15px;
-        }
+        .confirm-row { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--gray-1); font-size: 15px; }
         .confirm-row:last-child { border-bottom: none; }
-        .confirm-row .lbl {
-            color: var(--gray-4);
-            font-size: 13px;
-            width: 150px;
-            flex-shrink: 0;
-            padding-top: 1px;
-        }
+        .confirm-row .lbl { color: var(--gray-4); font-size: 13px; width: 150px; flex-shrink: 0; padding-top: 1px; }
         .confirm-row .val { color: var(--text); flex: 1; font-weight: 500; }
         .confirm-row .val.empty { color: var(--gray-3); font-weight: normal; font-style: italic; }
 
-        .modal-foot {
-            padding: 18px 28px 24px;
-            display: flex;
-            gap: 12px;
-            border-top: 1px solid var(--gray-2);
-        }
+        .modal-foot { padding: 18px 28px 24px; display: flex; gap: 12px; border-top: 1px solid var(--gray-2); }
         .btn-back {
-            flex: 1;
-            padding: 14px;
-            background: var(--white);
-            color: var(--gray-4);
-            border: 2px solid var(--gray-2);
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: inherit;
-            cursor: pointer;
+            flex: 1; padding: 14px;
+            background: var(--white); color: var(--gray-4);
+            border: 2px solid var(--gray-2); border-radius: 8px;
+            font-size: 15px; font-family: inherit; cursor: pointer;
             transition: background 0.15s;
         }
         .btn-back:hover { background: var(--gray-1); }
         .btn-send {
-            flex: 2;
-            padding: 14px;
+            flex: 2; padding: 14px;
             background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            font-family: inherit;
+            color: var(--white); border: none; border-radius: 8px;
+            font-size: 16px; font-weight: bold; font-family: inherit;
             cursor: pointer;
             box-shadow: 0 3px 12px rgba(15,63,114,0.25);
             transition: opacity 0.15s;
         }
         .btn-send:hover { opacity: 0.9; }
+        .btn-send:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* ===== フッター ===== */
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--gray-4);
-            line-height: 1.9;
-        }
-        footer a { color: var(--blue); text-decoration: none; }
+        footer { margin-top: 40px; text-align: center; font-size: 13px; color: var(--gray-4); line-height: 1.9; }
     </style>
 </head>
 <body>
@@ -384,10 +278,29 @@
 
     <div class="info-bar">
         <strong>📋 ご注文の流れ</strong>
-        ①〜④をご入力 → 「内容を確認する」ボタンを押す → 内容をご確認 → メールソフトが開きますので、そのまま送信してください
+        ①〜④をご入力 → 「入力内容を確認する」ボタンを押す → 内容をご確認 → 「送信する」ボタンを押すと、ご注文が完了します。ご入力いただいたメールアドレスに確認メールをお送りします。
+    </div>
+
+    <!-- 送信完了メッセージ -->
+    <div id="successMsg">
+        <h2>✅ ご注文を受け付けました</h2>
+        <p>
+            ご注文いただきありがとうございます。<br>
+            ご入力いただいたメールアドレスに確認メールをお送りしました。<br>
+            届いていない場合は、迷惑メールフォルダをご確認ください。<br><br>
+            担当の小杉より改めてご連絡いたします。<br>
+            <small style="color:var(--gray-4);">Tel：075-351-0361　mobile：090-7555-8763</small>
+        </p>
     </div>
 
     <form id="orderForm" novalidate>
+
+        <!-- Web3Forms 設定（hidden） -->
+        <input type="hidden" name="access_key" value="0766104d-ace8-45ec-a21e-8c82a8aaf0e2">
+        <input type="hidden" name="to" value="kosugi@ichikawa-jin.co.jp">
+        <input type="hidden" name="cc" value="kyoto-jimu@ichikawa-jin.co.jp">
+        <input type="hidden" name="subject" id="mailSubject" value="非常用給水袋注文">
+        <input type="hidden" name="from_name" id="mailFromName" value="">
 
         <!-- ① 事業者情報 -->
         <div class="section">
@@ -400,17 +313,17 @@
 
                 <div class="field">
                     <label>ご発注事業者名<span class="req">★必須</span></label>
-                    <input type="text" id="company_name" name="company_name" placeholder="例：○○市上下水道局" required>
+                    <input type="text" id="company_name" name="company_name" required>
                 </div>
 
                 <div class="row">
                     <div class="field field-lg">
                         <label>ご担当者様のお名前（部署名・役職など）</label>
-                        <input type="text" name="contact_person" placeholder="例：総務部　山田 太郎">
+                        <input type="text" name="contact_person">
                     </div>
                     <div class="field">
                         <label>お電話番号<span class="req">★必須</span></label>
-                        <input type="tel" name="phone" placeholder="例：075-000-0000" required>
+                        <input type="tel" name="phone" required>
                     </div>
                 </div>
 
@@ -425,8 +338,13 @@
                     </div>
                     <div class="field field-lg">
                         <label>ご住所<span class="hint">※郵便番号検索後、番地・建物名をご追記ください</span></label>
-                        <input type="text" id="address" name="address" placeholder="例：京都市下京区○○町123">
+                        <input type="text" id="address" name="address">
                     </div>
+                </div>
+
+                <div class="field">
+                    <label>メールアドレス<span class="req">★必須</span><span class="hint">確認メールをお送りします</span></label>
+                    <input type="email" name="email" id="email" required>
                 </div>
 
             </div>
@@ -445,7 +363,7 @@
                     <div class="field">
                         <label>数量<span class="req">★必須</span></label>
                         <div style="display:flex;gap:8px;">
-                            <input type="number" name="qty" id="qty" min="1" placeholder="例：1000" style="flex:1;" required>
+                            <input type="number" name="qty" id="qty" min="1" style="flex:1;" required>
                             <select name="unit" style="width:90px;flex-shrink:0;" required>
                                 <option value="">単位</option>
                                 <option value="枚">枚</option>
@@ -479,12 +397,11 @@
                     </div>
                 </div>
 
-                <!-- 名入れオプション -->
                 <div class="name-print-area inactive" id="namePrintArea">
                     <div class="row">
                         <div class="field">
                             <label>印刷する色<span class="req">★必須</span><span class="hint">（名入れあり の場合）</span></label>
-                            <select name="color" id="color">
+                            <select name="color" id="color" disabled>
                                 <option value="">▼ 選んでください</option>
                                 <option value="赤">赤</option>
                                 <option value="黒">黒</option>
@@ -493,7 +410,7 @@
                         </div>
                         <div class="field field-lg">
                             <label>印刷する文言<span class="req">★必須</span><span class="hint">（名入れあり の場合）</span></label>
-                            <input type="text" name="name_text" id="name_text" placeholder="例：○○市上下水道局">
+                            <input type="text" name="name_text" id="name_text" disabled>
                         </div>
                     </div>
                 </div>
@@ -513,7 +430,7 @@
                 <div class="row">
                     <div class="field field-lg">
                         <label>お届け先の名称</label>
-                        <input type="text" name="delivery_name" placeholder="例：○○市○○倉庫">
+                        <input type="text" name="delivery_name">
                     </div>
                     <div class="field">
                         <label>建物の状況</label>
@@ -532,7 +449,7 @@
                 <div style="margin-top:18px;">
                     <div class="field">
                         <label>担当者様のお名前（部署名など）</label>
-                        <input type="text" name="delivery_contact" placeholder="例：○○部　鈴木 花子">
+                        <input type="text" name="delivery_contact">
                     </div>
 
                     <div class="row">
@@ -546,18 +463,18 @@
                         </div>
                         <div class="field field-lg">
                             <label>ご住所</label>
-                            <input type="text" id="delivery_address" name="delivery_address" placeholder="例：大阪市○○区○○町456">
+                            <input type="text" id="delivery_address" name="delivery_address">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="field">
                             <label>お電話番号</label>
-                            <input type="tel" name="delivery_phone" placeholder="例：06-000-0000">
+                            <input type="tel" name="delivery_phone">
                         </div>
                         <div class="field field-lg">
                             <label>備考・連絡事項</label>
-                            <input type="text" name="delivery_note" placeholder="例：午前中の配送をご希望の場合など">
+                            <input type="text" name="delivery_note">
                         </div>
                     </div>
                 </div>
@@ -577,11 +494,11 @@
                 <div class="row">
                     <div class="field field-lg">
                         <label>請求書の宛名<span class="req">★必須</span></label>
-                        <input type="text" name="invoice_name" id="invoice_name" placeholder="例：○○市上下水道局 御中" required>
+                        <input type="text" name="invoice_name" id="invoice_name" required>
                     </div>
                     <div class="field">
                         <label>ご担当者様（部署名など）</label>
-                        <input type="text" name="invoice_contact" placeholder="例：経理部　田中様">
+                        <input type="text" name="invoice_contact">
                     </div>
                 </div>
 
@@ -596,18 +513,18 @@
                     </div>
                     <div class="field field-lg">
                         <label>ご住所<span class="hint">（①と異なる場合のみ）</span></label>
-                        <input type="text" id="invoice_address" name="invoice_address" placeholder="例：神戸市○○区○○町789">
+                        <input type="text" id="invoice_address" name="invoice_address">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="field">
                         <label>お電話番号</label>
-                        <input type="tel" name="invoice_phone" placeholder="例：078-000-0000">
+                        <input type="tel" name="invoice_phone">
                     </div>
                     <div class="field field-lg">
                         <label>備考</label>
-                        <input type="text" name="invoice_note" placeholder="例：請求書はPDFでのご送付をご希望の場合など">
+                        <input type="text" name="invoice_note">
                     </div>
                 </div>
 
@@ -623,17 +540,17 @@
     </form>
 </div>
 
-<!-- ===== 確認モーダル ===== -->
+<!-- 確認モーダル -->
 <div id="overlay">
     <div id="modal">
         <div class="modal-head">
             <h2>📋 注文内容のご確認</h2>
-            <p>以下の内容でよろしければ「メールを送信する」ボタンを押してください</p>
+            <p>以下の内容でよろしければ「この内容で送信する」ボタンを押してください</p>
         </div>
         <div class="modal-body" id="modalBody"></div>
         <div class="modal-foot">
             <button class="btn-back" onclick="closeModal()">← 入力画面に戻る</button>
-            <button class="btn-send" onclick="doSend()">✉️ メールを送信する</button>
+            <button class="btn-send" id="btnSend" onclick="doSend()">✉️ この内容で送信する</button>
         </div>
     </div>
 </div>
@@ -703,10 +620,8 @@ function formatDate(s) {
 }
 
 // =============================
-// 確認モーダル生成
+// 確認モーダル
 // =============================
-let pendingMailto = '';
-
 function row(label, value) {
     const isEmpty = !value;
     return `<div class="confirm-row">
@@ -714,7 +629,6 @@ function row(label, value) {
         <span class="val${isEmpty ? ' empty' : ''}">${isEmpty ? '（未入力）' : value}</span>
     </div>`;
 }
-
 function block(title, rows) {
     return `<div class="confirm-block"><h3>${title}</h3>${rows}</div>`;
 }
@@ -726,6 +640,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     const checks = [
         ['company_name', 'ご発注事業者名'],
         ['phone',        'お電話番号'],
+        ['email',        'メールアドレス'],
         ['qty',          '数量'],
         ['unit',         '単位'],
         ['delivery',     'お届け希望日'],
@@ -757,9 +672,16 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
         }
     }
 
-    // 確認HTML
+    // 件名・差出人名をhiddenに設定
+    const suffix = v('name_print') === '有'
+        ? (v('name_text') || '名入れ文言未入力')
+        : v('company_name');
+    document.getElementById('mailSubject').value = `非常用給水袋注文・${suffix}`;
+    document.getElementById('mailFromName').value = v('company_name');
+
+    // 確認モーダルHTML生成
     const deliveryFmt = formatDate(v('delivery'));
-    const namePrintLabel = v('name_print') === '有' ? 'あり（印刷する）' : v('name_print') === '無' ? 'なし' : '';
+    const namePrintLabel = v('name_print') === '有' ? 'あり（印刷する）' : 'なし';
 
     let html = '';
     html += block('① 事業者情報',
@@ -767,7 +689,8 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
         row('ご担当者様', v('contact_person')) +
         row('電話番号', v('phone')) +
         row('郵便番号', v('postal')) +
-        row('ご住所', v('address'))
+        row('ご住所', v('address')) +
+        row('メールアドレス', v('email'))
     );
     html += block('② ご注文内容',
         row('数量', `${v('qty')} ${v('unit')}`) +
@@ -795,51 +718,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     );
 
     document.getElementById('modalBody').innerHTML = html;
-
-    // メール本文
-    let body = '【非常用給水袋 注文書】\n\n';
-    body += '① 事業者情報\n';
-    body += `ご発注事業者名: ${v('company_name')}\n`;
-    body += `ご担当者様: ${v('contact_person')}\n`;
-    body += `電話番号: ${v('phone')}\n`;
-    body += `〒: ${v('postal')}\n`;
-    body += `住所: ${v('address')}\n\n`;
-    body += '② ご注文内容\n';
-    body += `数量: ${v('qty')} ${v('unit')}\n`;
-    body += `お届け希望日: ${deliveryFmt}\n`;
-    body += `給水袋サイズ: ${v('size')}\n`;
-    body += `名入れ印刷: ${namePrintLabel}\n`;
-    if (v('name_print') === '有') {
-        body += `印刷する色: ${v('color')}\n`;
-        body += `印刷する文言: ${v('name_text')}\n`;
-    }
-    body += '\n③ お届け先\n';
-    body += `お届け先名: ${v('delivery_name')}\n`;
-    body += `建物の状況: ${v('manned')}\n`;
-    body += `担当者様: ${v('delivery_contact')}\n`;
-    body += `〒: ${v('delivery_postal')}\n`;
-    body += `住所: ${v('delivery_address')}\n`;
-    body += `電話番号: ${v('delivery_phone')}\n`;
-    body += `備考: ${v('delivery_note')}\n\n`;
-    body += '④ 請求書の送付先\n';
-    body += `請求書の宛名: ${v('invoice_name')}\n`;
-    body += `担当者様: ${v('invoice_contact')}\n`;
-    body += `〒: ${v('invoice_postal')}\n`;
-    body += `住所: ${v('invoice_address')}\n`;
-    body += `電話番号: ${v('invoice_phone')}\n`;
-    body += `備考: ${v('invoice_note')}\n\n`;
-    body += `申込日時: ${new Date().toLocaleString('ja-JP')}\n`;
-
-    // 件名
-    const suffix = v('name_print') === '有'
-        ? (v('name_text') || '（名入れ文言未入力）')
-        : (v('company_name') || '（事業者名未入力）');
-    const subject = `非常用給水袋注文・${suffix}`;
-
-    pendingMailto = `mailto:kosugi@ichikawa-jin.co.jp?cc=kyoto-jimu@ichikawa-jin.co.jp&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
     document.getElementById('overlay').classList.add('show');
-    document.getElementById('modal').scrollTop = 0;
     window.scrollTo(0, 0);
 });
 
@@ -847,14 +726,46 @@ function closeModal() {
     document.getElementById('overlay').classList.remove('show');
 }
 
-function doSend() {
-    window.location.href = pendingMailto;
-    closeModal();
+// =============================
+// Web3Forms で送信
+// =============================
+async function doSend() {
+    const btn = document.getElementById('btnSend');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    const formData = new FormData(document.getElementById('orderForm'));
+
+    try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            // 成功
+            closeModal();
+            document.getElementById('orderForm').style.display = 'none';
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else {
+            alert('送信に失敗しました。お手数ですが、お電話にてご連絡ください。\nTel：075-351-0361');
+            btn.disabled = false;
+            btn.textContent = '✉️ この内容で送信する';
+        }
+    } catch {
+        alert('通信エラーが発生しました。インターネットの接続をご確認のうえ、再度お試しください。\nTel：075-351-0361');
+        btn.disabled = false;
+        btn.textContent = '✉️ この内容で送信する';
+    }
 }
 
 document.getElementById('overlay').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
 </script>
+
 </body>
 </html>
