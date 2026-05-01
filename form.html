@@ -263,6 +263,27 @@
         .btn-send:hover { opacity: 0.9; }
         .btn-send:disabled { opacity: 0.6; cursor: not-allowed; }
 
+        /* コピー・保存ボタン */
+        .modal-util {
+            display: flex;
+            gap: 10px;
+            padding: 0 28px 16px;
+        }
+        .btn-util {
+            flex: 1;
+            padding: 10px;
+            background: var(--gray-1);
+            color: var(--gray-4);
+            border: 1px solid var(--gray-2);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-util:hover { background: var(--gray-2); color: var(--text); }
+        .btn-util.copied { background: #e8f8ee; color: #1a7a4a; border-color: #1a7a4a; }
+
         footer { margin-top: 40px; text-align: center; font-size: 13px; color: var(--gray-4); line-height: 1.9; }
     </style>
 </head>
@@ -548,6 +569,10 @@
             <p>以下の内容でよろしければ「この内容で送信する」ボタンを押してください</p>
         </div>
         <div class="modal-body" id="modalBody"></div>
+        <div class="modal-util">
+            <button class="btn-util" id="btnCopy" onclick="copyToClipboard()">📋 クリップボードにコピー</button>
+            <button class="btn-util" onclick="saveAsText()">💾 テキストで保存</button>
+        </div>
         <div class="modal-foot">
             <button class="btn-back" onclick="closeModal()">← 入力画面に戻る</button>
             <button class="btn-send" id="btnSend" onclick="doSend()">✉️ この内容で送信する</button>
@@ -765,6 +790,96 @@ async function doSend() {
 document.getElementById('overlay').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
+
+// =============================
+// 注文内容をテキストに変換
+// =============================
+function buildOrderText() {
+    const deliveryFmt = formatDate(v('delivery'));
+    const namePrintLabel = v('name_print') === '有' ? 'あり（印刷する）' : 'なし';
+    let t = '【非常用給水袋 注文書】\n';
+    t += `申込日時：${new Date().toLocaleString('ja-JP')}\n`;
+    t += '\n① 事業者情報\n';
+    t += `  ご発注事業者名：${v('company_name')}\n`;
+    t += `  ご担当者様　　：${v('contact_person') || '（未入力）'}\n`;
+    t += `  お電話番号　　：${v('phone')}\n`;
+    t += `  郵便番号　　　：${v('postal') || '（未入力）'}\n`;
+    t += `  ご住所　　　　：${v('address') || '（未入力）'}\n`;
+    t += `  メールアドレス：${v('email')}\n`;
+    t += '\n② ご注文内容\n';
+    t += `  数量　　　　：${v('qty')} ${v('unit')}\n`;
+    t += `  お届け希望日：${deliveryFmt}\n`;
+    t += `  サイズ　　　：${v('size')}\n`;
+    t += `  名入れ印刷　：${namePrintLabel}\n`;
+    if (v('name_print') === '有') {
+        t += `  印刷する色　：${v('color')}\n`;
+        t += `  印刷する文言：${v('name_text')}\n`;
+    }
+    t += '\n③ お届け先（①と異なる場合）\n';
+    t += `  お届け先名　：${v('delivery_name') || '（未入力）'}\n`;
+    t += `  建物の状況　：${v('manned') || '（未入力）'}\n`;
+    t += `  担当者様　　：${v('delivery_contact') || '（未入力）'}\n`;
+    t += `  郵便番号　　：${v('delivery_postal') || '（未入力）'}\n`;
+    t += `  ご住所　　　：${v('delivery_address') || '（未入力）'}\n`;
+    t += `  電話番号　　：${v('delivery_phone') || '（未入力）'}\n`;
+    t += `  備考　　　　：${v('delivery_note') || '（未入力）'}\n`;
+    t += '\n④ 請求書の送付先\n';
+    t += `  請求書の宛名：${v('invoice_name')}\n`;
+    t += `  ご担当者様　：${v('invoice_contact') || '（未入力）'}\n`;
+    t += `  郵便番号　　：${v('invoice_postal') || '（未入力）'}\n`;
+    t += `  ご住所　　　：${v('invoice_address') || '（未入力）'}\n`;
+    t += `  電話番号　　：${v('invoice_phone') || '（未入力）'}\n`;
+    t += `  備考　　　　：${v('invoice_note') || '（未入力）'}\n`;
+    t += '\n────────────────────\n';
+    t += '市川甚商事株式会社 本社営業部\n';
+    t += 'Tel：075-351-0361　担当：小杉 mobile：090-7555-8763\n';
+    return t;
+}
+
+// クリップボードにコピー
+async function copyToClipboard() {
+    const text = buildOrderText();
+    const btn = document.getElementById('btnCopy');
+    try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = '✅ コピーしました！';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = '📋 クリップボードにコピー';
+            btn.classList.remove('copied');
+        }, 2500);
+    } catch {
+        // フォールバック
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✅ コピーしました！';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = '📋 クリップボードにコピー';
+            btn.classList.remove('copied');
+        }, 2500);
+    }
+}
+
+// テキストファイルで保存
+function saveAsText() {
+    const text = buildOrderText();
+    const now = new Date();
+    const fname = `給水袋注文書_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.txt`;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fname;
+    a.click();
+    URL.revokeObjectURL(url);
+}
 </script>
 
 </body>
